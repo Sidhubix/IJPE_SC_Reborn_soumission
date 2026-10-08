@@ -1,0 +1,23 @@
+\section{Discussion}
+\label{sec:5}
+
+\subsection{Apports théoriques}
+\label{sec:5.1}
+
+La première contribution est méthodologique : la démarche produit des données reliant perturbation, décisions et taux de service, avec une propriété que les données d'observation n'ont jamais, chaque crise étant observée sous plusieurs politiques, toutes choses égales par ailleurs. La politique devient ainsi une intervention au sens de \citet{pearl2009}, dont l'effet est identifiable par construction, et une préconisation peut être confrontée à ce qui se serait réellement produit.
+
+La deuxième contribution porte sur la représentation de la résilience. La courbe de perte et de rétablissement \citep{bruneau2003} et le profil de perturbation \citep{sheffi2005book} résument une crise par sa profondeur et sa durée. Les résultats montrent que ces deux dimensions ne relèvent pas des mêmes causes : la profondeur dépend surtout du choc, la durée surtout de la gestion. Décomposer la trajectoire en paramètres de mécanisme est donc la condition pour attribuer une perte à sa cause, et le réseau appris retrouve ce partage sans qu'il lui soit imposé.
+
+La troisième contribution précise la typologie des stratégies de contingence \citep{tomlin2006,chopra2004}. L'efficacité d'un levier n'est pas une propriété du levier, mais de sa rencontre avec la nature du choc et la topologie du réseau : le déstockage est sans effet sur une panne fournisseur mais atténue une congestion, et la réaction la plus rapide perd de son efficacité lorsque les voies de secours sont étroites. Ces interactions plaident pour des règles de pilotage conditionnelles, propres au réseau considéré.
+
+La domination du profil réactif ne rend pas la préconisation triviale : la réactivité n'est ni toujours rentable ni toujours nécessaire, une politique plus sobre suffisant dans deux crises de test sur trois pour éviter une perte forte. L'enjeu est d'arbitrer, crise par crise, entre le coût des leviers et la résilience obtenue.
+
+\subsection{Implications managériales}
+\label{sec:5.2}
+
+Il suffit à une entreprise de connaître le rapport entre le coût d'un levier et sa marge unitaire pour situer sa politique sur la figure~\ref{fig:eco}. La vitesse de détection et de décision compte davantage que le nombre de leviers : investir dans la surveillance du taux de service et dans des délégations de décision pré-établies est prioritaire, et moins coûteux que multiplier les leviers. L'information sur la durée prévisible d'un choc a une valeur économique propre, puisqu'elle seule rend possible une politique plus sobre sans perte notable de résilience ; la communication avec fournisseurs et transporteurs sur la durée des incidents mérite d'être organisée avant la crise. Les points de passage obligés réduisent l'efficacité de toute réaction et justifient des investissements de redondance ciblés. Enfin, une réserve d'urgence gagne à être tenue séparée de la politique de commande, faute de quoi elle peut perturber le signal de réapprovisionnement.
+
+\subsection{Limites}
+\label{sec:5.3}
+
+Les résultats reposent sur des données simulées. Les valeurs posées faute de données de terrain ont été choisies pour être plausibles et sont toutes réglables, mais elles conditionnent les ordres de grandeur : seules les tendances et les hiérarchies, stables entre les deux réseaux étudiés, doivent être généralisées, et une validation sur des données d'entreprise reste nécessaire. Les leviers n'ont pas de coût et restent engagés jusqu'à la fin de la période observée, ce qui rend la domination de la réactivité en partie structurelle. La nature de la perturbation est supposée diagnostiquée sans erreur, chaque scénario ne comporte qu'une perturbation, les crises touchant un point de passage obligé sont trop rares pour que leurs effets propres soient appris, et l'interaction entre couverture de stock et politique de gestion n'a pas été étudiée.

@@ -1,0 +1,120 @@
+\section{Compléments sur le générateur de scénarios (Simuler)}
+\label{sec:S2}
+
+\subsection{Réseaux de référence}
+\label{sec:S2.1}
+
+Deux réseaux servent de référence (tableau~\ref{tab:reseaux}). Le réseau paramétrique comporte trois échelons : trois usines, neuf entrepôts et un client final. Chaque entrepôt est approvisionné par une usine principale, par une usine de secours via un lien de moindre capacité et, pour un entrepôt sur trois, par une troisième usine. La redondance est donc partielle par construction : la perte de la voie principale d'un entrepôt ne peut être que partiellement compensée par ses voies de repli, comme dans la plupart des réseaux réels où la double source reste coûteuse.
+
+Le réseau ISOMORPH reprend la topologie d'origine (Fig.~\ref{fig:d2}) : treize villes reliées par seize liaisons, avec un hub et cinq échelons intermédiaires entre les sources et le client. Le fichier d'origine ne fixant pas toutes les grandeurs nécessaires, trois hypothèses complètent sa description. La capacité de chaque liaison est tirée à plus ou moins 10~\% autour de sa valeur d'origine. La capacité de production de chaque source est fixée à 0,8 fois la capacité cumulée de ses liaisons sortantes : à 1,0, la production ne pourrait jamais constituer un goulot et le report de charge vers les sites de production sains serait sans effet. Le dernier kilomètre est enfin supposé illimité ; les deux derniers sites de stockage avant le client n'ont alors ni capacité propre ni liaison sortante limitée, et échappent aux leviers d'expédition.
+
+\begin{center}
+\input{figures/tikz/fig_reseau_isomorph}
+\captionof{figure}{Réseau ISOMORPH d'origine représenté par échelons, des trois sources au client.}\label{fig:d2}
+\end{center}
+
+\begin{table}[htbp]
+\caption{Caractéristiques des deux réseaux de référence (valeurs nominales).}
+\label{tab:reseaux}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}P{4.2cm}LL@{}}
+\toprule
+\textbf{Élément} & \textbf{Réseau paramétrique} & \textbf{Réseau ISOMORPH} \\
+\midrule
+Sites et échelons & 3 usines, 9 entrepôts, 1 client & 13 villes, 16 liaisons, 1 hub, 5 échelons intermédiaires \\
+Capacité de production d'une source (unités par jour) & 200 à 320 & 0,8 fois la capacité de ses liaisons sortantes \\
+Capacité des liaisons (unités par jour) & Voie principale 60 à 110 ; voie de secours 15 à 35 ; troisième voie 10 à 20 & Valeur d'origine $\pm$ 10~\% ; dernier kilomètre illimité \\
+Capacité d'expédition d'un site de stockage (unités par jour) & 50 à 100 & Portée par les liaisons sortantes \\
+Délai de trajet, représentation temporelle (jours) & 0 par défaut, réglable & 1 à 8 (valeurs d'origine) \\
+Délai de production, représentation temporelle (jours) & 0 par défaut, réglable & 0 par défaut, réglable \\
+Part des articles critiques dans la demande & 15~\% à 45~\% & 15~\% à 45~\% \\
+Fluctuation journalière de la demande & $\pm$ 3~\% à $\pm$ 8~\% & $\pm$ 3~\% à $\pm$ 8~\% \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Dans la représentation par flux, le volume livrable $F(t)$ d'un jour est la quantité maximale que le réseau peut acheminer des sources au client compte tenu de toutes ses capacités, dégradées ou renforcées ce jour-là. Cette formulation fait apparaître naturellement les goulots d'étranglement : c'est souvent la capacité d'expédition des sites de stockage, et non la production, qui limite le service. Dans la représentation temporelle, $F(t)$ désigne le volume que la circulation de la matière et les stocks permettent effectivement de livrer ce jour-là.
+
+\subsection{Représentation temporelle : délais et politique de stock}
+\label{sec:S2.2}
+
+La représentation par flux suppose que la matière circule instantanément et qu'aucun stock ne s'interpose entre les capacités et le client. La représentation temporelle lève ces deux hypothèses. Chaque liaison a un délai de trajet et chaque site de production un délai de production, exprimés en jours entiers. Les commandes remontent instantanément vers l'amont, mais la matière met le temps de ces délais à descendre vers le client. Chaque site de stockage gère son stock selon une politique (s, S) \citep{scarf1960} : lorsque sa position de stock, stock disponible plus matière en route, passe sous le point de commande s, il commande la quantité qui la ramène au niveau S.
+
+Les niveaux $s_{i}$ et $S_{i}$ d'un site de stockage i sont exprimés en jours de couverture de son propre débit nominal, auxquels s'ajoute le stock nécessairement en transit vers lui :
+
+\begin{equation}
+s_i = c_s\,\Phi_i + \sum_{a \in A_i} (L_a + P_a)\, f_a, \qquad S_i = c_S\,\Phi_i + \sum_{a \in A_i} (L_a + P_a)\, f_a
+\label{eq:S1}
+\end{equation}
+
+$\Phi_{i}$ désigne le débit nominal du site i, somme des débits nominaux de ses liaisons d'approvisionnement pour la demande de référence (section~3.2 du manuscrit), $c_{s}$ et $c_{S}$ les couvertures en jours, 3 et 10 jours par défaut, $A_{i}$ l'ensemble des liaisons qui approvisionnent le site i, $L_{a}$ le délai de trajet de la liaison a, $P_{a}$ le délai de production de son site d'origine et $f_{a}$ son débit nominal. Le second terme applique la loi de Little \citep{little1961} liaison par liaison : il dimensionne la matière en route pour qu'en régime établi le stock disponible corresponde à la couverture choisie, quelle que soit l'hétérogénéité des délais d'approvisionnement. Rapporter la couverture au débit propre de chaque site, plutôt qu'à une part égale de la demande, est indispensable sur un réseau en série : un hub par lequel transite tout le flux recevrait sinon la même couverture qu'un entrepôt secondaire, et le réseau cesserait de livrer même sans perturbation. Lorsque la description du réseau fixe les niveaux d'un site, ceux-ci sont conservés.
+
+Trois règles complètent la représentation. Chaque jour, un site de stockage sert d'abord les besoins du jour, puis le recomplètement des sites en aval, et la répartition privilégie la liaison principale avant les liaisons de secours. Les articles critiques et ordinaires sont agrégés dans les stocks, la priorité aux articles critiques ne s'appliquant qu'au service du client. Enfin, les liaisons vers le client sont servies le jour même : avec un délai sur ces liaisons, le client recevrait aujourd'hui ce qu'il a commandé la veille, et l'indicateur baisserait à chaque hausse de la demande d'un jour à l'autre, même sans perturbation ; il mesurerait alors le bruit de la demande et non la disponibilité du réseau.
+
+Avant toute observation, le réseau est simulé sans perturbation pendant une pré-chauffe de 60 jours, qui amène les stocks et la matière en route à leur régime établi. Cette pré-chauffe est commune aux quatre versions d'une même crise.
+
+Les deux représentations sont emboîtées. À délais nuls, la représentation temporelle reproduit presque exactement la représentation par flux : l'écart moyen du taux de service reste compris entre 0,00025 et 0,002 selon les cas testés. Avec des délais, en revanche, les stocks modifient profondément la réponse du réseau aux chocs, dans une mesure qui dépend de la couverture et de la nature du choc ; la section~S5.4 en analyse la sensibilité.
+
+\subsection{Perturbations et calibration de la demande de référence}
+\label{sec:S2.3}
+
+La coupure de lien illustre un phénomène souvent sous-estimé : la perte d'une voie principale ne se limite pas au volume qu'elle portait. Le site de stockage privé de son approvisionnement habituel doit se réorganiser dans l'urgence, ce qui dégrade sa propre capacité d'expédition, et ses voies de secours, sursollicitées, perdent elles aussi de leur efficacité. La perturbation se propage ainsi au-delà de sa cible. Coupures et fermetures sont traitées comme des ruptures quasi totales, d'où une sévérité plus élevée ; la durée de toute perturbation varie de 3 à 15 jours. Dans la représentation temporelle, ces réductions de capacité s'appliquent de la même manière, mais leur effet sur le client est amorti par les stocks et décalé par la matière déjà en route.
+
+L'effet d'une perturbation dépend autant de sa sévérité que de la tension dans laquelle opère le réseau : un réseau qui dispose de marges absorbe un choc qui ferait rompre un réseau saturé. Pour contrôler ce facteur, la demande de référence de chaque scénario est fixée en fonction du volume encore livrable pendant l'incident, à l'aide d'un taux de tension $u$ tiré entre 0,85 et 1,15 :
+
+\begin{equation}
+D_{max} = \min\left(\frac{u \cdot F_{inc}}{m_{inc}},\ \frac{0{,}995 \cdot F_{nom}}{1 + \varepsilon}\right)
+\label{eq:S2}
+\end{equation}
+
+$F_{\mathrm{inc}}$ et $F_{\mathrm{nom}}$ désignent le volume livrable pendant l'incident et en régime normal, $m_{\mathrm{inc}}$ la multiplication de la demande pendant l'incident (1 + 2s pour un pic de demande, 1 sinon) et $\varepsilon$ l'amplitude de la fluctuation journalière. $D_{\max}$ est la demande la plus élevée que le réseau sert à la fois pendant l'incident, à la tension $u$ près, et sans dégradation en régime normal. Les volumes $F_{\mathrm{inc}}$ et $F_{\mathrm{nom}}$ sont obtenus par un calcul de flot maximal (algorithme d'Edmonds-Karp). Le facteur $0{,}995$ laisse une marge de $0{,}5\,\%$ sous la capacité nominale. Cette marge ne se déduit d'aucune théorie : c'est un paramètre du simulateur fixé par essais. D'abord prise à $0{,}97$, elle a été resserrée à $0{,}995$ parce qu'une marge plus large écrasait l'effet d'une coupure de lien dans un réseau redondant. Une tension inférieure à 1 réduit seulement la marge du réseau ; une tension supérieure à 1 crée une pénurie franche. Le second terme garantit, dans la représentation par flux, qu'aucune dégradation n'apparaît avant la perturbation, pendant une période initiale de 10 jours, de sorte que tout creux observé est imputable à la crise. Dans cette représentation, la demande de référence $D_{0}$ est égale à $D_{\max}$, arrondie à l'entier.
+
+Dans la représentation temporelle, $F_{\mathrm{inc}}$ et $F_{\mathrm{nom}}$ sont mesurés par le moteur de simulation lui-même, en flux tendu : ce sont les volumes que la circulation de la matière permet effectivement d'écouler, qui ne dépassent jamais le flot maximal. Le second terme ne suffit plus alors à garantir l'absence de dégradation : les recomplètements par à-coups et les délais peuvent laisser une demande non servie un jour donné, même sans perturbation. La demande de référence est donc vérifiée par simulation. Chaque scénario est simulé sans perturbation, pré-chauffe comprise, avec sa propre série de fluctuations, et $D_{0}$ est la plus grande demande entière au plus égale à $D_{\max}$ qui est servie intégralement chaque jour :
+
+\begin{equation}
+D_0 = \max\left\{\, d \in \mathbb{N}^*,\ d \le D_{max} \;:\; \mathrm{IP}_d(t) = 1 \ \text{pour tout jour } t \text{ simulé sans perturbation} \right\}
+\label{eq:S3}
+\end{equation}
+
+$\mathrm{IP}_{d}(t)$ désigne le taux de service obtenu sous une demande de référence $d$, les niveaux s et S étant recalculés par l'équation~\eqref{eq:S1} pour chaque demande essayée. La recherche procède par dichotomie sur les entiers et ne fait qu'abaisser $D_{\max}$ ; la valeur retenue est toujours vérifiée par simulation. Lorsque même une demande d'une unité n'est pas servie intégralement, la couverture de stock est trop faible au regard des fluctuations et des délais : le scénario n'admet aucun régime nominal sans dégradation, et le plan d'expériences est refusé plutôt que poursuivi avec une demande arbitraire. Cette condition de faisabilité relie directement la couverture de stock, les délais d'approvisionnement et la variabilité de la demande.
+
+\subsection{Leviers de remédiation}
+\label{sec:S2.4}
+
+Les neuf leviers du gestionnaire simulé (section 3.2 du manuscrit) sont détaillés au tableau~\ref{tab:d4}.
+
+\begin{table}[htbp]
+\caption{Leviers de remédiation.}
+\label{tab:d4}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}P{1.0cm}P{1.5cm}LLL@{}}
+\toprule
+\textbf{Levier} & \textbf{Famille} & \textbf{Action} & \textbf{Effet nominal} & \textbf{Perturbations concernées} \\
+\midrule
+D1 & Reroutage & Report de charge vers les sites de production sains & + 20 \% de capacité & Panne, coupure, congestion \\
+D2 & Reroutage & Report vers les sites de stockage voisins & + 25 \% d'expédition & Coupure, fermeture, congestion \\
+D3 & Capacité & Heures supplémentaires au site de production touché & 50 \% de la perte récupérée & Panne \\
+D4 & Capacité & Transporteur d'appoint sur la liaison ou le site touché & 50 \% de la perte récupérée & Coupure, fermeture \\
+D5 & Capacité & Entrepôt tampon & + 15 \% d'expédition sur tout le réseau & Toutes \\
+D6 & Stock & Déstockage de sécurité & Flux : 30 \% de la demande, épuisé en 10 jours. Temporel : réserve séparée libérée une fois, réservée à la demande non servie & Toutes \\
+D7 & Stock & Pré-positionnement près du client & Flux : 20 \% de toute perte compensée. Temporel : s et S relevés de 50 \%, commande immédiate & Panne, coupure, congestion \\
+D8 & Demande & Priorisation des articles critiques & $-$ 25 \% de demande ordinaire servie & Toutes \\
+D9 & Demande & Report de la demande non critique & 30 \% de la demande ordinaire différée & Toutes \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Les leviers n'agissent pas tous de la même manière. Le reroutage et la capacité additionnelle restaurent ou contournent une capacité perdue. Le déstockage apporte un soulagement temporaire, qui peut produire un second creux lorsque le stock est épuisé avant la fin de la crise. Les leviers de demande, enfin, améliorent le taux de service mesuré en renonçant à une partie de la demande ordinaire : ils traduisent un arbitrage de service plutôt qu'une restauration de la capacité, distinction qui devra guider l'interprétation des préconisations.
+
+Dans la représentation temporelle, les deux leviers de stock changent de mécanisme. Le pré-positionnement (D7) relève temporairement les niveaux s et S des sites de stockage et déclenche une commande immédiate. Le déstockage (D6) libère une réserve de sécurité tenue à l'écart du stock ordinaire : elle n'est pas visible de la politique de commande et ne sert que la demande que le stock ordinaire n'a pu satisfaire.
+
+Ce choix n'est pas anodin. Injectée directement dans le stock ordinaire, la même quantité faisait passer certains sites au-dessus de leur point de commande. Ils sautaient alors un recomplètement, le besoin manquant remontait jusqu'aux sources, qui restaient à l'arrêt un jour de panne, et la capacité de production ainsi perdue ne se rattrapait pas : sur un cas mesuré, le levier réduisait le volume livré au lieu de l'accroître. Une intervention d'urgence sur les stocks peut donc perturber le signal de réapprovisionnement qu'elle devait soulager. La réserve séparée garantit que le déstockage ne réduit jamais le volume livré. Les deux leviers de stock excluent enfin les sites de stockage sans capacité propre et à liaisons sortantes illimitées, sur lesquels ils n'ont pas de prise.
+
+\subsection{Plan d'expériences, niveau de tension et contenu des observations}
+\label{sec:S2.5}
+
+Les caractéristiques du réseau, la nature, la cible, la sévérité et la durée de la perturbation, ainsi que la tension du réseau, sont tirées indépendamment pour chaque scénario, selon une loi uniforme. Les grandeurs continues sont tirées uniformément sur les plages décrites ci-dessus : capacités des sites et des liaisons, part des articles critiques, amplitude de la fluctuation de la demande, sévérité, durée (arrondie au jour) et taux de tension. La nature de la perturbation est tirée uniformément parmi les cinq natures, et sa cible parmi les sites ou liaisons admissibles ; une coupure de lien vise toutefois la liaison principale d'un site avec une probabilité de 0,85, car couper une voie de secours déjà marginale n'aurait presque aucun effet. La fluctuation journalière de la demande est elle aussi tirée uniformément, chaque jour, entre $-\varepsilon$ et $+\varepsilon$. Faute de données de terrain sur la fréquence des crises, la loi uniforme donne le même poids à toutes les valeurs plausibles et couvre l'espace des scénarios sans privilégier un régime ; les proportions observées dans la base décrivent donc cet espace, et non la fréquence réelle des crises. Tous les tirages proviennent d'un générateur pseudo-aléatoire initialisé par une graine. Le réseau de référence, la représentation et, dans la représentation temporelle, les délais par défaut et la couverture de stock sont en revanche fixés pour un lot de scénarios : comparer plusieurs réseaux ou plusieurs couvertures suppose de générer plusieurs lots. Chaque crise est suivie sur 60 jours après son déclenchement. La génération est reproductible à l'identique, ce qui permet de régénérer une base ou de l'étendre.
+
+Toutes les valeurs posées par hypothèse faute de données de terrain peuvent être modifiées : capacités, effets des leviers, caractéristiques des profils, hypothèses qui complètent le réseau ISOMORPH et paramètres de la représentation temporelle. Pour explorer des contextes contrastés, un niveau de tension global, de 0 à 100, déplace simultanément quatre groupes d'hypothèses : l'intensité et la durée des chocs, la tension du réseau, l'efficacité des leviers et la réactivité des gestionnaires. Le niveau 50 correspond aux valeurs nominales présentées ici. Le niveau 0 décrit un réseau surcapacitaire soumis à des chocs brefs et géré par des décideurs très réactifs ; le niveau 100 décrit des chocs de 12 à 32 jours sur un réseau saturé, avec des leviers peu efficaces et des délais de décision allant jusqu'à 12 jours. Lorsque le réseau est imposé, ce niveau continue de piloter la sévérité et la durée des chocs, la tension entre demande et capacité, l'efficacité des leviers et la réactivité des gestionnaires, mais ne modifie pas les capacités du réseau, qui viennent de sa description. Il ne touche pas non plus aux délais ni à la couverture de stock, qui relèvent de la représentation du réseau et non de l'intensité de la crise.
+
+Chaque version d'une crise constitue une observation complète, qui réunit le contexte du réseau (identité et taille du réseau, demande de référence, part des articles critiques), la perturbation subie, le journal des décisions (date de détection, leviers mobilisés et dates d'engagement) et la trajectoire journalière du taux de service. Les niveaux de stock et la matière en route ne sont pas enregistrés : la base décrit une crise par ses causes, ses décisions et le service rendu, et non par l'état interne du réseau. Des grandeurs descriptives simples, taux de service minimal, service cumulé perdu et délai de retour à la normale, servent au contrôle de la base.

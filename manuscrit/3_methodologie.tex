@@ -1,0 +1,166 @@
+\section{Démarche : simuler, mesurer, apprendre}
+\label{sec:3}
+
+Étudier la résilience d'une chaîne logistique demande d'observer, pour une même crise, ce qui l'a provoquée, ce que les gestionnaires ont décidé et comment le taux de service a évolué jour après jour. L'objet d'étude est donc la crise observée de bout en bout, de sa cause au service rendu, et non le réseau seul. Le bloc Simuler produit ces crises, le bloc Mesurer résume chacune par une courbe de résilience et le bloc Apprendre en tire un modèle causal.
+
+\subsection{Point de départ : du jumeau numérique ISOMORPH à un générateur de crises}
+\label{sec:3.1}
+
+Le point de départ de ce travail est ISOMORPH \citep{zhang2026isomorph}, un jumeau numérique ouvert d'un réseau de distribution américain de 13 nœuds desservant une destination unique, simulé au pas journalier avec une politique de réapprovisionnement (s, S). Conçu pour la prévision, il ne permet pas d'étudier la résilience : ses perturbations ne sont pas étiquetées, aucune décision n'intervient en cours de crise et aucun indicateur de résilience n'est calculé.
+
+Greffer directement un gestionnaire et des perturbations sur ISOMORPH a montré que les stocks tampons absorbaient l'essentiel des chocs : environ la moitié des scénarios ne présentaient aucune dégradation observable. La démarche sépare donc les mécanismes en deux représentations emboîtées d'un même réseau. La première, un modèle de flux capacitaire instantané, isole les mécanismes de capacité : toute baisse du taux de service s'y explique par une perte de capacité, une hausse de la demande ou une décision identifiée. La seconde y ajoute des délais de trajet et de production et une politique de stock (s, S) dans chaque site de stockage ; l'absorption des chocs par les stocks devient ainsi un facteur maîtrisé dont on peut faire varier l'intensité. Le générateur accepte enfin un réseau multi-échelon quelconque (tableau~\ref{tab:isomorph}).
+
+\begin{table*}[htbp]
+\caption{Positionnement de la démarche par rapport au jumeau numérique ISOMORPH.}
+\label{tab:isomorph}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}P{2.6cm}LL@{}}
+\toprule
+\textbf{Dimension} & \textbf{ISOMORPH} & \textbf{Démarche proposée} \\
+\midrule
+Réseau & 13 nœuds, destination unique, pas journalier & Réseau multi-échelon quelconque ; réseau paramétrique à redondance partielle et réseau ISOMORPH d'origine comme références \\
+Dynamique & Stocks gérés en (s, S) & Deux représentations emboîtées : flux capacitaire instantané, ou délais de trajet et de production avec stocks (s, S) à couverture réglable \\
+Perturbations & Aléatoires, non étiquetées & Cinq natures maîtrisées : cible, date, durée et sévérité connues \\
+Décisions & Paramètres fixés avant la simulation & Gestionnaire simulé réagissant en cours de crise \\
+Expérimentation & Tirages indépendants & Même crise rejouée sous plusieurs comportements de gestion \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+\subsection{Simuler : réseau, perturbations et gestionnaire}
+\label{sec:3.2}
+
+\paragraph{Réseau et taux de service.} Le réseau est un graphe orienté sans cycle qui relie des sites typés (fournisseurs, usines, hubs, entrepôts, transporteurs) à un client final unique. Les sites sont regroupés en un groupe de production et un groupe de stockage, si bien qu'une perturbation ou un levier vise un site d'un groupe et non un type de site prédéfini. La capacité d'expédition d'un site de stockage est portée par ses liaisons sortantes : l'efficacité d'un levier dépend de la position du goulot d'étranglement dans la topologie, et pas seulement de son ampleur nominale. À perturbation et décision identiques, deux topologies peuvent donc aboutir à des résiliences très différentes, effet que le générateur permet d'isoler en rejouant les mêmes crises sur plusieurs réseaux. Deux réseaux servent ici de référence, un réseau paramétrique à redondance partielle (trois usines, neuf entrepôts) et le réseau ISOMORPH d'origine (treize villes, seize liaisons) ; leurs valeurs nominales sont données dans le matériel supplémentaire (section~S2.1).
+
+Le volume livrable $F(t)$ d'un jour est, dans la représentation par flux, la quantité maximale que le réseau peut acheminer compte tenu de ses capacités du jour ; dans la représentation temporelle, c'est le volume que la circulation de la matière et les stocks permettent effectivement de livrer. Ce volume sert en priorité les articles critiques, dont la part varie de 15 à 45~\% selon les scénarios. La performance du réseau est mesurée chaque jour par son taux de service, noté $\mathrm{IP}(t)$ : la part de la demande du client effectivement servie, pondérée pour que les articles critiques comptent triple,
+
+\begin{equation}
+\mathrm{IP}(t) = \frac{S_r(t) + 3\,S_c(t)}{D_r(t) + 3\,D_c(t)}, \quad S_c(t) = \min\big(F(t), D_c(t)\big), \quad S_r(t) = \min\big(F(t) - S_c(t), D_r(t)\big)
+\label{eq:1}
+\end{equation}
+
+où $D_{c}(t)$ et $D_{r}(t)$ sont les demandes d'articles critiques et ordinaires, et $S_{c}(t)$ et $S_{r}(t)$ les quantités servies. Le taux de service vaut 1 lorsque toute la demande est honorée ; la demande non servie un jour n'est pas reportée au lendemain. Dans la représentation temporelle, les niveaux s et S de chaque site sont exprimés en jours de couverture de son débit nominal \citep{scarf1960, little1961}, après une période de chauffe de 60 jours (\voirSM{S2.2}).
+
+\paragraph{Perturbations.} Chaque scénario subit une perturbation unique, choisie parmi cinq natures qui représentent des mécanismes de dysfonctionnement distincts (tableau~\ref{tab:d3}). Sa cible, sa date de début, sa durée et sa sévérité $s \in [0,1]$ sont connues exactement, ce qui fournit l'origine certaine de chaque dégradation observée.
+
+\begin{table*}[htbp]
+\caption{Natures de perturbation et mécanismes représentés.}
+\label{tab:d3}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}P{2.4cm}LLP{1.7cm}@{}}
+\toprule
+\textbf{Nature} & \textbf{Mécanisme de dysfonctionnement} & \textbf{Effet modélisé} & \textbf{Sévérité nominale} \\
+\midrule
+Panne fournisseur & Perte localisée de capacité amont & Production du site touché réduite de $s$ & 0,50 à 1,00 \\
+\addlinespace
+Coupure de lien & Rupture d'une voie d'approvisionnement et désorganisation du site desservi & Liaison réduite de $s$ ; expédition du site desservi réduite de $0{,}7\,s$ ; ses voies de secours de $0{,}3\,s$ & 0,80 à 1,00 \\
+\addlinespace
+Fermeture d'un site de stockage & Perte d'un nœud de distribution & Expédition et approvisionnement du site réduits de $s$ & 0,80 à 1,00 \\
+\addlinespace
+Pic de demande & Saturation sans dommage physique & Demande multipliée par $1 + 2s$ & 0,50 à 1,00 \\
+\addlinespace
+Congestion & Dégradation diffuse de tout le réseau & Capacités de transport et d'expédition réduites de $s$ & 0,50 à 1,00 \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+La demande de référence de chaque scénario est fixée à partir du volume encore livrable pendant l'incident, à l'aide d'un taux de tension $u$ tiré entre 0,85 et 1,15 ; elle garantit qu'aucune dégradation n'apparaît avant la perturbation, si bien que tout creux observé est imputable à la crise (\voirSM{S2.3}).
+
+\paragraph{Gestionnaire simulé.} Le gestionnaire reproduit la séquence de réaction observée dans les organisations plutôt qu'une politique optimale. Il ne perçoit la crise qu'à travers le taux de service, qu'il moyenne sur quelques jours pour ne pas réagir à de simples fluctuations. Il déclare une anomalie lorsque ce taux lissé passe sous un seuil critique : au-delà de ce seuil, c'est-à-dire lorsque le taux de service tombe plus bas, une crise est jugée vraisemblable et la résilience du réseau est mobilisée. Il décide après un délai d'analyse, puis, tant que le taux de service reste insuffisant, mobilise à intervalles réguliers un levier supplémentaire selon son ordre de préférence. Trois retards aggravent ainsi une crise : la perception, l'inertie décisionnelle et la lenteur de l'escalade. Neuf leviers sont disponibles, répartis en quatre familles issues de la typologie des stratégies de contingence \citep{sheffi2005book,ivanov2019ijpr,tomlin2006,chopra2004} : rediriger les flux, mobiliser une capacité additionnelle, puiser dans des stocks ou agir sur la demande servie. Leurs effets nominaux, et le mécanisme particulier des leviers de stock dans la représentation temporelle, figurent dans le matériel supplémentaire (section~S2.4).
+
+Trois profils de gestionnaire représentent des cultures de pilotage contrastées (tableau~\ref{tab:d5}). Le profil réactif détecte tôt, décide vite et privilégie le reroutage. Le profil prudent filtre davantage les signaux, commence par les stocks et escalade de manière méthodique. Le profil tardif tolère une forte dégradation avant d'agir et commence par restreindre la demande servie.
+
+\begin{table*}[htbp]
+\caption{Profils de gestionnaire (valeurs nominales).}
+\label{tab:d5}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}LLLL@{}}
+\toprule
+\textbf{Caractéristique} & \textbf{Réactif} & \textbf{Prudent} & \textbf{Tardif} \\
+\midrule
+Seuil critique (taux de service lissé) & 0,97 & 0,92 & 0,85 \\
+Période de lissage & 1 jour & 4 jours & 6 jours \\
+Délai de décision & 1 jour & 3 jours & 6 jours \\
+Intervalle de réévaluation & 2 jours & 5 jours & 8 jours \\
+Premiers leviers essayés & Reroutage, transporteur d'appoint & Déstockage, pré-positionnement & Priorisation, report de demande \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+\paragraph{Rejeu contrefactuel.} Chaque crise est jouée quatre fois : sans aucune réaction, puis sous chacun des trois profils. Les quatre versions partagent exactement le même réseau, la même perturbation, les mêmes fluctuations de demande et, dans la représentation temporelle, le même état de stock initial. Toute différence de trajectoire est donc attribuable au seul comportement de gestion, et la version sans réaction indique ce qu'aurait été la crise sans remédiation (Fig.~\ref{fig:d3}). Au sens de \citet{pearl2009}, le profil constitue une intervention : il est assigné indépendamment de la situation, alors que les leviers effectivement mobilisés dépendent de ce que le gestionnaire perçoit.
+
+\begin{center}
+\input{figures/tikz/fig_crise_S0366}
+\captionof{figure}{Une même crise jouée sous les quatre politiques : fermeture de l'entrepôt d'Atlanta pendant 21 jours.}\label{fig:d3}
+\end{center}
+
+\paragraph{Plan d'expériences.} Les caractéristiques du réseau, la nature, la cible, la sévérité et la durée de la perturbation, ainsi que la tension, sont tirées indépendamment pour chaque scénario, selon une loi uniforme sur leurs plages ; la nature et la cible sont tirées uniformément parmi les possibilités, une coupure de lien visant toutefois la liaison principale d'un site avec une probabilité de 0,85. Faute de données de terrain sur la fréquence des crises, la loi uniforme donne le même poids à toutes les valeurs plausibles : la base décrit l'espace des scénarios, non la fréquence réelle des crises. Chaque crise est suivie sur 60 jours, et la génération, initialisée par une graine, est reproductible à l'identique. Un niveau de tension global, de 0 à 100, déplace simultanément l'intensité et la durée des chocs, la tension du réseau, l'efficacité des leviers et la réactivité des gestionnaires ; le niveau 50 correspond aux valeurs nominales présentées ici (\voirSM{S2.5}).
+
+\subsection{Mesurer : courbe de résilience et indicateurs}
+\label{sec:3.3}
+
+Une trajectoire journalière est trop longue et trop bruitée pour être comparée directement d'une crise à l'autre. Ce travail s'inscrit dans la formalisation de \citet{rahiel2026in4pl}, dont il reprend la courbe hyperbolique composée et les six indicateurs, en les appliquant à des crises simulées en grand nombre. Le taux de service modélisé $p(x)$, où $x$ est le temps écoulé depuis le déclenchement de la perturbation, combine une transition décroissante pour la chute et une transition croissante pour la reprise :
+
+\begin{equation}
+p(x) = k + \frac{q}{2} - \frac{h}{2}\tanh\left(\frac{\alpha\,(x - g)}{2}\right) + \frac{h + q}{2}\tanh\left(\frac{\beta\,(x - g - d)}{2}\right)
+\label{eq:5}
+\end{equation}
+
+Avant la crise, $p$ vaut $k$ ; au cœur de la crise, il atteint le palier $k - h$ ; après la reprise, il se stabilise en $k + q$. Les quatre autres paramètres décrivent la forme de la crise : le décalage $g$ de la chute, temps pendant lequel le réseau absorbe le choc, la durée $d$ du palier dégradé, et les raideurs $\alpha$ et $\beta$ de la chute et de la reprise. Ils sont estimés pour chaque version de crise par un critère robuste, qui limite l'influence des rebonds liés à l'engagement successif des leviers (\voirSM{S3.1}).
+
+Six indicateurs sont calculés analytiquement à partir des paramètres ajustés (tableau~\ref{tab:d7}). Le principal, l'indice de perte cumulée, mesure l'aire entre le niveau nominal et la courbe :
+
+\begin{equation}
+\mathrm{IPC} = \frac{h}{\alpha}\ln 2 + \frac{h\,d}{2} - \frac{h + q}{\beta}\ln 2
+\label{eq:7}
+\end{equation}
+
+Les formules des cinq autres indicateurs, le critère d'estimation et un exemple d'ajustement sont donnés dans le matériel supplémentaire (section~S3).
+
+\begin{table*}[htbp]
+\caption{Les six indicateurs de résilience.}
+\label{tab:d7}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}P{3.6cm}P{2.3cm}LP{2.1cm}@{}}
+\toprule
+\textbf{Indicateur} & \textbf{Dimension} & \textbf{Interprétation} & \textbf{Sens favorable} \\
+\midrule
+IPC, indice de perte cumulée & Perte & Service cumulé perdu pendant la crise & Faible \\
+CRD, coefficient de récupération dynamique & Vitesse & Rapidité de la reprise rapportée à la chute et à la durée du palier & Élevé \\
+TRP, temps de récupération pondéré & Durée & Temps nécessaire pour que la reprise atteigne 95~\% de son amplitude & Faible \\
+SRA, score de robustesse adaptative & Adaptation & Capacité à remonter, pénalisée par un écart durable au niveau initial & Élevé \\
+ERR, efficacité de résilience relative & Performance conservée & Part du service nominal maintenue sur l'épisode & Élevé \\
+PR, potentiel de récupération & Rétablissement & Niveau final rapporté à la mi-profondeur de la chute & À préciser \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+La courbe est construite pour le domaine de la résilience, qui suppose une chute effective suivie d'un rétablissement. Une crise absorbée sans dégradation relève de la robustesse ; des variations rapides et de faible amplitude autour du niveau nominal relèvent de la stabilité ; une chute dont le réseau ne se relève pas relève de la défaillance, qui appelle une reconfiguration. Lorsque $h$ tend vers zéro, les indicateurs rapportés à $h$, CRD et SRA, deviennent instables : ce n'est pas une limite du modèle, mais le signe d'un cas de robustesse (\voirSM{S3.3}).
+
+\subsection{Apprendre : réseau bayésien causal}
+\label{sec:3.4}
+
+Chaque version d'une crise fournit une observation. Les variables sont organisées selon les causes qu'un diagnostic doit pouvoir distinguer et selon l'ordre temporel d'une crise, qui impose des paliers qu'aucune relation causale ne peut remonter (tableau~\ref{tab:d9}). La position de la cible distingue les points de passage obligés, dont la suppression déconnecte toutes les sources du client. Les variables continues sont discrétisées en trois classes de même effectif, dont les seuils sont calculés sur l'échantillon d'apprentissage. IPC, fidèle au service perdu et sans ambiguïté de sens, est la cible du pronostic.
+
+\begin{table*}[htbp]
+\caption{Variables de la base d'apprentissage, paliers de la structure causale et question de diagnostic associée.}
+\label{tab:d9}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}P{2.4cm}LP{2.3cm}L@{}}
+\toprule
+\textbf{Palier} & \textbf{Variables} & \textbf{Statut causal} & \textbf{Question de diagnostic} \\
+\midrule
+1a. Contexte & Position de la cible (passage obligé, site redondé, réseau entier), part des articles critiques, nature, sévérité, durée & Exogène & Le choc touchait-il un point sans alternative, était-il surmontable ? \\
+1b. Politique & Profil : sans réaction, réactif, prudent, tardif & Intervention & La politique était-elle adaptée ? \\
+2. Réponse & Délai de détection, délai de réaction, nombre de leviers, familles mobilisées & Médiateur & La réaction a-t-elle été tardive ou mal ciblée ? \\
+3. Mécanisme & Paramètres $h$, $d$, $\alpha$, $\beta$ & Médiateur & Comment la crise s'est-elle déroulée ? \\
+4. Résilience & IPC (cible du pronostic), TRP, CRD & Effet & Quel niveau de résilience a été atteint ? \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+La politique, assignée indépendamment de la crise et comparée sur des crises strictement identiques, a un effet sur la résilience identifiable sans ajustement ; les leviers effectivement mobilisés, qui dépendent de ce que le gestionnaire a perçu, sont des médiateurs. La structure est apprise par recherche gloutonne au critère BIC \citep{schwarz1978}, l'ordre des paliers étant imposé comme une liste d'arcs interdits \citep{heckerman1995} ; l'inférence est exacte \citep{koller2009}. L'apprentissage est réalisé avec l'outil BayesArtist \citep{bayesartist}, et peut être reproduit avec tout logiciel qui accepte des arcs interdits (\voirSM{S4}).
+
+Le réseau sert à trois usages. En pronostic, il donne la distribution de la résilience pour un contexte et une politique. En diagnostic, il remonte d'une résilience dégradée vers ses causes probables. En préconisation, chaque politique est évaluée par la probabilité d'atteindre un objectif de résilience fixé ; parmi celles dont la probabilité dépasse un seuil $\theta$ choisi par le décideur, est préconisée la moins interventionniste, les politiques étant ordonnées par le nombre moyen de leviers qu'elles engagent (sans réaction, tardif, prudent, réactif). Comme le profil est une variable racine assignée selon une loi uniforme, l'inférence à rebours, de l'objectif vers le profil, classe les politiques exactement comme le pronostic et fournit en une requête par contexte une carte de préconisation.
+
+Les 2 000 scénarios sont partagés en 1 600 d'apprentissage et 400 de test. Chaque crise de test ayant été jouée sous toutes les politiques, la préconisation est jugée directement, en vérifiant si la politique préconisée a effectivement atteint l'objectif ; le pronostic est jugé par le taux de classement correct et le score de Brier.

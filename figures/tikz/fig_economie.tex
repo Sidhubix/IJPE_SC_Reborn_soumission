@@ -1,0 +1,31 @@
+% Figure : bénéfice net moyen d'une politique par crise, selon le coût d'un levier
+% (données : ip_timeseries.csv et base d'apprentissage du lot A ; calcul décrit en section 6.6)
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.93\textwidth, height=5.8cm,
+  xmin=0, xmax=12000, ymin=-6, ymax=20,
+  xlabel={Coût d'un levier engagé, exprimé en unités de marge ($c/m$)},
+  ylabel={Bénéfice net moyen par crise (milliers d'unités de marge)},
+  xtick={0,2000,4000,6000,8000,10000,12000},
+  xticklabel style={/pgf/number format/.cd,1000 sep={\,}},
+  scaled x ticks=false,
+  tick label style={font=\scriptsize}, label style={font=\small},
+  grid=major, grid style={black!8},
+  legend style={font=\scriptsize, draw=none, fill=white, fill opacity=0.9, text opacity=1, at={(0.98,0.98)}, anchor=north east, cells={anchor=west}},
+  every axis plot/.append style={line width=1.2pt}]
+  \fill[appreac!6] (axis cs:0,-6) rectangle (axis cs:6628,20);
+  \node[font=\scriptsize, text=appreac!85!black, anchor=south west, align=left] at (axis cs:150,-5.6) {zone où la politique\\réactive est rentable};
+  \addplot[appnone] table[x=r, y expr=\thisrow{none}/1000] {figures/data/eco_benefice.dat};
+  \addlegendentry{Sans réaction}
+  \addplot[apptard] table[x=r, y expr=\thisrow{tardif}/1000] {figures/data/eco_benefice.dat};
+  \addlegendentry{Tardif}
+  \addplot[appprud] table[x=r, y expr=\thisrow{prudent}/1000] {figures/data/eco_benefice.dat};
+  \addlegendentry{Prudent}
+  \addplot[appreac] table[x=r, y expr=\thisrow{reactif}/1000] {figures/data/eco_benefice.dat};
+  \addlegendentry{Réactif}
+  \addplot[black!75, line width=1.6pt, densely dashed] table[x=r, y expr=\thisrow{posteriori}/1000] {figures/data/eco_benefice.dat};
+  \addlegendentry{Meilleure politique choisie crise par crise}
+  \draw[black!50, densely dotted] (axis cs:6628,-6) -- (axis cs:6628,20);
+  \node[font=\scriptsize, fill=white, inner sep=1pt, anchor=west] at (axis cs:6750,9.3) {seuil de la politique réactive : 6 630};
+\end{axis}
+\end{tikzpicture}

@@ -1,0 +1,64 @@
+\section{État de l'art}
+\label{sec:etat}
+
+Quatre courants de la littérature éclairent la préconisation de décisions face aux perturbations. Cette section en retient l'essentiel ; une revue détaillée figure dans le matériel supplémentaire (section~S1).
+
+\subsection{Mesurer la résilience sur une trajectoire}
+\label{sec:ea-mesure}
+
+Les revues s'accordent sur une définition de la résilience comme la capacité d'une chaîne logistique à se préparer aux perturbations, à y répondre et à s'en rétablir \citep{tukamuhabwa2015, kamalahmadi2016}. Cette définition a été formalisée mathématiquement à partir de la trajectoire de performance, qui décrit la chute puis le rétablissement d'une chaîne soumise à une perturbation \citep{rahiel2026in4pl, rahiel2026these}, appliquée à la chaîne logistique hospitalière \citep{rahiel2025esd} et prolongée par une modélisation probabiliste des perturbations sévères \citep{rahiel2026codit}. Une famille de mesures part de la performance observée dans le temps : \citet{bruneau2003} associent la perte de résilience à la surface comprise entre la performance nominale et la performance dégradée, \citet{henry2012} définissent la résilience comme une fonction du temps, et plusieurs travaux en tirent des indicateurs utiles à la décision \citep{spiegler2012, behzadi2020}. Une formalisation récente décrit la courbe entière par une fonction composée de tangentes hyperboliques à sept paramètres, qui fournit six indicateurs \citep{rahiel2026in4pl}. Ces mesures s'appliquent toutes à une courbe déjà observée : aucune ne dit comment obtenir en nombre des courbes comparables, pour des crises variées et des réponses différentes.
+
+\subsection{Stratégies d'atténuation et de contingence}
+\label{sec:ea-strategies}
+
+La littérature distingue les mesures prises avant la perturbation, d'atténuation, de celles prises une fois qu'elle survient, de contingence \citep{tang2006, tomlin2006}. Les travaux quantitatifs précisent le rôle de chaque levier, stock en prévention et capacité de réserve en réaction \citep{lucker2019}, comparent politiques proactives et de rétablissement \citep{ivanov2016tre} ou chiffrent les coûts de la résilience \citep{aldrighetti2021}. Les décisions y sont le plus souvent fixées à l'avance : leur déclenchement au fil de la crise, avec les délais de détection et de décision d'un gestionnaire réel, reste peu modélisé \citep{klibi2012ijpe}, de même que la comparaison de plusieurs comportements de gestion face à un même aléa.
+
+\subsection{Simulation des perturbations}
+\label{sec:ea-simulation}
+
+La simulation s'est imposée pour étudier la propagation des perturbations, ou effet domino \citep{schmitt2012, ivanov2017}, bâtir la théorie par plans d'expériences \citep{macdonald2018}, générer des scénarios plausibles \citep{klibi2012ejor} et comparer des stratégies de rétablissement \citep{ramzy2022}. ISOMORPH, premier jumeau numérique public d'un réseau logistique multi-échelon, fournit des trajectoires de référence pour la prévision, sans décision qui réagisse à l'état du réseau \citep{zhang2026isomorph}. Ces simulateurs étudient un réseau ou un cas : aucun ne rejoue systématiquement un même aléa sans réaction puis sous plusieurs comportements de gestion.
+
+\subsection{Réseaux bayésiens causaux}
+\label{sec:ea-rb}
+
+Les réseaux bayésiens représentent les dépendances entre risques, stratégies et conséquences et permettent l'inférence dans les deux sens \citep{hosseiniivanov2020}. Ils ont servi à modéliser la propagation des risques \citep{garvey2015, ojha2018} et à choisir des stratégies d'atténuation \citep{qazi2018}. Leur structure, souvent fixée par des experts, peut aussi être apprise sur des données, les deux sources se combinant \citep{heckerman1995}. Pour qu'un tel modèle préconise une décision, l'effet de cette décision doit être identifiable : une décision est une intervention, dont la conséquence ne se lit pas dans une corrélation observée, car le gestionnaire réagit d'autant plus fort que la crise est grave \citep{pearl2009}. Or les historiques d'entreprise ne contiennent ni l'étiquette de la décision prise ni ce qui se serait passé sans elle \citep{do2024}.
+
+\subsection{Positionnement}
+\label{sec:ea-lacune}
+
+Les quatre courants sont solides mais cloisonnés (tableau~\ref{tab:synthese}). Aucune base publique connue ne relie, pour un grand nombre de crises, la perturbation subie, la décision prise et la trajectoire du taux de service qui en découle.
+
+\begin{table*}[htbp]
+\caption{Courants de la littérature, limites pour la préconisation de décisions et réponse apportée par ce travail.}
+\label{tab:synthese}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}P{1.9cm}P{3.3cm}LLL@{}}
+\toprule
+\textbf{Courant} & \textbf{Travaux représentatifs} & \textbf{Apport} & \textbf{Limite pour la préconisation} & \textbf{Réponse de ce travail} \\
+\midrule
+Mesure de la résilience
+  & \citealp{bruneau2003}; \citealp{henry2012}; \citealp{spiegler2012}; \citealp{behzadi2020}; \citealp{rahiel2026in4pl}
+  & Courbe de performance, indicateurs, fonction explicite de la trajectoire
+  & Suppose une courbe déjà observée
+  & Mesurer : fonction à sept paramètres ajustée sur chaque trajectoire simulée \\
+\addlinespace
+Atténuation et contingence
+  & \citealp{tang2006}; \citealp{tomlin2006}; \citealp{lucker2019}; \citealp{ivanov2016tre}; \citealp{aldrighetti2021}
+  & Répertoire de leviers et de leurs coûts
+  & Décisions fixées à l'avance ; délais de réaction peu modélisés
+  & Simuler : gestionnaire qui ne voit que le taux de service, trois profils de gestion \\
+\addlinespace
+Simulation des perturbations
+  & \citealp{schmitt2012}; \citealp{ivanov2017}; \citealp{macdonald2018}; \citealp{klibi2012ejor}; \citealp{ramzy2022}; \citealp{zhang2026isomorph}
+  & Propagation des ruptures, génération de scénarios, stratégies de rétablissement
+  & Étude d'un cas ; pas de contrefactuels systématiques
+  & Simuler : chaque crise rejouée sans réaction puis sous chaque profil \\
+\addlinespace
+Réseaux bayésiens causaux
+  & \citealp{garvey2015}; \citealp{ojha2018}; \citealp{qazi2018}; \citealp{hosseiniivanov2020}; \citealp{rahiel2026codit}
+  & Inférence dans les deux sens, choix de stratégies
+  & Données rares, sans étiquette de décision ni contrefactuel
+  & Apprendre : réseau appris sur la base contrefactuelle, avec arcs interdits \\
+\bottomrule
+\end{tabularx}
+\end{table*}

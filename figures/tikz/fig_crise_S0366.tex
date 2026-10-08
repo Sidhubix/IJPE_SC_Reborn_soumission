@@ -1,0 +1,31 @@
+% Figure : crise S0366 jouée sous les quatre politiques (données : ip_timeseries.csv, lot A)
+% Couleurs identiques à celles de l'application Isomorph-Reborn.
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.93\textwidth, height=5.6cm,
+  xmin=-3, xmax=25, ymin=0.80, ymax=1.02,
+  xlabel={Jours depuis le début de la perturbation}, ylabel={Taux de service $\mathrm{IP}(t)$},
+  xtick={-3,0,4,7,11,14,18,21,25}, ytick={0.80,0.85,0.90,0.95,1.00},
+  yticklabel style={/pgf/number format/.cd,fixed,fixed zerofill,precision=2,use comma},
+  tick label style={font=\scriptsize}, label style={font=\small},
+  grid=major, grid style={black!8},
+  legend style={font=\scriptsize, draw=none, fill=none, at={(0.5,1.02)}, anchor=south, legend columns=4, /tikz/every even column/.append style={column sep=1em}},
+  every axis plot/.append style={line width=1.2pt, smooth, tension=0.6}]
+  \fill[black!5] (axis cs:0,0.80) rectangle (axis cs:21,1.02);
+  \draw[appreac!70, densely dashed, line width=0.6pt] (axis cs:0,0.80) -- (axis cs:0,1.02);
+  \node[font=\scriptsize, text=black!60, anchor=north] at (axis cs:10.5,1.018) {fermeture d'Atlanta (21 jours, sévérité 0,95)};
+  \addplot[appnone] table[x=jour,y=none] {figures/data/fig4_S0366.dat};
+  \addlegendentry{Aucune décision}
+  \addplot[appprud] table[x=jour,y=prudent] {figures/data/fig4_S0366.dat};
+  \addlegendentry{Prudent}
+  \addplot[appreac] table[x=jour,y=reactif] {figures/data/fig4_S0366.dat};
+  \addlegendentry{Réactif}
+  \addplot[apptard] table[x=jour,y=tardif] {figures/data/fig4_S0366.dat};
+  \addlegendentry{Tardif}
+  % jours de détection
+  \addplot[only marks, mark=triangle*, mark size=3pt, appreac, forget plot] coordinates {(0,0.8838)};
+  \addplot[only marks, mark=triangle*, mark size=3pt, appprud, forget plot] coordinates {(1,0.8468)};
+  \addplot[only marks, mark=triangle*, mark size=3pt, apptard, forget plot] coordinates {(3,0.8466)};
+  \node[font=\scriptsize, anchor=south east, text=black!65, fill=white, fill opacity=0.85, text opacity=1, inner sep=1.5pt] at (axis cs:24.7,0.805) {$\blacktriangle$ : jour de détection de chaque profil};
+\end{axis}
+\end{tikzpicture}

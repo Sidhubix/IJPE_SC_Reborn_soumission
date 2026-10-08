@@ -1,0 +1,20 @@
+% Déclarations finales : disponibilité des données, usage de l'IA générative, intérêts, financement.
+
+\section*{Disponibilité des données}
+
+Les données et le code qui permettent de reproduire les résultats sont déposés dans un entrepôt public, conformément à la politique de données de la revue. Le jeu de données Mendeley Data \citep{screborn2026data} réunit les bases de scénarios des lots A, B et C, les fichiers d'hypothèses et de configuration, les trajectoires, les paramètres ajustés, la base d'apprentissage, les contraintes structurelles et le réseau bayésien appris, ainsi que le générateur Isomorph-Reborn, diffusé en code ouvert avec son manuel d'utilisation. Pendant l'évaluation, il est accessible par un lien de consultation réservé aux relecteurs : \url{https://data.mendeley.com/preview/jm2phpyw92?a=b897008c-f117-4563-85e2-fb74ac173c47}. L'outil BayesArtist, utilisé pour l'apprentissage et l'inférence, n'est pas diffusé ; l'apprentissage du réseau peut toutefois être reproduit avec tout logiciel de réseaux bayésiens qui apprend la structure et les paramètres à partir d'un fichier CSV et accepte des arcs interdits, par exemple Hugin, GeNIe (BayesFusion), le paquet R bnlearn ou la bibliothèque Python pgmpy. Les algorithmes de recherche disponibles différant d'un outil à l'autre, de légers écarts de structure sont possibles. Le matériel supplémentaire, déposé avec le manuscrit, réunit la revue détaillée de la littérature, les compléments de modélisation, les résultats complémentaires et les consignes de reproduction des figures.
+
+\section*{Déclaration d'usage de l'IA générative}
+
+Pendant la préparation de ce travail, les auteurs ont utilisé Claude (Anthropic) pour rédiger et structurer une partie du texte. Les auteurs ont relu et modifié le contenu autant que nécessaire. Google AI Studio a été utilisé pour appuyer le développement des deux applications BayesArtist et Isomorph-Reborn. Après usage de ces outils, les auteurs ont vérifié avec plus d'insistance les sections de code et les algorithmes réellement implémentés et ce autant que nécessaire. Ils ont confirmer correspondance exacte avec le cahier des charges et les descriptions donnés dans le présent papier. Les auteurs assument ainsi l'entière responsabilité du contenu de l'article.
+
+\section*{Déclaration d'intérêts}
+
+Les auteurs déclarent n'avoir aucun intérêt financier concurrent ni aucune relation personnelle connus qui auraient pu sembler influencer les travaux présentés dans cet article.
+
+% En double aveugle (\anonymetrue), le financement va sur la page de titre séparée.
+\ifanonyme\else
+\section*{Financement}
+
+Ces travaux ont été réalisés dans le cadre du projet SC-Reborn, \og La logistique reconfigurable et résiliente \fg{} (ANR-AAPG2021, convention ANR-21-CE10-0020), financé par l'Agence nationale de la recherche (ANR), France.
+\fi

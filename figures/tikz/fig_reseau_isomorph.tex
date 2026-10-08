@@ -1,0 +1,50 @@
+% Figure : réseau ISOMORPH d'origine par échelons (données : reseau_isomorph-originel.json)
+\begin{tikzpicture}[x=2.25cm,y=1cm,
+  site/.style={draw=black!60, rounded corners=2pt, fill=white, font=\scriptsize, minimum width=1.75cm, minimum height=0.6cm, align=center, inner sep=1.5pt},
+  usine/.style={site, fill=black!6, rounded corners=0pt},
+  oblige/.style={site, draw=polreac, very thick, fill=polreac!12},
+  client/.style={site, rounded corners=7pt, fill=black!12},
+  arc/.style={-{Stealth[length=1.6mm]}, black!45, thin},
+  arcob/.style={-{Stealth[length=2mm]}, polreac, very thick},
+  delai/.style={font=\tiny, fill=white, inner sep=0.6pt, text=black!70}]
+  % échelons
+  \node[usine] (SF) at (0, 1.6) {San Francisco};
+  \node[usine] (SL) at (0, 0)   {St. Louis};
+  \node[usine] (OR) at (0,-1.6) {Orlando};
+  \node[oblige] (NA) at (1, 0) {Nashville\\(hub)};
+  \node[oblige] (AT) at (2, 0) {Atlanta};
+  \node[site] (CH) at (3, 1.6) {Chicago};
+  \node[site] (CT) at (3, 0)   {Charlotte};
+  \node[site] (ME) at (3,-1.6) {Memphis};
+  \node[site] (CO) at (4, 1.2) {Columbus};
+  \node[site] (RI) at (4,-0.4) {Richmond};
+  \node[site] (PH) at (5, 1.0) {Philadelphia};
+  \node[site] (BA) at (5,-1.2) {Baltimore};
+  \node[client] (NY) at (6, 0) {New York\\(client)};
+  % liaisons et délais de trajet (jours)
+  \draw[arc] (SF) -- node[delai]{4} (NA);
+  \draw[arc] (SL) -- node[delai]{2} (NA);
+  \draw[arc] (OR) -- node[delai]{2} (NA);
+  \draw[arcob] (NA) -- node[delai]{1} (AT);
+  \draw[arc] (AT) -- node[delai]{8} (CH);
+  \draw[arc] (AT) -- node[delai]{7} (CT);
+  \draw[arc] (AT) -- node[delai]{7} (ME);
+  \draw[arc] (CH) -- node[delai]{2} (CO);
+  \draw[arc] (CT) -- node[delai]{2} (RI);
+  \draw[arc] (CO) -- node[delai,pos=0.4]{2} (PH);
+  \draw[arc] (CO) -- node[delai,pos=0.25]{3} (BA);
+  \draw[arc] (RI) -- node[delai,pos=0.25]{1} (PH);
+  \draw[arc] (RI) -- node[delai,pos=0.4]{3} (BA);
+  \draw[arc] (ME) -- node[delai]{2} (BA);
+  \draw[arc] (PH) -- node[delai]{1} (NY);
+  \draw[arc] (BA) -- node[delai]{2} (NY);
+  % échelons
+  \foreach \x/\t in {0/Sources, 1/Hub, 2/{Échelon 2}, 3/{Échelon 3}, 4/{Échelon 4}, 5/{Échelon 5}, 6/Client}
+    \node[font=\scriptsize\itshape, text=black!55] at (\x, 2.45) {\t};
+  % légende
+  \begin{scope}[shift={(0,-2.75)}]
+    \draw[arcob] (0.9,0) -- (1.35,0);
+    \node[font=\scriptsize, anchor=west] at (1.4,0) {point de passage obligé : sa perte déconnecte toutes les sources du client};
+    \node[font=\scriptsize, anchor=west] at (1.4,-0.5) {chiffre sur une liaison : délai de trajet en jours ; dernier kilomètre illimité};
+  \end{scope}
+\end{tikzpicture}

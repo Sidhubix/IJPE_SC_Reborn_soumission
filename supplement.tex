@@ -1,0 +1,50 @@
+%% Article SC-Reborn pour International Journal of Production Economics
+%% MATÉRIEL SUPPLÉMENTAIRE : compléments retirés du manuscrit principal (manuscrit.tex).
+%% Les renvois « section S… » du manuscrit pointent vers les sections de ce document.
+
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[margin=2.3cm]{geometry}
+\usepackage[authoryear,longnamesfirst]{natbib}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,tabularx}
+\usepackage{capt-of}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,backgrounds,calc,patterns}
+\usepackage[hidelinks]{hyperref}
+\input{commun}
+
+% Numérotation propre au matériel supplémentaire : S1, S2... pour les sections, figures, tableaux et équations
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\theequation}{S\arabic{equation}}
+\setcounter{tocdepth}{2}
+
+\title{Jumeau numérique et pilotage bayésien causal de la résilience des chaînes logistiques\\[4pt]
+\large Matériel supplémentaire}
+\author{Auteurs anonymisés pour l'évaluation}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent Ce document complète le manuscrit principal. Il réunit la revue détaillée de la littérature (S1), les compléments de modélisation des trois blocs de la démarche, Simuler (S2), Mesurer (S3) et Apprendre (S4), les résultats complémentaires (S5), une vue détaillée de la démarche (S6) et les consignes de reproduction des figures (S7). Les figures, tableaux et équations y sont numérotés S1, S2, etc. ; les renvois au manuscrit principal sont signalés comme tels.
+
+\tableofcontents
+
+\input{supplement/S1}
+\input{supplement/S2}
+\input{supplement/S3}
+\input{supplement/S4}
+\input{supplement/S5}
+\input{supplement/S6}
+\input{supplement/S7}
+
+\bibliographystyle{cas-model2-names}
+\bibliography{references}
+
+\end{document}

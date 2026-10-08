@@ -1,0 +1,24 @@
+% Liste de suivi des dépôts (à retirer avant la soumission : \suivifalse dans manuscrit.tex).
+\noindent{\color{blue}\fbox{\parbox{0.96\textwidth}{\footnotesize
+\textbf{Liste de suivi des dépôts (à retirer par toi ou moi avant la soumission).} La politique de données d'IJPE (option C) impose le dépôt des données dans un entrepôt et une déclaration de disponibilité dès la soumission ; les fichiers supplémentaires doivent être téléversés avec le manuscrit, chacun avec une légende courte, et ne peuvent plus être ajoutés qu'à l'étape de révision.
+\begin{itemize}[leftmargin=1.2em, itemsep=1pt]
+\item[$\boxtimes$] \textbf{Mendeley Data} (fait, en brouillon) : le jeu de données contient, pour chaque lot (A : réseau ISOMORPH, tension 75, 2 000 scénarios ; B : réseau paramétrique, 500 scénarios) : \texttt{hypotheses\_lot\_A\_isomorph\_tension75.json}, \texttt{hypotheses\_lot\_B\_parametrique\_tension75.json}, les fichiers des lots complémentaires C0 et C1 (\texttt{hypotheses\_lot\_C0\_sans\_perturbation.json}, \texttt{hypotheses\_lot\_C1\_perturbation\_mineure.json} et leurs exports), \texttt{reseau\_isomorph-originel.json}, \texttt{ip\_timeseries.csv}, \texttt{resilience\_ip.csv}, les fichiers de scénarios, de perturbations et de décisions, la base \texttt{rb\_training\_42\_*.csv}, \texttt{bayesartist\_apprentissage\_lotA.csv}, \texttt{bayesartist\_contraintes\_isomorph.json} et le réseau appris au format \texttt{.bif}.
+\item[$\boxtimes$] Rédiger le README du jeu de données : contenu de chaque fichier, signification des colonnes, graine et configuration de génération, correspondance avec les tableaux et figures de l'article.
+\item[$\square$] Choisir la licence des données (CC-BY 4.0 conseillée) ; garder le jeu de données privé pendant l'évaluation et générer le lien de partage réservé aux relecteurs.
+\item[$\boxtimes$] \textbf{Isomorph-Reborn} : déposé dans le même jeu de données Mendeley (pas de Zenodo) ; vérifier la licence du code (MIT conseillée), le manuel d'utilisation et le README d'installation.
+\item[$\boxtimes$] README propre d'Isomorph-Reborn (installation, aucune clé requise, Firebase facultatif) ; \texttt{firebase-applet-config.json} retiré du code déposé ; fichiers renommés selon le README du jeu de données.
+\item[$\square$] Choisir la licence du code d'Isomorph-Reborn (MIT conseillée) et la reporter dans son README.
+\item[$\boxtimes$] Lot C0 : \texttt{resilience\_ip} réexporté.
+\item[$\square$] Vérifier que le manuel d'utilisation est à jour (correctif de la représentation temporelle) et qu'il décrit les manœuvres citées dans les consignes de reproductibilité des figures.
+\item[$\square$] Pour l'évaluation anonyme : fournir un lien anonymisé vers le code (par exemple anonymous.4open.science) ou une archive jointe réservée aux relecteurs.
+\item[$\square$] \textbf{BayesArtist} : non diffusé ; vérifier que la base CSV et le fichier de contraintes suffisent à reproduire l'apprentissage dans un outil tiers (essai conseillé avec bnlearn ou pgmpy).
+\item[$\boxtimes$] \textbf{Matériel supplémentaire} : \texttt{supplement.tex} compilé (sections S1 à S7).
+\item[$\square$] Rédiger la légende courte du matériel supplémentaire et le téléverser avec le manuscrit.
+\item[$\square$] À l'acceptation : publier le jeu de données, vérifier que son DOI est bien \acompleter{10.17632/jm2phpyw92.1} dans la bibliographie, que les auteurs de la référence (Addouche et Rahiel) correspondent à ceux du dépôt, et retirer le lien de consultation privé.
+\item[$\square$] Renseigner la déclaration de disponibilité des données dans le formulaire de soumission.
+\item[$\boxtimes$] Déclaration CRediT rédigée (section en fin d'article) ; financement avec le numéro de convention ANR-21-CE10-0020.
+\item[$\square$] \textbf{Exigences de soumission Elsevier} : fournir les points clés dans un fichier séparé ; ajouter les identifiants ORCID ; confirmer la déclaration d'intérêts ; vérifier le mode d'évaluation (anonymat simple ou double) et, s'il est double, déplacer le financement et les remerciements sur une page de titre séparée.
+\item[$\boxtimes$] Manuscrit ramené sous 10 000 mots ; détails techniques, figures secondaires et revue détaillée déplacés dans le matériel supplémentaire.
+\item[$\boxtimes$] Référence Rajah et al. (2025) ajoutée à l'état de l'art.
+\item[$\square$] Traduire l'article en anglais (texte, figures, tableaux et matériel supplémentaire).
+\end{itemize}}}}

@@ -1,0 +1,25 @@
+% Réglages communs au manuscrit et au matériel supplémentaire : couleurs, colonnes, champs à compléter.
+% Couleurs des figures (politiques de gestion et paliers du réseau bayésien)
+\definecolor{polnone}{HTML}{5C5B56}
+\definecolor{poltard}{HTML}{EDA100}
+\definecolor{polprud}{HTML}{EB6834}
+\definecolor{polreac}{HTML}{2A78D6}
+% Couleurs des politiques dans l'application Isomorph-Reborn
+\definecolor{appnone}{HTML}{9CA3AF}
+\definecolor{appprud}{HTML}{2563EB}
+\definecolor{appreac}{HTML}{DC2626}
+\definecolor{apptard}{HTML}{16A34A}
+\definecolor{palctx}{HTML}{8A8984}
+\definecolor{palpol}{HTML}{2A78D6}
+\definecolor{palrep}{HTML}{EDA100}
+\definecolor{palmec}{HTML}{1BAF7A}
+\definecolor{palres}{HTML}{EB6834}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+% Champs restant à compléter avant la soumission (en bleu)
+\newcommand{\acompleter}[1]{\textcolor{blue}{#1}}
+
+% Renvois du manuscrit vers le matériel supplémentaire (numérotation S1, S2, ... fixée dans supplement.tex)
+\newcommand{\voirSM}[1]{voir le matériel supplémentaire, section~#1}

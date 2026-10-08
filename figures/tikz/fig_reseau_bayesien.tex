@@ -1,0 +1,75 @@
+% Figure : réseau bayésien appris sous contraintes (données : fichier .bif exporté par BayesArtist)
+\begin{tikzpicture}[x=1.18cm,y=0.98cm,
+  n/.style={draw=#1, fill=#1!12, rounded corners=3pt, font=\scriptsize, align=center, minimum width=1.9cm, minimum height=0.72cm, inner sep=1.2pt},
+  a/.style={-{Stealth[length=1.4mm]}, black!30, thin},
+  m/.style={-{Stealth[length=2mm]}, polreac, very thick}]
+  \node[font=\small\bfseries, text=black!70] at (0,5.6) {Contexte};
+  \node[n=palctx] (cible) at (0,2.700) {Position\\de la cible};
+  \node[n=palctx] (partcrit) at (0,1.350) {Part des articles\\critiques};
+  \node[n=palctx] (nature) at (0,0.000) {Nature};
+  \node[n=palctx] (severite) at (0,-1.350) {Sévérité};
+  \node[n=palctx] (duree) at (0,-2.700) {Durée};
+  \node[font=\small\bfseries, text=black!70] at (2.9,5.6) {Politique};
+  \node[n=palpol] (profil) at (2.9,0.000) {Profil de\\gestion};
+  \node[font=\small\bfseries, text=black!70] at (5.8,5.6) {Réponse};
+  \node[n=palrep] (detection) at (5.8,4.050) {Détection};
+  \node[n=palrep] (nbleviers) at (5.8,2.700) {Nombre\\de leviers};
+  \node[n=palrep] (lag) at (5.8,1.350) {Délai de\\réaction};
+  \node[n=palrep] (fstock) at (5.8,0.000) {Leviers\\de stock};
+  \node[n=palrep] (freroutage) at (5.8,-1.350) {Leviers de\\reroutage};
+  \node[n=palrep] (fcapacite) at (5.8,-2.700) {Leviers de\\capacité};
+  \node[n=palrep] (fdemande) at (5.8,-4.050) {Leviers\\de demande};
+  \node[font=\small\bfseries, text=black!70] at (8.7,5.6) {Mécanisme};
+  \node[n=palmec] (beta) at (8.7,2.025) {$\beta$ (reprise)};
+  \node[n=palmec] (h) at (8.7,0.675) {$h$ (profondeur)};
+  \node[n=palmec] (alpha) at (8.7,-0.675) {$\alpha$ (chute)};
+  \node[n=palmec] (d) at (8.7,-2.025) {$d$ (durée\\du palier)};
+  \node[font=\small\bfseries, text=black!70] at (11.6,5.6) {Résilience};
+  \node[n=palres] (CRD) at (11.6,1.350) {CRD};
+  \node[n=palres] (IPC) at (11.6,0.000) {IPC};
+  \node[n=palres] (TRP) at (11.6,-1.350) {TRP};
+  \begin{scope}[on background layer]
+    \draw[a] (cible.west) to[bend right=40] (nature.west);
+    \draw[a] (cible.east) -- (detection.west);
+    \draw[a] (profil.east) -- (detection.west);
+    \draw[a] (nature.west) to[bend right=40] (severite.west);
+    \draw[a] (nature.east) -- (nbleviers.west);
+    \draw[a] (detection.east) to[bend left=40] (nbleviers.east);
+    \draw[a] (severite.west) to[bend right=40] (duree.west);
+    \draw[a] (profil.east) -- (beta.west);
+    \draw[a] (nbleviers.east) -- (beta.west);
+    \draw[a] (nature.east) -- (freroutage.west);
+    \draw[a] (profil.east) -- (freroutage.west);
+    \draw[a] (nbleviers.east) to[bend left=40] (freroutage.east);
+    \draw[a] (nature.east) -- (fdemande.west);
+    \draw[a] (profil.east) -- (fdemande.west);
+    \draw[a] (nbleviers.east) to[bend left=40] (fdemande.east);
+    \draw[a] (beta.east) to[bend left=40] (h.east);
+    \draw[a] (detection.east) -- (h.west);
+    \draw[a] (fdemande.east) -- (h.west);
+    \draw[a] (profil.east) -- (fstock.west);
+    \draw[a] (nbleviers.east) to[bend left=40] (fstock.east);
+    \draw[a] (freroutage.east) to[bend right=40] (fstock.east);
+    \draw[a] (h.east) to[bend left=40] (alpha.east);
+    \draw[a] (beta.east) to[bend left=40] (alpha.east);
+    \draw[a] (detection.east) to[bend left=40] (lag.east);
+    \draw[a] (nbleviers.east) to[bend left=40] (lag.east);
+    \draw[a] (fstock.east) to[bend right=40] (lag.east);
+    \draw[a] (nature.east) -- (fcapacite.west);
+    \draw[a] (nbleviers.east) to[bend left=40] (fcapacite.east);
+    \draw[a] (fstock.east) to[bend left=40] (fcapacite.east);
+    \draw[m] (profil.east) -- (d.west);
+    \draw[m] (duree.east) -- (d.west);
+    \draw[m] (lag.east) -- (d.west);
+    \draw[m] (profil.east) -- (IPC.west);
+    \draw[m] (h.east) -- (IPC.west);
+    \draw[m] (d.east) -- (IPC.west);
+    \draw[a] (d.east) -- (CRD.west);
+    \draw[a] (alpha.east) -- (CRD.west);
+    \draw[a] (beta.east) -- (CRD.west);
+    \draw[a] (duree.east) -- (TRP.west);
+    \draw[a] (d.east) -- (TRP.west);
+    \draw[a] (CRD.east) to[bend left=40] (TRP.east);
+  \end{scope}
+  \node[font=\scriptsize, text=black!65, anchor=north] at (5.8,-5.1) {Trait épais : chemin principal (la politique agit sur la durée $d$ du palier dégradé, qui détermine la perte cumulée IPC). 20 variables, 41 arcs.};
+\end{tikzpicture}
