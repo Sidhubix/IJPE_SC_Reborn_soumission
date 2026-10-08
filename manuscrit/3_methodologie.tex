@@ -106,26 +106,14 @@ p(x) = k + \frac{q}{2} - \frac{h}{2}\tanh\left(\frac{\alpha\,(x - g)}{2}\right) 
 \label{eq:5}
 \end{equation}
 
-Avant la crise, $p$ vaut $k$ ; au cœur de la crise, il atteint le palier $k - h$ ; après la reprise, il se stabilise en $k + q$. La courbe est ainsi décrite par trois niveaux et quatre grandeurs de forme, qui ont chacune une lecture opérationnelle directe (tableau~\ref{tab:d6}). Quelques contraintes garantissent une forme interprétable : le palier dégradé reste positif, le niveau final reste au-dessus du palier, et les raideurs ainsi que la durée du palier ne peuvent descendre sous des valeurs minimales qui produiraient des formes sans signification. Les paramètres sont estimés pour chaque version de crise par un critère robuste, qui limite l'influence des rebonds liés à l'engagement successif des leviers (\voirSM{S3.1}).
+Avant la crise, $p$ vaut $k$ ; au cœur de la crise, il atteint le palier $k - h$ ; après la reprise, il se stabilise en $k + q$. Les quatre autres paramètres décrivent la forme de la crise : le décalage $g$ de la chute, temps pendant lequel le réseau absorbe le choc, la durée $d$ du palier dégradé, et les raideurs $\alpha$ et $\beta$ de la chute et de la reprise. Leur lecture détaillée et les contraintes qui garantissent une forme interprétable sont données dans le matériel supplémentaire (section~S3.1).
 
-\begin{table*}[htbp]
-\caption{Paramètres de la courbe de résilience.}
-\label{tab:d6}
-\footnotesize
-\begin{tabularx}{\textwidth}{@{}P{1.4cm}P{3.4cm}L@{}}
-\toprule
-\textbf{Paramètre} & \textbf{Signification} & \textbf{Lecture pour la chaîne logistique} \\
-\midrule
-$k$ & Niveau avant la perturbation & Service nominal du réseau \\
-$h$ & Profondeur de la chute & Ampleur de la perte de service au plus fort de la crise \\
-$q$ & Écart entre niveau final et niveau initial & Perte durable ($q$ $<$ 0) ou sur-récupération ($q$ $>$ 0) \\
-$g$ & Décalage de la chute & Temps pendant lequel le réseau absorbe le choc avant de se dégrader, par ses marges de capacité et, en représentation temporelle, par ses stocks et la matière en route \\
-$d$ & Durée entre chute et reprise & Durée du palier dégradé, liée à la persistance du choc, au délai de réaction et, en représentation temporelle, au temps de reconstitution des stocks après le retour des capacités \\
-$\alpha$ & Raideur de la chute & Brutalité de la dégradation \\
-$\beta$ & Raideur de la reprise & Rapidité du rétablissement \\
-\bottomrule
-\end{tabularx}
-\end{table*}
+Chaque trajectoire est recalée sur le déclenchement de la perturbation, de sorte que la période précédant la crise fournit directement le niveau nominal. Les sept paramètres sont estimés en minimisant un critère robuste, qui pénalise les grands écarts moins fortement que les moindres carrés (\voirSM{S3.1}). Ce choix répond à une caractéristique des crises logistiques : la phase de reprise est rarement monotone. Rebonds, oscillations et à-coups liés à l'engagement successif des leviers ne peuvent être reproduits par une courbe à une seule chute. Le critère robuste en limite l'influence et oriente l'ajustement vers la profondeur et la largeur du creux, qui portent l'essentiel de l'information sur la résilience. Le critère n'étant pas convexe, l'estimation part de plusieurs points initiaux construits à partir de la trajectoire observée et retient la meilleure solution (Fig.~\ref{fig:d4}).
+
+\begin{center}
+\input{figures/tikz/fig_ajustement_S0366}
+\captionof{figure}{Trajectoire observée et courbe ajustée pour la crise de la figure~\ref{fig:d3}, en l'absence de réaction, avec la lecture des paramètres.}\label{fig:d4}
+\end{center}
 
 Six indicateurs sont calculés analytiquement à partir des paramètres ajustés : l'indice de perte cumulée (IPC), le coefficient de récupération dynamique (CRD), le temps de récupération pondéré (TRP), le score de robustesse adaptative (SRA), l'efficacité de résilience relative (ERR) et le potentiel de récupération (PR). Le principal, IPC, mesure l'aire entre le niveau nominal et la courbe :
 

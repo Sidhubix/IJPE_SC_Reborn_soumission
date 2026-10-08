@@ -1,8 +1,31 @@
 \section{Compléments sur la courbe de résilience et les indicateurs (Mesurer)}
 \label{sec:S3}
 
-\subsection{Estimation des paramètres}
+\subsection{Paramètres et estimation}
 \label{sec:S3.1}
+
+Le tableau~\ref{tab:d6} donne la lecture opérationnelle des sept paramètres de la courbe (équation~(2) du manuscrit).
+
+\begin{table}[htbp]
+\caption{Paramètres de la courbe de résilience.}
+\label{tab:d6}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}P{1.4cm}P{3.4cm}L@{}}
+\toprule
+\textbf{Paramètre} & \textbf{Signification} & \textbf{Lecture pour la chaîne logistique} \\
+\midrule
+$k$ & Niveau avant la perturbation & Service nominal du réseau \\
+$h$ & Profondeur de la chute & Ampleur de la perte de service au plus fort de la crise \\
+$q$ & Écart entre niveau final et niveau initial & Perte durable ($q$ $<$ 0) ou sur-récupération ($q$ $>$ 0) \\
+$g$ & Décalage de la chute & Temps pendant lequel le réseau absorbe le choc avant de se dégrader, par ses marges de capacité et, en représentation temporelle, par ses stocks et la matière en route \\
+$d$ & Durée entre chute et reprise & Durée du palier dégradé, liée à la persistance du choc, au délai de réaction et, en représentation temporelle, au temps de reconstitution des stocks après le retour des capacités \\
+$\alpha$ & Raideur de la chute & Brutalité de la dégradation \\
+$\beta$ & Raideur de la reprise & Rapidité du rétablissement \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Quelques contraintes garantissent une forme interprétable : le palier dégradé reste positif, le niveau final reste au-dessus du palier, et les raideurs ainsi que la durée du palier ne peuvent descendre sous des valeurs minimales qui produiraient des formes sans signification.
 
 Chaque trajectoire est recalée sur le déclenchement de la perturbation, de sorte que la période précédant la crise fournit directement le niveau nominal. Les sept paramètres sont estimés en minimisant un critère robuste qui pénalise les grands écarts moins fortement que les moindres carrés :
 
@@ -11,12 +34,7 @@ L(\theta) = \sum_{i} 2\left(\sqrt{1 + \frac{r_i^2}{f^2}} - 1\right), \qquad r_i 
 \label{eq:S4}
 \end{equation}
 
-Ce choix répond à une caractéristique des crises logistiques : la phase de reprise est rarement monotone. Rebonds, oscillations et à-coups liés à l'engagement successif des leviers ne peuvent être reproduits par une courbe à une seule chute. Le critère robuste en limite l'influence et oriente l'ajustement vers la profondeur et la largeur du creux, qui portent l'essentiel de l'information sur la résilience. Le critère n'étant pas convexe, l'estimation part de plusieurs points initiaux construits à partir de la trajectoire observée (niveau avant crise, minimum atteint, niveau final) et retient la meilleure solution (figure~\ref{fig:d4}).
-
-\begin{center}
-\input{figures/tikz/fig_ajustement_S0366}
-\captionof{figure}{Trajectoire observée et courbe ajustée pour la crise de la figure~2 du manuscrit, en l'absence de réaction, avec la lecture des paramètres.}\label{fig:d4}
-\end{center}
+Ce critère, ses raisons et un exemple d'ajustement sont présentés en section 3.3 du manuscrit (figure~3).
 
 \subsection{Définition et formules des six indicateurs}
 \label{sec:S3.2}
