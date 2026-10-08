@@ -1,29 +1,8 @@
 \section{Compléments sur la courbe de résilience et les indicateurs (Mesurer)}
 \label{sec:S3}
 
-\subsection{Paramètres et estimation}
+\subsection{Estimation des paramètres}
 \label{sec:S3.1}
-
-\begin{table}[htbp]
-\caption{Paramètres de la courbe de résilience.}
-\label{tab:d6}
-\footnotesize
-\begin{tabularx}{\textwidth}{@{}P{1.4cm}P{3.4cm}L@{}}
-\toprule
-\textbf{Paramètre} & \textbf{Signification} & \textbf{Lecture pour la chaîne logistique} \\
-\midrule
-$k$ & Niveau avant la perturbation & Service nominal du réseau \\
-$h$ & Profondeur de la chute & Ampleur de la perte de service au plus fort de la crise \\
-$q$ & Écart entre niveau final et niveau initial & Perte durable ($q$ $<$ 0) ou sur-récupération ($q$ $>$ 0) \\
-$g$ & Décalage de la chute & Temps pendant lequel le réseau absorbe le choc avant de se dégrader, par ses marges de capacité et, en représentation temporelle, par ses stocks et la matière en route \\
-$d$ & Durée entre chute et reprise & Durée du palier dégradé, liée à la persistance du choc, au délai de réaction et, en représentation temporelle, au temps de reconstitution des stocks après le retour des capacités \\
-$\alpha$ & Raideur de la chute & Brutalité de la dégradation \\
-$\beta$ & Raideur de la reprise & Rapidité du rétablissement \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-Quelques contraintes garantissent une forme interprétable : le palier dégradé reste positif, le niveau final reste au-dessus du palier, et les raideurs ainsi que la durée du palier ne peuvent descendre sous des valeurs minimales qui produiraient des formes sans signification.
 
 Chaque trajectoire est recalée sur le déclenchement de la perturbation, de sorte que la période précédant la crise fournit directement le niveau nominal. Les sept paramètres sont estimés en minimisant un critère robuste qui pénalise les grands écarts moins fortement que les moindres carrés :
 
@@ -39,8 +18,28 @@ Ce choix répond à une caractéristique des crises logistiques : la phase de re
 \captionof{figure}{Trajectoire observée et courbe ajustée pour la crise de la figure~2 du manuscrit, en l'absence de réaction, avec la lecture des paramètres.}\label{fig:d4}
 \end{center}
 
-\subsection{Formules des six indicateurs}
+\subsection{Définition et formules des six indicateurs}
 \label{sec:S3.2}
+
+Le tableau~\ref{tab:d7} présente les six indicateurs, la dimension de la résilience que chacun décrit et leur sens favorable.
+
+\begin{table}[htbp]
+\caption{Les six indicateurs de résilience.}
+\label{tab:d7}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}P{3.6cm}P{2.3cm}LP{2.1cm}@{}}
+\toprule
+\textbf{Indicateur} & \textbf{Dimension} & \textbf{Interprétation} & \textbf{Sens favorable} \\
+\midrule
+IPC, indice de perte cumulée & Perte & Service cumulé perdu pendant la crise & Faible \\
+CRD, coefficient de récupération dynamique & Vitesse & Rapidité de la reprise rapportée à la chute et à la durée du palier & Élevé \\
+TRP, temps de récupération pondéré & Durée & Temps nécessaire pour que la reprise atteigne 95~\% de son amplitude & Faible \\
+SRA, score de robustesse adaptative & Adaptation & Capacité à remonter, pénalisée par un écart durable au niveau initial & Élevé \\
+ERR, efficacité de résilience relative & Performance conservée & Part du service nominal maintenue sur l'épisode & Élevé \\
+PR, potentiel de récupération & Rétablissement & Niveau final rapporté à la mi-profondeur de la chute & À préciser \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 Six indicateurs sont calculés analytiquement à partir des paramètres ajustés. Ils héritent ainsi du lissage opéré par l'ajustement et décrivent chacun une facette de la résilience : perte subie, vitesse et durée de la reprise, capacité d'adaptation, performance conservée et potentiel de rétablissement.
 

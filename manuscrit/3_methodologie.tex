@@ -106,34 +106,35 @@ p(x) = k + \frac{q}{2} - \frac{h}{2}\tanh\left(\frac{\alpha\,(x - g)}{2}\right) 
 \label{eq:5}
 \end{equation}
 
-Avant la crise, $p$ vaut $k$ ; au cœur de la crise, il atteint le palier $k - h$ ; après la reprise, il se stabilise en $k + q$. Les quatre autres paramètres décrivent la forme de la crise : le décalage $g$ de la chute, temps pendant lequel le réseau absorbe le choc, la durée $d$ du palier dégradé, et les raideurs $\alpha$ et $\beta$ de la chute et de la reprise. Ils sont estimés pour chaque version de crise par un critère robuste, qui limite l'influence des rebonds liés à l'engagement successif des leviers (\voirSM{S3.1}).
+Avant la crise, $p$ vaut $k$ ; au cœur de la crise, il atteint le palier $k - h$ ; après la reprise, il se stabilise en $k + q$. La courbe est ainsi décrite par trois niveaux et quatre grandeurs de forme, qui ont chacune une lecture opérationnelle directe (tableau~\ref{tab:d6}). Quelques contraintes garantissent une forme interprétable : le palier dégradé reste positif, le niveau final reste au-dessus du palier, et les raideurs ainsi que la durée du palier ne peuvent descendre sous des valeurs minimales qui produiraient des formes sans signification. Les paramètres sont estimés pour chaque version de crise par un critère robuste, qui limite l'influence des rebonds liés à l'engagement successif des leviers (\voirSM{S3.1}).
 
-Six indicateurs sont calculés analytiquement à partir des paramètres ajustés (tableau~\ref{tab:d7}). Le principal, l'indice de perte cumulée, mesure l'aire entre le niveau nominal et la courbe :
+\begin{table*}[htbp]
+\caption{Paramètres de la courbe de résilience.}
+\label{tab:d6}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}P{1.4cm}P{3.4cm}L@{}}
+\toprule
+\textbf{Paramètre} & \textbf{Signification} & \textbf{Lecture pour la chaîne logistique} \\
+\midrule
+$k$ & Niveau avant la perturbation & Service nominal du réseau \\
+$h$ & Profondeur de la chute & Ampleur de la perte de service au plus fort de la crise \\
+$q$ & Écart entre niveau final et niveau initial & Perte durable ($q$ $<$ 0) ou sur-récupération ($q$ $>$ 0) \\
+$g$ & Décalage de la chute & Temps pendant lequel le réseau absorbe le choc avant de se dégrader, par ses marges de capacité et, en représentation temporelle, par ses stocks et la matière en route \\
+$d$ & Durée entre chute et reprise & Durée du palier dégradé, liée à la persistance du choc, au délai de réaction et, en représentation temporelle, au temps de reconstitution des stocks après le retour des capacités \\
+$\alpha$ & Raideur de la chute & Brutalité de la dégradation \\
+$\beta$ & Raideur de la reprise & Rapidité du rétablissement \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+Six indicateurs sont calculés analytiquement à partir des paramètres ajustés : l'indice de perte cumulée (IPC), le coefficient de récupération dynamique (CRD), le temps de récupération pondéré (TRP), le score de robustesse adaptative (SRA), l'efficacité de résilience relative (ERR) et le potentiel de récupération (PR). Le principal, IPC, mesure l'aire entre le niveau nominal et la courbe :
 
 \begin{equation}
 \mathrm{IPC} = \frac{h}{\alpha}\ln 2 + \frac{h\,d}{2} - \frac{h + q}{\beta}\ln 2
 \label{eq:7}
 \end{equation}
 
-Les formules des cinq autres indicateurs, le critère d'estimation et un exemple d'ajustement sont donnés dans le matériel supplémentaire (section~S3).
-
-\begin{table*}[htbp]
-\caption{Les six indicateurs de résilience.}
-\label{tab:d7}
-\footnotesize
-\begin{tabularx}{\textwidth}{@{}P{3.6cm}P{2.3cm}LP{2.1cm}@{}}
-\toprule
-\textbf{Indicateur} & \textbf{Dimension} & \textbf{Interprétation} & \textbf{Sens favorable} \\
-\midrule
-IPC, indice de perte cumulée & Perte & Service cumulé perdu pendant la crise & Faible \\
-CRD, coefficient de récupération dynamique & Vitesse & Rapidité de la reprise rapportée à la chute et à la durée du palier & Élevé \\
-TRP, temps de récupération pondéré & Durée & Temps nécessaire pour que la reprise atteigne 95~\% de son amplitude & Faible \\
-SRA, score de robustesse adaptative & Adaptation & Capacité à remonter, pénalisée par un écart durable au niveau initial & Élevé \\
-ERR, efficacité de résilience relative & Performance conservée & Part du service nominal maintenue sur l'épisode & Élevé \\
-PR, potentiel de récupération & Rétablissement & Niveau final rapporté à la mi-profondeur de la chute & À préciser \\
-\bottomrule
-\end{tabularx}
-\end{table*}
+La définition des six indicateurs, leur interprétation et leurs formules, ainsi que le critère d'estimation et un exemple d'ajustement, sont donnés dans le matériel supplémentaire (sections~S3.1 et S3.2).
 
 La courbe est construite pour le domaine de la résilience, qui suppose une chute effective suivie d'un rétablissement. Une crise absorbée sans dégradation relève de la robustesse ; des variations rapides et de faible amplitude autour du niveau nominal relèvent de la stabilité ; une chute dont le réseau ne se relève pas relève de la défaillance, qui appelle une reconfiguration. Lorsque $h$ tend vers zéro, les indicateurs rapportés à $h$, CRD et SRA, deviennent instables : ce n'est pas une limite du modèle, mais le signe d'un cas de robustesse (\voirSM{S3.3}).
 
