@@ -3,7 +3,7 @@
 
 L'objet d'étude est la crise, suivie de bout en bout : ce qui l'a provoquée, ce que les responsables des opérations ont décidé et l'évolution du taux de service jour après jour. Le bloc Simuler produit ces crises, le bloc Mesurer résume chacune par une courbe de résilience et le bloc Apprendre en tire un modèle causal.
 
-\subsection{Point de départ : du jumeau numérique ISOMORPH à la plateforme Isomorph-Reborn}
+\subsection{Jumeau numérique de la plateforme Isomorph-Reborn}
 \label{sec:3.1}
 
 Ce travail part d'ISOMORPH \citep{zhang2026isomorph}, jumeau numérique ouvert d'un réseau de distribution implanté dans des villes réelles des États-Unis. Trois sources (San Francisco, St.~Louis et Orlando) alimentent un hub à Nashville ; la marchandise passe ensuite par Atlanta puis par Chicago, Charlotte, Memphis, Columbus, Richmond, Philadelphie et Baltimore pour atteindre un client unique à New York. Le réseau compte ainsi treize villes reliées par seize liaisons. Le réseau y est simulé au pas journalier, avec une politique de réapprovisionnement (s, S). ISOMORPH a été conçu pour la prévision et ne se prête pas tel quel à l'étude de la résilience. Ses perturbations ne sont pas étiquetées, aucune décision n'intervient en cours de crise et aucun indicateur de résilience n'est calculé.
@@ -31,7 +31,7 @@ Expérimentation & Tirages indépendants & Même crise rejouée sous plusieurs p
 \end{tabularx}
 \end{table*}
 
-\subsection{Simuler : réseau, perturbations et responsable des opérations}
+\subsection{Simulation des scénarios de crise}
 \label{sec:3.2}
 
 \paragraph{Réseau et taux de service.} Le réseau est un graphe orienté sans cycle qui relie des sites typés (fournisseurs, usines, hubs, entrepôts, transporteurs) à un client final unique. Les sites forment deux groupes, production et stockage. C'est un site d'un groupe que vise une perturbation ou un levier. La capacité d'expédition d'un site de stockage est portée par ses liaisons sortantes. L'efficacité d'un levier dépend donc de la place du goulot d'étranglement dans la topologie autant que de son ampleur nominale. Deux réseaux peuvent réagir très différemment à la même perturbation et à la même décision. Le générateur permet d'isoler cet effet en rejouant les mêmes crises sur plusieurs réseaux. Deux réseaux servent ici de référence : un réseau paramétrique à redondance partielle (trois usines, neuf entrepôts) et le réseau d'ISOMORPH (treize villes, seize liaisons), dont les valeurs nominales figurent dans le matériel supplémentaire (section~S2.1).
@@ -104,7 +104,7 @@ Premiers leviers essayés & Reroutage, transporteur d'appoint & Déstockage, pr�
 
 \paragraph{Plan d'expériences.} Pour chaque scénario, les caractéristiques du réseau, la sévérité et la durée de la perturbation et la tension sont tirées indépendamment selon une loi uniforme sur leurs plages. La nature et la cible sont tirées de même parmi les possibilités, à une exception près : une coupure de lien vise la liaison principale d'un site avec une probabilité de 0,85. Faute de données de terrain sur la fréquence des crises, la loi uniforme donne le même poids à toutes les valeurs plausibles. La base décrit donc l'espace des scénarios et non la fréquence réelle des crises. Chaque crise est suivie sur 60 jours et la génération, initialisée par une graine, se reproduit à l'identique. Un niveau de tension global, de 0 à 100, règle d'un seul geste l'intensité et la durée des chocs, la tension du réseau, l'efficacité des leviers et la réactivité des responsables des opérations ; le niveau 50 correspond aux valeurs nominales données ici (\voirSM{S2.5}).
 
-\subsection{Mesurer : courbe de résilience et indicateurs}
+\subsection{Calcul des courbes de résilience et indicateurs}
 \label{sec:3.3}
 
 Une trajectoire journalière est trop longue et trop bruitée pour être comparée telle quelle d'une crise à l'autre. On reprend ici la courbe hyperbolique paramétrique (7 param.) et les six indicateurs de \citet{rahiel2026in4pl}, en les appliquant à des crises simulées en grand nombre. Le taux de service modélisé $p(x)$, où $x$ est le temps écoulé depuis le déclenchement de la perturbation, enchaîne une transition descendante pour la chute et une transition montante pour la reprise :
@@ -136,7 +136,7 @@ Les définitions et formules des six indicateurs, ainsi que le critère d'estima
 
 La courbe décrit une résilience au sens strict, c'est-à-dire une chute effective suivie d'un rétablissement. Une crise absorbée sans dégradation relève de la robustesse et de petites variations rapides autour du niveau nominal relèvent de la stabilité. Une chute dont le réseau ne se relève pas relève de la défaillance, qui appelle une reconfiguration. Quand $h$ tend vers zéro, CRD et SRA, qui sont rapportés à $h$, deviennent instables ; c'est le signe d'une crise absorbée, donc d'un cas de robustesse (\voirSM{S3.3}).
 
-\subsection{Apprendre : réseau bayésien causal}
+\subsection{Apprentissage bayésien causal}
 \label{sec:3.4}
 
 Chaque version d'une crise fournit une observation. Les variables sont rangées selon les causes qu'un diagnostic doit pouvoir distinguer et selon l'ordre temporel de la crise, qui impose des paliers qu'aucune relation causale ne peut remonter (tableau~\ref{tab:d9}). La position de la cible signale en particulier les points de passage obligés, sites ou liaisons dont la suppression couperait le client de toutes ses sources. Les variables continues sont réparties en trois classes de même effectif, dont les seuils sont calculés sur l'échantillon d'apprentissage. Le pronostic porte sur IPC, qui suit fidèlement le service perdu et dont le sens ne prête pas à confusion.

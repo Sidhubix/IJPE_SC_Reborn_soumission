@@ -1,10 +1,10 @@
 \section{Résultats}
 \label{sec:4}
 
-\subsection{Base générée}
+% \subsection{Base générée}
 \label{sec:4.1}
 
-La base principale a été générée avec Isomorph-Reborn sur le réseau d'ISOMORPH au niveau de tension 75, en représentation par flux, donc sans effet des stocks. La sévérité y varie de 0,68 à 1, la durée des perturbations de 8 à 24 jours et le taux de tension de 1,08 à 1,42. Les seuils critiques des profils ont été relevés à 0,98, 0,95 et 0,92. Avec un taux de service minimal médian proche de 0,87, les seuils nominaux laissaient en effet les profils prudent et tardif presque toujours inactifs. L'ordre des profils, seul objet de la comparaison, reste le même.
+La base principale a été générée avec Isomorph-Reborn en adoptant le réseau d'ISOMORPH avec une niveau de tension de 75, en représentation par flux (donc sans effet des stocks). La sévérité y varie de 0,68 à 1, la durée des perturbations de 8 à 24 jours et le taux de tension de 1,08 à 1,42. Les seuils critiques des profils ont été relevés à 0,98, 0,95 et 0,92. Avec un taux de service minimal médian proche de 0,87, les seuils nominaux laissaient en effet les profils prudent et tardif presque toujours inactifs. L'ordre des profils, seul objet de la comparaison, reste le même.
 
 La base utilisée compte les 2 000 scénarios, soit 8 000 versions de crise, répartis à parts à peu près égales entre les cinq natures. L'ajustement de la courbe est satisfaisant, avec un coefficient de détermination médian de 0,88. La perte cumulée IPC suit de très près le service effectivement perdu (corrélation de 0,97). C'est pourquoi elle sert d'indicateur principal dans la suite (\voirSM{S5.1}).
 
@@ -50,7 +50,7 @@ L'efficacité d'une politique varie avec la nature du choc. Le profil prudent, p
 
 Ces proportions se retrouvent sur un second réseau. Sur un lot de contrôle de 500 scénarios générés sur le réseau paramétrique, la part du service perdu évitée atteint 67~\%, 17~\% et 13~\% pour les profils réactif, prudent et tardif. La topologie change pourtant l'efficacité des leviers. Sur ce réseau aux voies de secours étroites, le profil réactif ne réduit plus que de 25~\% la perte d'une coupure de lien et de 53~\% celle d'une fermeture, contre 73~\% et 82~\% sur ISOMORPH.
 
-\subsection{Pronostic, diagnostic et préconisation}
+\subsection{Piloter par le modèle bayésien}
 \label{sec:4.3}
 
 Le réseau appris retrouve de lui-même le mécanisme décrit plus haut. Sa structure (Fig.~\ref{fig:d6}) compte 41 arcs, dont aucun ne remonte l'ordre des paliers. La perte cumulée y dépend directement de la politique, de la profondeur $h$ et de la durée $d$ du palier. Cette durée dépend à son tour de la politique, de la durée de la perturbation et du délai de réaction.
@@ -93,10 +93,10 @@ La figure~\ref{fig:carte} étend cette lecture aux sept contextes que permet la 
 \end{minipage}
 \end{center}
 
-\subsection{Rôle des stocks}
+% \subsection{Rôle des stocks}
 \label{sec:4.4}
 
-Les stocks protègent contre certaines perturbations seulement. La base principale les neutralise. Pour les étudier, on passe à la représentation temporelle, où la matière circule avec ses délais de trajet et de production et où chaque site de stockage gère son stock selon une politique (s, S) ; 60 crises sans réaction y ont été simulées sur le réseau d'ISOMORPH pour chaque nature et chaque couverture de stock. Face aux ruptures de distribution, la couverture agit comme un levier de robustesse progressif. Le nombre de crises visibles augmente quand elle diminue, de 11 à 43 sur 60 pour une coupure de lien. Le pic de demande, lui, est mieux absorbé sans stocks, car le surcroît de demande doit d'abord être prélevé sur des stocks dimensionnés pour le débit nominal (\voirSM{S5.4}).
+\textbf{Rôle des stocks — }Les stocks protègent contre certaines perturbations seulement. La base principale les neutralise. Pour les étudier, on passe à la représentation temporelle, où la matière circule avec ses délais de trajet et de production et où chaque site de stockage gère son stock selon une politique (s, S) ; 60 crises sans réaction y ont été simulées sur le réseau d'ISOMORPH pour chaque nature et chaque couverture de stock. Face aux ruptures de distribution, la couverture agit comme un levier de robustesse progressif. Le nombre de crises visibles augmente quand elle diminue, de 11 à 43 sur 60 pour une coupure de lien. Le pic de demande, lui, est mieux absorbé sans stocks, car le surcroît de demande doit d'abord être prélevé sur des stocks dimensionnés pour le débit nominal (\voirSM{S5.4}).
 
 \subsection{Lecture économique}
 \label{sec:4.5}
