@@ -51,8 +51,8 @@ Ces proportions se retrouvent sur un second réseau. Sur un lot de contrôle de 
 Le réseau appris retrouve de lui-même le mécanisme décrit plus haut. Sa structure (Fig.~\ref{fig:d6}) compte 41 arcs, dont aucun ne remonte l'ordre des paliers. La perte cumulée y dépend directement de la politique, de la profondeur $h$ et de la durée $d$ du palier, et cette durée dépend à son tour de la politique, de la durée de la perturbation et du délai de réaction.
 
 \begin{center}
-\resizebox{0.85\textwidth}{!}{\input{figures/tikz/fig_reseau_bayesien}}
-\captionof{figure}{Réseau bayésien appris sous contraintes, variables colorées par palier de l'ordre temporel d'une crise.}\label{fig:d6}
+\resizebox{\textwidth}{!}{\input{figures/tikz/fig_reseau_bayesien}}
+\captionof{figure}{Réseau bayésien appris sous contraintes, variables colorées par palier de l'ordre temporel d'une crise ; chaque nœud donne la probabilité marginale de ses modalités.}\label{fig:d6}
 \end{center}
 
 À partir des seules variables connues au moment de décider, le pronostic classe correctement 65~\% des crises de test, contre 34~\% pour la classe majoritaire et 60~\% pour un modèle qui ne connaîtrait que la politique (scores de Brier de 0,466, 0,667 et 0,494). La courbe d'apprentissage est presque plate, ce qui indique que la précision est limitée par l'information disponible au moment de décider plutôt que par la taille de la base. Le diagnostic est bien calibré pour la politique et la durée. Pour les crises de test à forte perte, les probabilités a posteriori des politiques reproduisent leurs fréquences observées à 0,01 près.
