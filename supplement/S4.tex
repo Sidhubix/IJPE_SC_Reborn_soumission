@@ -1,33 +1,109 @@
-\section{Compléments sur l'apprentissage du réseau bayésien (Apprendre)}
+\section{Compléments sur la courbe de résilience et les indicateurs (Mesurer)}
 \label{sec:S4}
 
-\subsection{Construction de la base d'apprentissage}
+\subsection{Paramètres et estimation}
 \label{sec:S4.1}
 
-Chaque version d'une crise, c'est-à-dire une crise jouée sous une politique de gestion donnée, fournit une observation ; la base principale en compte 8 000. Les variables sont organisées selon les causes qu'un diagnostic doit pouvoir distinguer : l'exposition du réseau, la perturbation, la politique de gestion et la réponse effective du responsable des opérations, complétées par le mécanisme de la chute et par la résilience obtenue (tableau~5 du manuscrit).
+Le tableau~\ref{tab:d6} donne la lecture opérationnelle des sept paramètres de la courbe (équation~(2) du manuscrit).
 
-La demande de référence ne peut pas servir de variable de contexte, car elle est calibrée sur le volume livrable pendant l'incident et dépend donc de la perturbation elle-même. Elle est remplacée par la position de la cible dans la topologie. Un site ou une liaison constitue un point de passage obligé si sa suppression déconnecte toutes les sources du client. Sur le réseau ISOMORPH, le hub de Nashville, l'entrepôt d'Atlanta et la liaison qui les relie sont dans ce cas ; la congestion et le pic de demande touchent le réseau entier. Cette variable ne dépend que de la structure du réseau et se transpose à tout réseau étudié. La politique est représentée par le profil seul, car ses composantes (seuil, délai, rythme, ordre des leviers) lui sont parfaitement redondantes dans une base où elles sont fixées par profil. Une réponse absente, lorsque le taux de service n'est jamais passé sous le seuil critique, est codée par un état explicite « sans objet ».
+\begin{table}[htbp]
+\caption{Paramètres de la courbe de résilience.}
+\label{tab:d6}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}P{1.4cm}P{3.4cm}L@{}}
+\toprule
+\textbf{Paramètre} & \textbf{Signification} & \textbf{Lecture pour la chaîne logistique} \\
+\midrule
+$k$ & Niveau avant la perturbation & Service nominal du réseau \\
+$h$ & Profondeur de la chute & Ampleur de la perte de service au plus fort de la crise \\
+$q$ & Écart entre niveau final et niveau initial & Perte durable ($q$ $<$ 0) ou sur-récupération ($q$ $>$ 0) \\
+$g$ & Décalage de la chute & Temps pendant lequel le réseau absorbe le choc avant de se dégrader, par ses marges de capacité et, en représentation temporelle, par ses stocks et la matière en route \\
+$d$ & Durée entre chute et reprise & Durée du palier dégradé, liée à la persistance du choc, au délai de réaction et, en représentation temporelle, au temps de reconstitution des stocks après le retour des capacités \\
+$\alpha$ & Raideur de la chute & Brutalité de la dégradation \\
+$\beta$ & Raideur de la reprise & Rapidité du rétablissement \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
-Les paramètres de la courbe sont conservés comme variables intermédiaires, parce qu'ils décrivent le mécanisme par lequel une cause produit son effet (tableau~\ref{tab:S3}). Trois sont écartés faute de variation dans la base : $k$, proche de 1 par construction ; $q$, proche de 0 parce que les crises se résorbent avant la fin de la période observée ; $g$, presque toujours nul. Parmi les indicateurs, IPC, fidèle au service perdu et sans ambiguïté de sens, sert de cible au pronostic ; TRP et CRD le complètent. Trois indicateurs sont écartés : SRA, redondant avec les paramètres ; ERR, trop peu dispersé ; PR, dont le sens favorable dépend de la profondeur de la chute.
+Quelques contraintes garantissent une forme interprétable : le palier dégradé reste positif, le niveau final reste au-dessus du palier et les raideurs ainsi que la durée du palier ne peuvent descendre sous des valeurs minimales qui produiraient des formes sans signification.
 
-Toutes les versions sont conservées, y compris celles dont l'ajustement est imparfait, car écarter les crises mal ajustées éliminerait surtout les crises courtes, donc une partie des réussites du profil réactif. Les variables continues sont discrétisées en trois classes de même effectif, dont les seuils sont calculés sur l'échantillon d'apprentissage puis figés pour les crises nouvelles.
+Chaque trajectoire est recalée sur le déclenchement de la perturbation, de sorte que la période précédant la crise fournit directement le niveau nominal. Les sept paramètres sont estimés en minimisant un critère robuste qui pénalise les grands écarts moins fortement que les moindres carrés :
 
-\subsection{Apprentissage sous contraintes}
+\begin{equation}
+L(\theta) = \sum_{i} 2\left(\sqrt{1 + \frac{r_i^2}{f^2}} - 1\right), \qquad r_i = p(x_i;\theta) - \mathrm{IP}(x_i), \qquad f = 0{,}05
+\label{eq:S4}
+\end{equation}
+
+Ce critère, ses raisons et un exemple d'ajustement sont présentés en section 3.3 du manuscrit (figure~3).
+
+\subsection{Définition et formules des six indicateurs}
 \label{sec:S4.2}
 
-L'apprentissage est réalisé avec l'outil BayesArtist \citep{bayesartist}. La structure est apprise par recherche locale gloutonne au critère d'information bayésien (BIC) \citep{schwarz1978}. L'ordre des paliers est imposé comme une liste d'arcs interdits, avec au plus quatre parents par variable, de sorte qu'aucune structure apprise ne peut violer la temporalité de la crise ; cette combinaison de connaissance du domaine et de données suit le principe de \citet{heckerman1995}. Les tables de probabilités sont estimées par comptage avec un lissage de Laplace, qui évite d'attribuer une probabilité nulle à une combinaison de causes absente de la base. L'inférence est exacte, par élimination de variables ou arbre de jonction \citep{koller2009}.
+Le tableau~\ref{tab:d7} présente les six indicateurs, la dimension de la résilience que chacun décrit et leur sens favorable.
 
-La politique, intervention comparée sur des crises strictement identiques, a un effet sur la résilience identifiable sans ajustement. Les leviers effectivement mobilisés dépendent au contraire de ce que le responsable des opérations a perçu et jouent le rôle de médiateurs.
+\begin{table}[htbp]
+\caption{Les six indicateurs de résilience.}
+\label{tab:d7}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}P{3.6cm}P{2.3cm}LP{2.1cm}@{}}
+\toprule
+\textbf{Indicateur} & \textbf{Dimension} & \textbf{Interprétation} & \textbf{Sens favorable} \\
+\midrule
+IPC, indice de perte cumulée & Perte & Service cumulé perdu pendant la crise & Faible \\
+CRD, coefficient de récupération dynamique & Vitesse & Rapidité de la reprise rapportée à la chute et à la durée du palier & Élevé \\
+TRP, temps de récupération pondéré & Durée & Temps nécessaire pour que la reprise atteigne 95~\% de son amplitude & Faible \\
+SRA, score de robustesse adaptative & Adaptation & Capacité à remonter, pénalisée par un écart durable au niveau initial & Élevé \\
+ERR, efficacité de résilience relative & Performance conservée & Part du service nominal maintenue sur l'épisode & Élevé \\
+PR, potentiel de récupération & Rétablissement & Niveau final rapporté à la mi-profondeur de la chute & À préciser \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
-BayesArtist n'étant pas diffusé, le même apprentissage peut être conduit avec tout logiciel de réseaux bayésiens qui apprend la structure et les paramètres à partir d'un fichier CSV et accepte des arcs interdits, par exemple Hugin, GeNIe, le paquet R bnlearn ou la bibliothèque Python pgmpy ; les algorithmes de recherche différant d'un outil à l'autre, de légers écarts de structure sont possibles.
+Six indicateurs sont calculés analytiquement à partir des paramètres ajustés. Ils héritent ainsi du lissage opéré par l'ajustement et décrivent chacun une facette de la résilience : perte subie, vitesse et durée de la reprise, capacité d'adaptation, performance conservée et potentiel de rétablissement.
 
-\subsection{Inférence, préconisation et protocole de validation}
+\begin{align}
+\mathrm{IPC} &= \frac{h}{\alpha}\ln 2 + \frac{h\,d}{2} - \frac{h + q}{\beta}\ln 2 \label{eq:S5} \\
+\mathrm{CRD} &= \frac{\beta}{\alpha}\cdot\frac{h + q}{h}\cdot\frac{1}{d}\cdot\sqrt{\alpha\beta} \label{eq:S6} \\
+\mathrm{TRP} &= d + \frac{2{,}95}{\beta} \label{eq:S7} \\
+\mathrm{SRA} &= \frac{\beta\,(h + q)}{\alpha\,h\,d}\, e^{-|q|/h}\,\big(1 + \tanh(\beta - \alpha)\big) \label{eq:S8} \\
+\mathrm{ERR} &= 1 + \frac{q}{2k} - \frac{h\,|\mathrm{IPC}|}{T\,k}, \quad T = g + d + \frac{4}{\beta} \label{eq:S9} \\
+\mathrm{PR} &= \frac{k + q}{k - h/2} \label{eq:S10}
+\end{align}
+
+L'horizon $T$ de l'équation~\eqref{eq:S9} couvre la chute et une reprise complète à environ 98 \%, conformément à la définition proposée par \citet{rahiel2026in4pl} ; il s'adapte ainsi à la durée propre de chaque crise au lieu d'imposer une fenêtre fixe.
+
+\subsection{Qualité d'ajustement, cas limites et domaine de la résilience}
 \label{sec:S4.3}
 
-En pronostic, le réseau donne la distribution de la résilience pour un contexte et une politique, par exemple la probabilité d'une perte cumulée faible face à la fermeture sévère d'un site de stockage gérée par un profil prudent. En diagnostic, il remonte d'une résilience dégradée vers les causes les plus probables : point de passage obligé touché, choc difficilement surmontable, perception tardive, inertie décisionnelle ou leviers inadaptés.
+La qualité de chaque ajustement est appréciée par le coefficient de détermination et l'erreur quadratique moyenne, calculés sur la trajectoire brute, ainsi que par un coefficient de détermination calculé sur la trajectoire lissée sur cinq jours. L'écart entre les deux coefficients distingue un défaut de forme de la courbe d'une simple fluctuation journalière de la demande. Les crises dont l'ajustement est insuffisant, ou dont la chute est trop faible pour être caractérisée, peuvent être écartées de la base.
 
-La préconisation combine les deux. Face à une nouvelle crise (décrite en tout ou partie) et à un objectif de résilience, chaque politique candidate est évaluée par la probabilité d'atteindre cet objectif, qui se lit directement dans le réseau puisque la politique est une intervention. La règle retenue privilégie la sobriété : parmi les politiques dont cette probabilité dépasse un seuil $\theta$ fixé par le décideur, est préconisée la moins interventionniste, les politiques étant ordonnées par le nombre moyen de leviers qu'elles engagent (sans réaction, tardif, prudent, réactif). Si aucune n'atteint le seuil, la politique la plus probable est préconisée. Cette règle traduit le fait que tout levier a un coût que le modèle ne valorise pas ; à résilience égale, mobiliser moins de leviers est préférable.
+Les crises absorbées sans dégradation notable, lorsque le réseau dispose d'assez de marge ou, en représentation temporelle, d'assez de stock, posent une première difficulté : la profondeur $h$ tend vers zéro et les indicateurs rapportés à $h$, CRD et SRA, deviennent instables. La couverture de stock permet de déplacer de manière contrôlée le seuil à partir duquel une crise est ainsi absorbée. Les trajectoires à plusieurs creux se rencontrent typiquement lorsqu'un stock mobilisé s'épuise avant la fin de la crise, ou lorsque le retour des capacités provoque un rétablissement brutal : la courbe n'en restitue qu'une enveloppe. Enfin, PR augmente avec la profondeur de la chute à niveau final donné ; son sens d'interprétation doit être arrêté avant de l'utiliser comme objectif de pilotage.
 
-La même question peut être posée à rebours : fixer l'objectif (par exemple une perte cumulée faible) et le contexte connu, puis lire la distribution du profil. En général, remonter d'un effet vers une décision ne livre qu'une association, car les décisions observées dépendent de la situation. Ici, le profil est une variable racine, assignée selon une loi uniforme indépendamment du contexte. Sa probabilité a posteriori est donc proportionnelle à sa probabilité d'atteindre l'objectif. L'inférence à rebours classe les politiques exactement comme le pronostic. Elle fournit en une requête par contexte une carte de préconisation, qui désigne la politique la plus efficace ; la règle de sobriété reste nécessaire pour retenir la plus économe parmi celles qui suffisent. Cette propriété ne vaut pas pour les leviers, qui dépendent de ce que le responsable des opérations perçoit.
+Ces cas limites tiennent à la définition même de la résilience. Trois propriétés voisines se distinguent par la forme de la trajectoire du taux de service. La robustesse est la capacité à absorber un choc sans dégradation notable : le taux de service reste au niveau nominal et il n'y a rien à rétablir. La stabilité est la capacité à rester au voisinage de ce niveau malgré des variations rapides et de faible amplitude, comme les fluctuations journalières de la demande, qui relèvent de la régulation courante. La résilience suppose au contraire une chute effective, suivie d'un rétablissement : elle se mesure à la perte subie et à la manière dont le taux de service revient à un niveau acceptable. Son domaine est donc borné des deux côtés. Sans chute, la question de la résilience ne se pose pas ; lorsque la chute est telle que le réseau cesse durablement de servir et ne se rétablit pas sur la période observée, la crise relève de la défaillance, qui appelle une reconfiguration plutôt qu'un rétablissement. La courbe hyperbolique composée \citep{rahiel2026in4pl} est construite pour ce domaine, qui va d'une chute à une reprise. L'instabilité de CRD et SRA lorsque $h$ tend vers zéro signale ainsi une crise absorbée, c'est-à-dire un cas de robustesse et non une limite du modèle.
 
-La validation exploite une propriété rare de la base, puisque chaque crise y est observée sous les quatre politiques. Les 2 000 scénarios sont partagés aléatoirement en 1 600 scénarios d'apprentissage et 400 de test ; le découpage porte sur les scénarios, les quatre versions d'une même crise n'étant pas indépendantes. Le pronostic est jugé sur la prédiction de la classe de perte cumulée à partir des seules variables connues au moment de décider, par le taux de classement correct et le score de Brier, comparés à la classe majoritaire et à un modèle fondé sur la seule politique. Le diagnostic est jugé en confrontant, pour les crises à forte perte, la distribution a posteriori des causes à leur fréquence observée. La préconisation est jugée directement. Chaque crise de test ayant été jouée sous toutes les politiques, on vérifie si la politique préconisée a effectivement atteint l'objectif et l'on mesure la part des préconisations plus sobres que le profil réactif. Une courbe d'apprentissage, de 200 à 1 600 scénarios, indique si la taille de la base est suffisante.
+\subsection{Signatures des dysfonctionnements sur la courbe}
+\label{sec:S4.4}
+
+Les paramètres de la courbe relient la trajectoire observée aux mécanismes décrits en section 3 du manuscrit. Le tableau~\ref{tab:S3} résume les signatures attendues ; il constitue un ensemble d'hypothèses que l'analyse des résultats et l'apprentissage causal permettent de confirmer ou de nuancer.
+
+\begin{table}[htbp]
+\caption{Signatures des dysfonctionnements sur la courbe de résilience.}
+\label{tab:S3}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}LLL@{}}
+\toprule
+\textbf{Phénomène} & \textbf{Signature attendue sur la courbe} & \textbf{Origine probable} \\
+\midrule
+Absorption du choc & $h$ faible, $g$ élevé & Marges de capacité, voies de secours suffisantes \\
+Absorption par les stocks & $h$ faible ou nul, $g$ élevé & Couverture de stock élevée au regard de la durée du choc \\
+Rupture brutale & $h$ élevé, $\alpha$ élevé & Coupure ou fermeture sévère, réseau sous tension \\
+Rupture différée & $g$ élevé, puis $h$ élevé & Stocks épuisés en cours de crise, matière en route insuffisante \\
+Dégradation progressive & $\alpha$ faible & Congestion diffuse, pic de demande modéré \\
+Crise prolongée & $d$ élevé & Perturbation longue, détection tardive, inertie décisionnelle \\
+Reprise retardée & $d$ supérieur à la durée du choc & Reconstitution des stocks et de la matière en route après le retour des capacités \\
+Reprise rapide & $\beta$ élevé, TRP faible & Levier efficace engagé tôt \\
+Perte durable & $q$ $<$ 0 & Capacité non restaurée à la fin de la période, stock épuisé \\
+Sur-récupération & $q$ $>$ 0 & Leviers maintenus après la fin de la perturbation \\
+\bottomrule
+\end{tabularx}
+\end{table}
