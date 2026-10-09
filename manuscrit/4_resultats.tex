@@ -11,7 +11,8 @@ La base comptant les 2 000 scénarios, soit 8 000 versions de crise, répartis �
 \subsection{Effet des politiques de gestion}
 \label{sec:4.2}
 
-Le tableau~\ref{tab:d12} compare les quatre politiques sur les 2 000 crises.
+Le tableau~\ref{tab:d12} compare les quatre politiques sur les 2 000 crises. Le profil réactif l'emporte nettement. Il réduit la perte cumulée de 82~\% en médiane par rapport à l'absence de réaction, contre 17~\% pour le profil prudent et 0~\% pour le profil tardif, qui n'agit pas dans la moitié des crises. Les trois écarts sont significatifs (test des rangs signés de Wilcoxon apparié, $p < 10^{-150}$). Comme les leviers n'ont pas de coût dans le modèle, agir tôt n'a jamais d'inconvénient, et cette avance tient en partie à la construction même du modèle.
+
 
 \begin{table*}[htbp]
 \caption{Réaction et résilience selon la politique de gestion (2 000 crises).}
@@ -20,19 +21,23 @@ Le tableau~\ref{tab:d12} compare les quatre politiques sur les 2 000 crises.
 \begin{tabularx}{\textwidth}{@{}LP{2.3cm}P{2.3cm}P{2.3cm}P{2.3cm}@{}}
 \toprule
 \textbf{Indicateur} & \textbf{Sans réaction} & \textbf{Réactif} & \textbf{Prudent} & \textbf{Tardif} \\
-\midrule
+\toprule
 Versions avec au moins un levier engagé & sans objet & 98 \% & 88 \% & 56 \% \\
+\midrule
 Leviers engagés en moyenne & 0 & 2,8 & 2,0 & 0,7 \\
+\midrule
 Détection, jours après le début (médiane) & sans objet & 0 & 1 & 3 \\
+\midrule
 Taux de service minimal (médiane) & 0,87 & 0,89 & 0,88 & 0,87 \\
-Retour à la normale, jours après le début (médiane) & 14 & 4 & 11 & 13 \\
+\midrule
+Jours avant le retour à la normale (médiane) & 14 & 4 & 11 & 13 \\
+\midrule
 IPC, médiane [quartiles] & 0,67 [0,43 ; 1,02] & 0,11 [0,07 ; 0,18] & 0,51 [0,36 ; 0,69] & 0,58 [0,43 ; 0,74] \\
+\midrule
 Part du service perdu évitée & référence & 73 \% & 18 \% & 14 \% \\
 \bottomrule
 \end{tabularx}
 \end{table*}
-
-Le profil réactif l'emporte nettement. Il réduit la perte cumulée de 82~\% en médiane par rapport à l'absence de réaction, contre 17~\% pour le profil prudent et 0~\% pour le profil tardif, qui n'agit pas dans la moitié des crises. Les trois écarts sont significatifs (test des rangs signés de Wilcoxon apparié, $p < 10^{-150}$). Comme les leviers n'ont pas de coût dans le modèle, agir tôt n'a jamais d'inconvénient, et cette avance tient en partie à la construction même du modèle.
 
 La réaction raccourcit la crise sans en réduire la profondeur. Le taux de service minimal est presque le même pour toutes les politiques, mais le retour à la normale intervient au quatrième jour sous le profil réactif, contre le quatorzième sans réaction (Fig.~\ref{fig:d5}). Sous le profil réactif, la perte cumulée ne dépend plus de la durée du choc (corrélation de rangs de Spearman de 0,01), alors qu'elle en dépend nettement sans réaction (0,48). La sévérité, elle, pèse peu (0,08) ; dans cette plage, c'est la persistance du choc qui fait la crise.
 
@@ -57,7 +62,7 @@ Le réseau appris retrouve de lui-même le mécanisme décrit plus haut. Sa stru
 
 À partir des seules variables connues au moment de décider, le pronostic classe correctement 65~\% des crises de test, contre 34~\% pour la classe majoritaire et 60~\% pour un modèle qui ne connaîtrait que la politique (scores de Brier de 0,466, 0,667 et 0,494). La courbe d'apprentissage est presque plate, ce qui indique que la précision est limitée par l'information disponible au moment de décider plutôt que par la taille de la base. Le diagnostic est bien calibré pour la politique et la durée. Pour les crises de test à forte perte, les probabilités a posteriori des politiques reproduisent leurs fréquences observées à 0,01 près.
 
-La préconisation dépend de l'objectif. Si l'on vise une perte faible, seul le profil réactif réussit régulièrement, et la règle le préconise toujours. Si l'on se contente d'éviter une perte forte, un arbitrage apparaît entre sécurité et sobriété, réglé par le seuil $\theta$ (tableau~\ref{tab:d15}).
+La préconisation que l'on peut emmètre dépend de l'objectif. Si l'on vise une perte faible, seul le profil réactif réussit régulièrement, et la règle le préconise toujours. Si l'on se contente d'éviter une perte forte, un arbitrage apparaît entre sécurité et sobriété, réglé par le seuil $\theta$ (tableau~\ref{tab:d15}).
 
 \begin{table*}[htbp]
 \caption{Préconisation sur les crises de test, objectif d'une perte cumulée non forte.}
