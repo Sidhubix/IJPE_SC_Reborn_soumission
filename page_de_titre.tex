@@ -1,0 +1,62 @@
+%% Page de titre séparée, exigée en évaluation en double aveugle (Elsevier, IJPE).
+%% À téléverser comme fichier distinct du manuscrit anonymisé (manuscrit.tex avec \anonymetrue).
+%% Compilation : pdflatex page_de_titre
+
+\documentclass[a4paper,11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{tikz}
+\input{commun}
+\input{manuscrit/front}
+% La déclaration CRediT n'est imprimée que hors mode anonyme.
+\newif\ifanonyme
+\anonymefalse
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\begin{document}
+
+\begin{center}
+{\Large\bfseries \ArticleTitle\par}
+\vspace{10pt}
+{\large Page de titre\par}
+\end{center}
+
+\section*{Auteurs}
+
+Naïma Rahiel\textsuperscript{a},
+Sid-Ali Addouche\textsuperscript{a,*},
+El Mouloudi Dafaoui\textsuperscript{a},
+Abderrahman El Mhamedi\textsuperscript{a},
+Saïd Amari\textsuperscript{b,c},
+Agnès Letouzey\textsuperscript{d},
+Xavier Desforges\textsuperscript{d},
+Kamal Medjaher\textsuperscript{d}
+
+\textsuperscript{a} Laboratoire QUARTZ, IUT de Montreuil, Université Paris 8, Montreuil, France\\
+\textsuperscript{b} LURPA, ENS Paris-Saclay, Gif-sur-Yvette, France\\
+\textsuperscript{c} LIPN, Université Sorbonne Paris Nord, Villetaneuse, France\\
+\textsuperscript{d} LGP, Université de Toulouse, UTTOP, Tarbes, France
+
+\textsuperscript{*} Auteur correspondant : Sid-Ali Addouche, Laboratoire QUARTZ, IUT de Montreuil, Université Paris 8, Montreuil, France. Courriel : sid-ali.addouche@univ-paris8.fr
+
+\section*{Remerciements}
+
+\acompleter{Remerciements éventuels (personnes ou structures ayant aidé sans être auteurs), à compléter ou à supprimer.}
+
+\section*{Financement}
+
+Ces travaux ont été réalisés dans le cadre du projet SC-Reborn, \og La logistique reconfigurable et résiliente \fg{} (ANR-AAPG2021, convention ANR-21-CE10-0020), financé par l'Agence nationale de la recherche (ANR), France.
+
+\section*{Déclaration d'intérêts}
+
+Les auteurs déclarent n'avoir aucun intérêt financier concurrent ni aucune relation personnelle connus qui auraient pu sembler influencer les travaux présentés dans cet article.
+
+\input{manuscrit/credit}
+
+\end{document}
