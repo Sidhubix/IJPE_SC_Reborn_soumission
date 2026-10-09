@@ -4,14 +4,14 @@
 \subsection{Base générée}
 \label{sec:4.1}
 
-La base principale a été générée sur le réseau ISOMORPH d'origine, en représentation par flux et au niveau de tension 75. La sévérité y varie de 0,68 à 1, la durée des perturbations de 8 à 24 jours et le taux de tension de 1,08 à 1,42. Les seuils critiques des profils ont été relevés à 0,98, 0,95 et 0,92. Avec un taux de service minimal médian proche de 0,87, les seuils nominaux laissaient en effet les profils prudent et tardif presque toujours inactifs. L'ordre des profils, seul objet de la comparaison, reste le même.
+La base principale a été générée avec Isomorph-Reborn sur le réseau d'ISOMORPH au niveau de tension 75, en représentation par flux, donc sans effet des stocks. La sévérité y varie de 0,68 à 1, la durée des perturbations de 8 à 24 jours et le taux de tension de 1,08 à 1,42. Les seuils critiques des profils ont été relevés à 0,98, 0,95 et 0,92. Avec un taux de service minimal médian proche de 0,87, les seuils nominaux laissaient en effet les profils prudent et tardif presque toujours inactifs. L'ordre des profils, seul objet de la comparaison, reste le même.
 
-La base comptant les 2 000 scénarios, soit 8 000 versions de crise, répartis à parts à peu près égales entre les cinq natures. L'ajustement de la courbe est satisfaisant, avec un coefficient de détermination médian de 0,88, et la perte cumulée IPC suit de très près le service effectivement perdu (corrélation de 0,97). C'est pourquoi elle sert d'indicateur principal dans la suite (\voirSM{S5.1}).
+La base comptant les 2 000 scénarios, soit 8 000 versions de crise, répartis à parts à peu près égales entre les cinq natures. L'ajustement de la courbe est satisfaisant, avec un coefficient de détermination médian de 0,88. La perte cumulée IPC suit de très près le service effectivement perdu (corrélation de 0,97). C'est pourquoi elle sert d'indicateur principal dans la suite (\voirSM{S5.1}).
 
 \subsection{Effet des politiques de gestion}
 \label{sec:4.2}
 
-Le tableau~\ref{tab:d12} compare les quatre politiques sur les 2 000 crises. Le profil réactif l'emporte nettement. Il réduit la perte cumulée de 82~\% en médiane par rapport à l'absence de réaction, contre 17~\% pour le profil prudent et 0~\% pour le profil tardif, qui n'agit pas dans la moitié des crises. Les trois écarts sont significatifs (test des rangs signés de Wilcoxon apparié, $p < 10^{-150}$). Comme les leviers n'ont pas de coût dans le modèle, agir tôt n'a jamais d'inconvénient, et cette avance tient en partie à la construction même du modèle.
+Le tableau~\ref{tab:d12} compare les quatre politiques sur les 2 000 crises. Le profil réactif l'emporte nettement. Il réduit la perte cumulée de 82~\% en médiane par rapport à l'absence de réaction, contre 17~\% pour le profil prudent et 0~\% pour le profil tardif, qui n'agit pas dans la moitié des crises. Les trois écarts sont significatifs (test des rangs signés de Wilcoxon apparié, $p < 10^{-150}$). Comme les leviers n'ont pas de coût dans le modèle, agir tôt n'a jamais d'inconvénient. Cette avance tient en partie à la construction même du modèle.
 
 
 \begin{table*}[htbp]
@@ -53,16 +53,16 @@ Ces proportions se retrouvent sur un second réseau. Sur un lot de contrôle de 
 \subsection{Pronostic, diagnostic et préconisation}
 \label{sec:4.3}
 
-Le réseau appris retrouve de lui-même le mécanisme décrit plus haut. Sa structure (Fig.~\ref{fig:d6}) compte 41 arcs, dont aucun ne remonte l'ordre des paliers. La perte cumulée y dépend directement de la politique, de la profondeur $h$ et de la durée $d$ du palier, et cette durée dépend à son tour de la politique, de la durée de la perturbation et du délai de réaction.
+Le réseau appris retrouve de lui-même le mécanisme décrit plus haut. Sa structure (Fig.~\ref{fig:d6}) compte 41 arcs, dont aucun ne remonte l'ordre des paliers. La perte cumulée y dépend directement de la politique, de la profondeur $h$ et de la durée $d$ du palier. Cette durée dépend à son tour de la politique, de la durée de la perturbation et du délai de réaction.
 
 \begin{center}
 \resizebox{\textwidth}{!}{\input{figures/tikz/fig_reseau_bayesien}}
 \captionof{figure}{Réseau bayésien appris sous contraintes, variables colorées par palier de l'ordre temporel d'une crise ; chaque nœud donne la probabilité marginale de ses modalités.}\label{fig:d6}
 \end{center}
 
-À partir des seules variables connues au moment de décider, le pronostic classe correctement 65~\% des crises de test, contre 34~\% pour la classe majoritaire et 60~\% pour un modèle qui ne connaîtrait que la politique (scores de Brier de 0,466, 0,667 et 0,494). La courbe d'apprentissage est presque plate, ce qui indique que la précision est limitée par l'information disponible au moment de décider plutôt que par la taille de la base. Le diagnostic est bien calibré pour la politique et la durée. Pour les crises de test à forte perte, les probabilités a posteriori des politiques reproduisent leurs fréquences observées à 0,01 près.
+À partir des seules variables connues au moment de décider, le pronostic classe correctement 65~\% des crises de test, contre 60~\% pour un modèle qui ne connaîtrait que la politique de gestion appliquée (sans réaction, réactif, prudent ou tardif) et 34~\% pour un modèle sans information, qui attribue à chaque classe sa fréquence et retient la plus fréquente. Les scores de Brier correspondants sont 0,466, 0,494 et 0,667. La courbe d'apprentissage est presque plate, ce qui indique que la précision est limitée par l'information disponible au moment de décider plutôt que par la taille de la base. Le diagnostic est bien calibré pour la politique et la durée. Pour les crises de test à forte perte, les probabilités a posteriori des politiques reproduisent leurs fréquences observées à 0,01 près.
 
-La préconisation que l'on peut emmètre dépend de l'objectif. Si l'on vise une perte faible, seul le profil réactif réussit régulièrement, et la règle le préconise toujours. Si l'on se contente d'éviter une perte forte, un arbitrage apparaît entre sécurité et sobriété, réglé par le seuil $\theta$ (tableau~\ref{tab:d15}).
+La préconisation que l'on peut emmètre dépend de l'objectif. Si l'on vise une perte faible, seul le profil réactif réussit régulièrement et la règle le préconise toujours. Si l'on se contente d'éviter une perte forte, un arbitrage apparaît entre sécurité et sobriété, réglé par le seuil $\theta$ (tableau~\ref{tab:d15}).
 
 \begin{table*}[htbp]
 \caption{Préconisation sur les crises de test, objectif d'une perte cumulée non forte.}
@@ -82,9 +82,9 @@ Référence a posteriori : politique la plus sobre ayant réussi & 99,2 \% & 67 
 \end{tabularx}
 \end{table*}
 
-Avec $\theta$ = 0,8, le réseau préconise une politique plus sobre dans environ une crise sur sept, et l'objectif est atteint dans 97,5~\% des cas, moins de deux points sous la politique la plus interventionniste. Cette sobriété repose entièrement sur la durée prévue du choc. Si l'on retire cette information de la description de la crise, la règle ne préconise plus aucune politique sobre. Connaître la durée probable d'une perturbation a donc une valeur décisionnelle en soi. Pour la fermeture courte d'un site redondé, par exemple, le profil prudent atteint l'objectif avec une probabilité de 0,80 et devient la préconisation, alors que pour la fermeture longue d'un point de passage obligé, seul le profil réactif y parvient (\voirSM{S5.3}).
+Avec $\theta$ = 0,8, c'est-à-dire en retenant la politique la moins interventionniste parmi celles qui atteignent l'objectif avec une probabilité d'au moins 0,8, le réseau préconise une politique plus sobre dans environ une crise sur sept. L'objectif est atteint dans 97,5~\% des cas, moins de deux points sous la politique la plus interventionniste. Cette sobriété repose entièrement sur la durée prévue du choc. Si l'on retire cette information de la description de la crise, la règle ne préconise plus aucune politique sobre. Connaître la durée probable d'une perturbation a donc une valeur décisionnelle en soi. Pour la fermeture courte d'un site redondé, par exemple, le profil prudent atteint l'objectif avec une probabilité de 0,80 et devient la préconisation, alors que pour la fermeture longue d'un point de passage obligé, seul le profil réactif y parvient (\voirSM{S5.3}).
 
-La figure~\ref{fig:carte} étend cette lecture aux sept contextes que permet la topologie d'ISOMORPH, par inférence à rebours et pour l'objectif d'une perte faible. Le profil réactif est partout le plus probable, et d'autant plus que le choc dure, sa probabilité a posteriori passant de 0,51 à 0,58 pour un choc court à 0,72 à 0,79 pour un choc long. Pour un choc court, chacune des autres politiques garde une probabilité comprise entre 0,12 et 0,18, signe qu'une perte faible reste alors accessible sans réaction rapide.
+La figure~\ref{fig:carte} étend cette lecture aux sept contextes que permet la topologie d'ISOMORPH, par inférence à rebours et pour l'objectif d'une perte faible. Le profil réactif est partout le plus probable et d'autant plus que le choc dure, sa probabilité a posteriori passant de 0,51 à 0,58 pour un choc court à 0,72 à 0,79 pour un choc long. Pour un choc court, chacune des autres politiques garde une probabilité comprise entre 0,12 et 0,18, signe qu'une perte faible reste alors accessible sans réaction rapide.
 
 \begin{center}
 \begin{minipage}{\textwidth}\centering
@@ -96,7 +96,7 @@ La figure~\ref{fig:carte} étend cette lecture aux sept contextes que permet la 
 \subsection{Rôle des stocks}
 \label{sec:4.4}
 
-Les stocks protègent contre certaines perturbations seulement. La base principale les neutralise ; pour les étudier, 60 crises sans réaction ont été simulées sur ISOMORPH en représentation temporelle, pour chaque nature et chaque couverture de stock. Face aux ruptures de distribution, la couverture agit comme un levier de robustesse progressif, et le nombre de crises visibles augmente quand elle diminue, de 11 à 43 sur 60 pour une coupure de lien. Le pic de demande, lui, est mieux absorbé sans stocks, car le surcroît de demande doit d'abord être prélevé sur des stocks dimensionnés pour le débit nominal (\voirSM{S5.4}).
+Les stocks protègent contre certaines perturbations seulement. La base principale les neutralise. Pour les étudier, on passe à la représentation temporelle, où la matière circule avec ses délais de trajet et de production et où chaque site de stockage gère son stock selon une politique (s, S) ; 60 crises sans réaction y ont été simulées sur le réseau d'ISOMORPH pour chaque nature et chaque couverture de stock. Face aux ruptures de distribution, la couverture agit comme un levier de robustesse progressif. Le nombre de crises visibles augmente quand elle diminue, de 11 à 43 sur 60 pour une coupure de lien. Le pic de demande, lui, est mieux absorbé sans stocks, car le surcroît de demande doit d'abord être prélevé sur des stocks dimensionnés pour le débit nominal (\voirSM{S5.4}).
 
 \subsection{Lecture économique}
 \label{sec:4.5}
@@ -119,7 +119,7 @@ Réactif & 7 000 & 18 550 ; 73~\% & 2,80 & 6 630 & 16 940 \\
 \end{tabularx}
 \end{table*}
 
-La politique réactive est la plus efficace, et aussi la plus rentable par levier. Chacun de ses leviers préserve en moyenne 6 630 unités, environ un tiers de journée de demande. La politique prudente engage plus des deux tiers des leviers de la politique réactive pour un quart de ses gains, et chaque levier qu'elle ajoute à la politique tardive ne préserve que 790 unités ; elle est économiquement dominée. Ce qui fait la rentabilité d'une politique, c'est donc moins le nombre de leviers que le moment où ils sont engagés.
+La politique réactive est la plus efficace et aussi la plus rentable par levier. Chacun de ses leviers préserve en moyenne 6 630 unités, environ un tiers de journée de demande. La politique prudente engage plus des deux tiers des leviers de la politique réactive pour un quart de ses gains. Chaque levier qu'elle ajoute à la politique tardive ne préserve que 790 unités ; elle est économiquement dominée. Ce qui fait la rentabilité d'une politique, c'est donc moins le nombre de leviers que le moment où ils sont engagés.
 
 \begin{center}
 \input{figures/tikz/fig_economie}

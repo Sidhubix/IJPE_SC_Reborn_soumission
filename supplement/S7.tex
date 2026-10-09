@@ -15,7 +15,7 @@ Dans l'onglet « Générateur de scénarios » d'Isomorph-Reborn, charger le fic
 
 \subsection*{Ajustement de la crise S0366 (figure~3 du manuscrit)}
 
-Les paramètres ajustés de chaque version de crise sont exportés par Isomorph-Reborn (onglet « Ajustement par lot ») dans le fichier \texttt{resilience\_ip.csv} (colonnes \texttt{k}, \texttt{q}, \texttt{h}, \texttt{g}, \texttt{d}, \texttt{alpha}, \texttt{beta}, \texttt{r2}, puis les six indicateurs). La courbe tracée est l'équation (2) du manuscrit évaluée avec les paramètres de la ligne S0366, version \texttt{none}, superposée à la trajectoire du fichier \texttt{ip\_timeseries.csv}. Dans l'application, cette crise est la courbe n° 1461 sur 8 000 : le compteur numérote les versions de crise, à raison de quatre par scénario, et non les scénarios.
+Les paramètres ajustés de chaque version de crise sont exportés par Isomorph-Reborn (onglet « Ajustement par lot ») dans le fichier \texttt{resilience\_ip.csv} (colonnes \texttt{k}, \texttt{q}, \texttt{h}, \texttt{g}, \texttt{d}, \texttt{alpha}, \texttt{beta}, \texttt{r2}, puis les six indicateurs). La courbe tracée est l'équation (2) du manuscrit évaluée avec les paramètres de la ligne S0366, version \texttt{none}, superposée à la trajectoire du fichier \texttt{ip\_timeseries.csv}. Dans l'application, cette crise est la courbe n° 1461 sur 8 000 : le compteur numérote les versions de crise, à raison de quatre par scénario et non les scénarios.
 
 \subsection*{Apprentissage du réseau bayésien (figure~5 du manuscrit)}
 
@@ -23,7 +23,7 @@ Dans BayesArtist, importer la base \texttt{bayesartist\_apprentissage\_lotA.csv}
 
 \subsection*{Pronostic de l'étude de cas (figure~\ref{fig:d7})}
 
-Dans BayesArtist, en mode inférence sur le réseau de la figure~5 du manuscrit, poser les évidences nature = \texttt{fermeture\_entrepot}, cible = \texttt{passage\_oblige} et durée = \texttt{fort}, puis fixer successivement le profil à \texttt{none}, \texttt{tardif}, \texttt{prudent} et \texttt{reactif}, et lire à chaque fois la distribution du nœud IPC.
+Dans BayesArtist, en mode inférence sur le réseau de la figure~5 du manuscrit, poser les évidences nature = \texttt{fermeture\_entrepot}, cible = \texttt{passage\_oblige} et durée = \texttt{fort}, puis fixer successivement le profil à \texttt{none}, \texttt{tardif}, \texttt{prudent} et \texttt{reactif} et lire à chaque fois la distribution du nœud IPC.
 
 \subsection*{Carte de préconisation (figure~6 du manuscrit)}
 
