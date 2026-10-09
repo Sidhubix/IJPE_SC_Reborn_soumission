@@ -1,0 +1,93 @@
+%% Article SC-Reborn pour International Journal of Production Economics
+%% ENGLISH VERSION OF THE MAIN MANUSCRIPT (the French sources stay in manuscrit/).
+%% MANUSCRIT PRINCIPAL (Elsevier CAS, une colonne).
+%% Le matériel supplémentaire est compilé séparément par supplement.tex,
+%% avec les mêmes figures, la même bibliographie et les mêmes réglages (commun.tex).
+
+\documentclass[a4paper,fleqn]{cas-sc}
+
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage[authoryear,longnamesfirst]{natbib}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{capt-of} % figures insérées dans le texte, à l'endroit où elles sont citées
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,backgrounds,calc,patterns}
+\input{commun}
+
+% Mettre \anonymetrue pour la version soumise en double aveugle (masque auteurs, affiliations, CRediT et financement).
+\newif\ifanonyme
+\anonymetrue
+
+\input{manuscript_en/front}
+
+\begin{document}
+\let\WriteBookmarks\relax
+\def\floatpagepagefraction{1}
+\def\textpagefraction{.001}
+
+\shorttitle{Logistics network resilience: simulate, measure, learn}
+\ifanonyme\shortauthors{Anonymized authors}\else\shortauthors{N. Rahiel et al.}\fi
+
+\title [mode = title]{\ArticleTitle}
+
+\ifanonyme
+\author[1]{\acompleter{Authors anonymized for review}}
+\affiliation[1]{organization={\acompleter{Anonymized}},
+            country={France}}
+\else
+\author[1]{Naïma Rahiel}
+\author[1]{Sid-Ali Addouche}
+\cormark[1]
+\author[1]{El Mouloudi Dafaoui}
+\author[1]{Abderrahman El Mhamedi}
+\author[2,3]{Saïd Amari}
+\author[4]{Agnès Letouzey}
+\author[4]{Xavier Desforges}
+\author[4]{Kamal Medjaher}
+\affiliation[1]{organization={Laboratoire QUARTZ, IUT de Montreuil, Université Paris 8},
+            city={Montreuil},
+            country={France}}
+\affiliation[2]{organization={LURPA, ENS Paris-Saclay},
+            city={Gif-sur-Yvette},
+            country={France}}
+\affiliation[3]{organization={LIPN, Université Sorbonne Paris Nord},
+            city={Villetaneuse},
+            country={France}}
+\affiliation[4]{organization={LGP, Université de Toulouse, UTTOP},
+            city={Tarbes},
+            country={France}}
+\cortext[1]{Corresponding author}
+\fi
+
+\begin{abstract}
+Supply chain resilience depends as much on the reaction of operations managers as on the disruption itself, yet no database links a disruption, the decisions taken, and the resulting evolution of the service level. This article proposes a three-step approach to fill this gap. A multi-echelon logistics network is first subjected to controlled disruptions of five types, to which a simulated operations manager reacts by detecting the degradation, deciding, and escalating among nine levers. Each crisis is replayed with no reaction and then under three operations manager profiles, so that differences in service level are due to management alone. Each trajectory is then summarized by a composite hyperbolic resilience curve, from which six indicators are derived. Finally, a causal Bayesian network, whose structure follows the temporal order of a crisis and in which the management policy is an intervention, is used for prognosis, diagnosis, and recommendation. Over 2,000 crises simulated on the network of an open digital twin, the reaction shortens the crisis more than it reduces its depth. The most reactive policy avoids 73\% of the lost service, against 18\% and 14\% for the prudent and delayed policies. Each of its levers preserves on average one third of a day of sales, whereas the prudent policy is economically dominated. When the disruption duration is known, the learned network recommends a lighter policy in about one crisis in seven, without notable loss of resilience.
+\end{abstract}
+
+\begin{highlights}
+\ArticleHighlights
+\end{highlights}
+
+\begin{keywords}
+\ArticleKeywords
+\end{keywords}
+
+\maketitle
+
+\input{manuscript_en/1_introduction}
+\input{manuscript_en/2_literature}
+\input{manuscript_en/3_approach}
+\input{manuscript_en/4_results}
+\input{manuscript_en/5_discussion}
+\input{manuscript_en/6_conclusion}
+\input{manuscript_en/declarations}
+\input{manuscript_en/credit}
+
+\bibliographystyle{cas-model2-names}
+\bibliography{references}
+
+
+\end{document}

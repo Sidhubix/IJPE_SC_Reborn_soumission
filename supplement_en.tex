@@ -1,0 +1,50 @@
+%% Article SC-Reborn pour International Journal of Production Economics
+%% MATÉRIEL SUPPLÉMENTAIRE : compléments retirés du manuscrit principal (manuscrit.tex).
+%% Les renvois « section S… » du manuscrit pointent vers les sections de ce document.
+
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage[margin=2.3cm]{geometry}
+\usepackage[authoryear,longnamesfirst]{natbib}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,tabularx}
+\usepackage{capt-of}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,backgrounds,calc,patterns}
+\usepackage[hidelinks]{hyperref}
+\input{commun}
+
+% Numérotation propre au matériel supplémentaire : S1, S2... pour les sections, figures, tableaux et équations
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\theequation}{S\arabic{equation}}
+\setcounter{tocdepth}{2}
+
+\title{Digital twin and causal Bayesian control of supply chain resilience\\[4pt]
+\large Supplementary material}
+\author{Authors anonymized for review}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent This document complements the main manuscript and follows the order of its sections. It first presents a detailed view of the approach (S1), then the detailed literature review (S2), the modeling details for the three blocks, Simulate (S3), Measure (S4), and Learn (S5), the additional results (S6), and the instructions for reproducing the figures (S7). Figures, tables, and equations are numbered S1, S2, etc.; references to the main manuscript are marked as such.
+
+\tableofcontents
+
+\input{supplement_en/S1}
+\input{supplement_en/S2}
+\input{supplement_en/S3}
+\input{supplement_en/S4}
+\input{supplement_en/S5}
+\input{supplement_en/S6}
+\input{supplement_en/S7}
+
+\bibliographystyle{cas-model2-names}
+\bibliography{references}
+
+\end{document}

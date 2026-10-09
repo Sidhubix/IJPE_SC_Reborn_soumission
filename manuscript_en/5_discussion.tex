@@ -1,0 +1,23 @@
+\section{Discussion}
+\label{sec:5}
+
+% \subsection{Theoretical contributions}
+\label{sec:5.1}
+
+The main contribution is methodological. The approach produces data that link disruption, decisions, and service level. These data have a property that no field observation has: each crisis is observed under several policies, all else being equal. The policy then becomes an intervention in the sense of \citet{pearl2009}, whose effect is identifiable by construction. A recommendation can be compared with what would actually have happened.
+
+The results also shed light on how resilience is represented. The loss and recovery curve \citep{bruneau2003} and the disruption profile \citep{sheffi2005book} summarize a crisis by its depth and duration. Yet these two dimensions do not have the same causes: depth depends mainly on the disruption, duration mainly on management. To attribute a loss to its cause, the trajectory must therefore be decomposed into mechanism parameters. The learned network recovers this split without it being imposed.
+
+Finally, they refine the typology of contingency strategies \citep{tomlin2006,chopra2004}. The effectiveness of a lever depends on the disruption type and on the network topology. Releasing inventory makes no difference to a supplier failure but mitigates a congestion. The fastest reaction loses effectiveness when backup routes are narrow. Management rules therefore benefit from being conditional and specific to the network considered.
+
+The dominance of the reactive profile does not make the recommendation trivial. Reactivity is not always profitable and not always necessary, since a lighter policy would have been enough to avoid a high loss in two test crises out of three. The task is to arbitrate, crisis by crisis, between the cost of the levers and the resilience obtained.
+
+% \subsection{Managerial implications}
+\label{sec:5.2}
+
+A company that knows the ratio between the cost of a lever and its unit margin can locate its policy on Figure~\ref{fig:eco}. The speed of detection and decision matters more than the number of levers available; it is better to invest in monitoring the service level and in decision delegations set up in advance than to multiply levers. Reliable information on the probable duration of an incident has an economic value of its own, since it is what makes a lighter response possible without a notable loss of resilience. It is therefore useful to organize, before the crisis, the flow of this information from suppliers and carriers. Bottlenecks reduce the effectiveness of any reaction and justify targeted investments in redundancy. Finally, an emergency reserve is best kept apart from the ordering policy; otherwise it can blur the replenishment signal.
+
+% \subsection{Limitations}
+\label{sec:5.3}
+
+\textbf{Limitations — }The results rest on simulated data. In the absence of field data, several values were set at plausible levels; they are all adjustable, but they fix the orders of magnitude. Only the trends and rankings, which are stable from one network to another, lend themselves to generalization. Validation on company data remains to be done. The levers have no cost and remain engaged until the end of the observed period, which favors reactivity by construction. The disruption type is assumed to be known without error and each scenario contains only one disruption. Crises affecting a bottleneck are too rare in the dataset for their specific effects to be learned. The interaction between inventory cover and management policy was not studied.

@@ -1,0 +1,109 @@
+\section{Additional details on the resilience curve and the indicators (Measure)}
+\label{sec:S4}
+
+\subsection{Parameters and estimation}
+\label{sec:S4.1}
+
+Table~\ref{tab:d6} gives the operational interpretation of the seven parameters of the curve (Eq.~(2) of the main manuscript).
+
+\begin{table}[htbp]
+\caption{Parameters of the resilience curve.}
+\label{tab:d6}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}P{1.4cm}P{3.4cm}L@{}}
+\toprule
+\textbf{Parameter} & \textbf{Meaning} & \textbf{Interpretation for the supply chain} \\
+\midrule
+$k$ & Level before the disruption & Nominal service of the network \\
+$h$ & Depth of the drop & Extent of the service loss at the height of the crisis \\
+$q$ & Difference between final and initial level & Lasting loss ($q$ $<$ 0) or over-recovery ($q$ $>$ 0) \\
+$g$ & Drop delay & Time during which the network absorbs the disruption before degrading, through its capacity margins and, in the temporal representation, through its inventories and goods in transit \\
+$d$ & Time between drop and recovery & Duration of the degraded plateau, linked to the persistence of the disruption, to the reaction delay and, in the temporal representation, to the time needed to rebuild inventories after capacities return \\
+$\alpha$ & Drop steepness & Abruptness of the degradation \\
+$\beta$ & Recovery steepness & Speed of the restoration \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+A few constraints guarantee an interpretable shape: the degraded plateau stays positive, the final level stays above the plateau, and the steepness parameters and the plateau duration cannot fall below minimum values that would produce meaningless shapes.
+
+Each trajectory is aligned on the onset of the disruption, so that the period preceding the crisis directly provides the nominal level. The seven parameters are estimated by minimizing a robust criterion that penalizes large deviations less heavily than least squares:
+
+\begin{equation}
+L(\theta) = \sum_{i} 2\left(\sqrt{1 + \frac{r_i^2}{f^2}} - 1\right), \qquad r_i = p(x_i;\theta) - \mathrm{PI}(x_i), \qquad f = 0.05
+\label{eq:S4}
+\end{equation}
+
+This criterion, the reasons for choosing it and a fitting example are presented in Section~3.3 of the main manuscript (Figure~3).
+
+\subsection{Definition and formulas of the six indicators}
+\label{sec:S4.2}
+
+Table~\ref{tab:d7} presents the six indicators, the dimension of resilience that each one describes and their favorable direction.
+
+\begin{table}[htbp]
+\caption{The six resilience indicators.}
+\label{tab:d7}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}P{3.6cm}P{2.3cm}LP{2.1cm}@{}}
+\toprule
+\textbf{Indicator} & \textbf{Dimension} & \textbf{Interpretation} & \textbf{Favorable direction} \\
+\midrule
+IPC, cumulative loss index & Loss & Cumulative service lost during the crisis & Low \\
+CRD, dynamic recovery coefficient & Speed & Speed of the recovery relative to the drop and to the plateau duration & High \\
+TRP, weighted recovery time & Duration & Time needed for the recovery to reach 95\% of its amplitude & Low \\
+SRA, adaptive robustness score & Adaptation & Ability to climb back, penalized by a lasting gap to the initial level & High \\
+ERR, relative resilience efficiency & Retained performance & Share of the nominal service maintained over the episode & High \\
+PR, recovery potential & Restoration & Final level relative to the mid-depth of the drop & To be specified \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Six indicators are computed analytically from the fitted parameters. They thus inherit the smoothing performed by the fit, and each describes one facet of resilience: loss incurred, speed and duration of the recovery, adaptive capacity, retained performance, and recovery potential.
+
+\begin{align}
+\mathrm{IPC} &= \frac{h}{\alpha}\ln 2 + \frac{h\,d}{2} - \frac{h + q}{\beta}\ln 2 \label{eq:S5} \\
+\mathrm{CRD} &= \frac{\beta}{\alpha}\cdot\frac{h + q}{h}\cdot\frac{1}{d}\cdot\sqrt{\alpha\beta} \label{eq:S6} \\
+\mathrm{TRP} &= d + \frac{2.95}{\beta} \label{eq:S7} \\
+\mathrm{SRA} &= \frac{\beta\,(h + q)}{\alpha\,h\,d}\, e^{-|q|/h}\,\big(1 + \tanh(\beta - \alpha)\big) \label{eq:S8} \\
+\mathrm{ERR} &= 1 + \frac{q}{2k} - \frac{h\,|\mathrm{IPC}|}{T\,k}, \quad T = g + d + \frac{4}{\beta} \label{eq:S9} \\
+\mathrm{PR} &= \frac{k + q}{k - h/2} \label{eq:S10}
+\end{align}
+
+The horizon $T$ in Eq.~\eqref{eq:S9} covers the drop and a recovery that is about 98\% complete, in line with the definition proposed by \citet{rahiel2026in4pl}; it thus adapts to the duration of each crisis instead of imposing a fixed window.
+
+\subsection{Goodness of fit, edge cases and the domain of resilience}
+\label{sec:S4.3}
+
+The quality of each fit is assessed by the coefficient of determination and the root mean square error, computed on the raw trajectory, and by a coefficient of determination computed on the trajectory smoothed over five days. The gap between the two coefficients separates a shape defect of the curve from a mere day-to-day fluctuation of demand. Crises whose fit is insufficient, or whose drop is too small to be characterized, can be removed from the dataset.
+
+Crises absorbed without noticeable degradation, when the network has enough margin or, in the temporal representation, enough inventory, raise a first difficulty: the depth $h$ tends to zero and the indicators that are normalized by $h$, CRD and SRA, become unstable. Inventory cover makes it possible to shift, in a controlled way, the threshold beyond which a crisis is absorbed in this way. Trajectories with several troughs typically occur when a mobilized inventory runs out before the end of the crisis, or when the return of capacities causes an abrupt recovery: the curve only captures their envelope. Finally, PR increases with the depth of the drop for a given final level; its direction of interpretation must be settled before it is used as a management objective.
+
+These edge cases stem from the very definition of resilience. Three related properties can be distinguished by the shape of the service level trajectory. Robustness is the ability to absorb a disruption without noticeable degradation: the service level stays at the nominal level and there is nothing to restore. Stability is the ability to stay close to this level despite rapid, low-amplitude variations, such as day-to-day demand fluctuations, which fall under routine control. Resilience, in contrast, presupposes an actual drop followed by a recovery: it is measured by the loss incurred and by the way the service level returns to an acceptable level. Its domain is therefore bounded on both sides. Without a drop, the question of resilience does not arise; when the drop is such that the network stops serving for a long time and does not recover within the observed period, the crisis is a case of failure, which calls for reconfiguration rather than recovery. The composite hyperbolic curve \citep{rahiel2026in4pl} is built for this domain, which goes from a drop to a recovery. The instability of CRD and SRA when $h$ tends to zero thus signals an absorbed crisis, that is, a case of robustness and not a limitation of the model.
+
+\subsection{Signatures of malfunctions on the curve}
+\label{sec:S4.4}
+
+The parameters of the curve link the observed trajectory to the mechanisms described in Section~3 of the main manuscript. Table~\ref{tab:S3} summarizes the expected signatures; it forms a set of hypotheses that the analysis of the results and causal learning can confirm or qualify.
+
+\begin{table}[htbp]
+\caption{Signatures of malfunctions on the resilience curve.}
+\label{tab:S3}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}LLL@{}}
+\toprule
+\textbf{Phenomenon} & \textbf{Expected signature on the curve} & \textbf{Probable origin} \\
+\midrule
+Disruption absorption & Low $h$, high $g$ & Sufficient capacity margins and backup routes \\
+Absorption by inventories & Low or zero $h$, high $g$ & High inventory cover relative to the disruption duration \\
+Abrupt collapse & High $h$, high $\alpha$ & Severe cut or closure, strained network \\
+Delayed collapse & High $g$, then high $h$ & Inventories depleted during the crisis, insufficient goods in transit \\
+Gradual degradation & Low $\alpha$ & Diffuse congestion, moderate demand surge \\
+Prolonged crisis & High $d$ & Long disruption, late detection, decision inertia \\
+Delayed recovery & $d$ greater than the disruption duration & Rebuilding of inventories and goods in transit after capacities return \\
+Fast recovery & High $\beta$, low TRP & Effective lever engaged early \\
+Lasting loss & $q$ $<$ 0 & Capacity not restored by the end of the period, inventory depleted \\
+Over-recovery & $q$ $>$ 0 & Levers maintained after the end of the disruption \\
+\bottomrule
+\end{tabularx}
+\end{table}

@@ -1,0 +1,96 @@
+\section{Detailed literature review}
+\label{sec:S2}
+
+This section expands, stream by stream, the state of the art summarized in Section~2 of the main manuscript; Table~1 of the main manuscript gives its synthesis.
+
+\subsection{Supply chain resilience: definitions and resilience curve}
+\label{sec:ea-mesure}
+
+Literature reviews agree on defining resilience as the ability of a supply chain to prepare for disruptions, respond to them, and recover from them \citep{tukamuhabwa2015, kamalahmadi2016}. This definition has been formalized mathematically from the performance trajectory, which describes the drop and then the recovery of a supply chain subjected to a disruption \citep{rahiel2026in4pl, rahiel2026these}. It has been applied to the hospital supply chain \citep{rahiel2025esd} and extended by a probabilistic modeling of severe disruptions upstream of the network \citep{rahiel2026codit}. \citet{kamalahmadi2016} organize resilience into three phases: anticipation, resistance, and then recovery and response. Their review of one hundred articles also shows that measurement remains the neglected part of the field: only eight studies address it, against sixty-eight on the principles of resilience. Some measures rely on the perception of the actors, such as the survey scale of \citet{chowdhury2017}; it informs on the capabilities of a firm, not on the course of a given crisis.
+
+The other family of measures starts from performance observed over time. \citet{bruneau2003} associate the loss of resilience with the area between nominal performance and degraded performance, until the return to equilibrium (Fig.~\ref{fig:courbe}). Replaying the same crisis with no reaction, then with a decision taken at $t_d$, isolates the effect of this decision (hatched area): the return to equilibrium occurs at $t_r'$ with the decision and at $t_r$ with no reaction. This counterfactual reading of the curve, with and without a decision, is borrowed from \citet{rahiel2026in4pl}. In the logistics field, \citet{sheffirice2005} describe an eight-phase disruption profile, from preparation to long-term impact, which holds whatever measure is used: sales, production, profit, or customer service. \citet{henry2012} generalize the idea by defining resilience as a function of time that accounts for the event, the restoration of components, and the strategy adopted. \citet{zobel2011} show that two crises with the same area are not equivalent for the decision maker, who trades off the magnitude of the initial impact against the duration of recovery. The reviews by \citet{hosseini2016} and \citet{hosseini2019tre} survey these measures, the latter according to the capability involved: absorbing, adapting, or recovering.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.95\textwidth, height=6.4cm,
+  xmin=0, xmax=100, ymin=0, ymax=1.2,
+  axis lines=left,
+  xlabel={Time $t$}, ylabel={Service level $P(t)$},
+  xtick={20,26,58,84},
+  xticklabels={$t_e$,$t_d$,$t_r'$,$t_r$},
+  ytick={0.42,1}, yticklabels={$P_{\min}$,$P_0$},
+  every axis plot/.append style={thick},
+  legend style={font=\footnotesize, draw=none, fill=none, at={(0.99,0.03)}, anchor=south east},
+  clip=false]
+  % Resilience loss with decision (between the nominal level and the trajectory with decision)
+  \addplot[fill=red!14, draw=none, forget plot] coordinates
+    {(20,1) (26,0.751) (32,0.64) (40,0.64) (58,0.975) (58,1) (20,1)};
+  % Loss avoided by the decision (between the two trajectories)
+  \addplot[pattern=north east lines, pattern color=green!45!black, draw=none, forget plot] coordinates
+    {(26,0.751) (32,0.64) (40,0.64) (58,0.975) (84,0.975) (84,0.96) (52,0.42) (34,0.42) (26,0.751)};
+  % Nominal level
+  \addplot[dashed, gray, forget plot] coordinates {(0,1) (100,1)};
+  % Trajectory with no reaction
+  \addplot[black!70, densely dashed] coordinates
+    {(0,1) (20,1) (34,0.42) (52,0.42) (84,0.96) (100,0.96)};
+  \addlegendentry{No reaction}
+  % Trajectory with a decision taken at t_d
+  \addplot[blue!70!black] coordinates
+    {(0,1) (20,1) (26,0.751) (32,0.64) (40,0.64) (58,0.975) (100,0.975)};
+  \addlegendentry{With decision at $t_d$}
+  % Reference lines
+  \draw[gray, densely dotted] (axis cs:20,0) -- (axis cs:20,1);
+  \draw[gray, densely dotted] (axis cs:26,0) -- (axis cs:26,0.751);
+  \draw[gray, densely dotted] (axis cs:58,0) -- (axis cs:58,0.975);
+  \draw[gray, densely dotted] (axis cs:84,0) -- (axis cs:84,0.96);
+  % Labels
+  \node[font=\scriptsize, align=center] at (axis cs:46,0.90) {Resilience loss\\with decision};
+  \node[font=\scriptsize, align=center, fill=white, inner sep=1pt] at (axis cs:64,0.70) {Loss avoided\\by the decision};
+  \node[font=\scriptsize, anchor=south] at (axis cs:10,1.02) {Nominal regime};
+  \node[font=\scriptsize, anchor=north, align=center] at (axis cs:43,0.38) {Service\\trough};
+  \node[font=\scriptsize, anchor=south, align=center] at (axis cs:92,1.02) {New\\equilibrium};
+\end{axis}
+\end{tikzpicture}
+\captionof{figure}{Service level after a disruption at $t_e$, with and without a decision at $t_d$ (illustrative diagram, after \citet{rahiel2026in4pl}).}\label{fig:courbe}
+\end{center}
+
+Several studies derive indicators from this trajectory that can be used for decision making. \citet{spiegler2012} measure resilience by the integral of the time-weighted deviation in inventory and shipment levels and show that a more resilient chain has higher production costs: resilience has a price. \citet{simchilevi2015} assess risk exposure at Ford from the recovery time of each site, postponing the estimation of probabilities until after that of the effects; they observe that the impact of a disruption often depends less on its cause than on its duration. \citet{behzadi2020} show that the choice of measure changes the investment strategy selected and propose the discounted value of lost profit. \citet{dixit2020} relate resilience before and after a disaster to structural network parameters such as density, centrality, and connectivity.
+
+A recent formalization describes the whole curve by an explicit function rather than by indicators computed point by point. A composite function of hyperbolic tangents with seven parameters covers the complete disruption cycle and yields six indicators, including cumulative loss, recovery speed, and adaptive robustness \citep{rahiel2026in4pl, rahiel2026these}. These measures, like the previous ones, apply to a curve that has already been observed. None of them says how to obtain comparable curves in large numbers, for varied crises and different responses.
+
+% ---------------------------------------------------------------------
+\subsection{Mitigation and contingency strategies against disruptions}
+\label{sec:ea-strategies}
+
+The literature distinguishes measures taken before the disruption, called mitigation, from those taken once it occurs, called contingency. \citet{tang2006} classifies the former according to whether they concern supply, demand, product, or information. \citet{tomlin2006} formalizes the choice for one product and two suppliers, one cheap but unreliable, the other reliable but more expensive. The optimal strategy then depends on the supplier's availability rate and on the nature of the disruptions, frequent and short or rare and long. Contingent rerouting is often part of it. \citet{sheffirice2005} contrast redundancy, a mere cost as long as no crisis occurs, with flexibility, which provides an advantage even in normal times.
+
+Quantitative studies clarify the role of each lever. For \citet{lucker2019}, inventory acts as prevention and reserve capacity as reaction; their optimal levels depend on the type of product and of supply chain. Safety stock has also been studied as a resilience lever in the hospital supply chain, against seasonal activity peaks \citep{rahiel2025esd}. \citet{hosseini2019ijpe} combine proactive and reactive strategies in supplier selection and order allocation. \citet{ivanov2016tre} compare several proactive configurations and several recovery policies in terms of service level and costs. Faced with a long disruption such as the COVID-19 pandemic, \citet{ivanovdolgui2021ijpe} conclude that adaptation capabilities matter most.
+
+The economic dimension runs through these studies. \citet{aldrighetti2021} review the costs of proactive investments and of recovery in network design models. \citet{klibi2012ijpe} show, in a design problem, that how well the model anticipates the operational response of users strongly affects the result, and they stress that these response mechanisms have received little modeling attention.
+
+These studies establish a repertoire of decisions: inventory, backup supply, rerouting, capacity, and demand allocation. However, the decisions are most often fixed in advance, by optimization or by case analysis. Their triggering as the crisis unfolds, with the detection, decision, and implementation delays of a real operations manager, remains little modeled, as does the comparison of several management policies facing the same hazard.
+
+% ---------------------------------------------------------------------
+\subsection{Simulation of disruptions and recovery}
+\label{sec:ea-simulation}
+
+Simulation has become the standard tool for studying the propagation of disruptions in networks, known as the \textit{ripple effect}. \citet{schmitt2012} simulate a real consumer goods network to compare supply and demand interruption risks and the effect of placing inventory at several echelons. \citet{ivanov2017} presents a simulation model of a multi-echelon chain subject to capacity losses and stresses that simulation covers blind spots of optimization. Applied to COVID-19, the same approach shows that the timing of site closures and reopenings, echelon by echelon, can weigh more on the impact than the duration of the upstream disruption or the speed of propagation \citep{ivanov2020}. Nor does the crisis end when sites reopen: accumulated delays and backlogs persist. \citet{ivanov2019cie} shows that a recovery policy, which provides a gradual transition from contingency to normal operation, mitigates part of them.
+
+On the methodological side, \citet{macdonald2018} combine design of experiments (DoE) and discrete-event simulation to build theory, varying the interval between disruptions, connectivity, and buffer stocks. Timed discrete-event formalisms also make it possible to bound analytically the execution times of a chain subject to uncertain durations and then, when a disruption occurs, to choose the fastest reconfiguration scenario \citep{rajah2025}. Network structure also matters \citep{kim2015}: a set of network characteristics describes resilience better than the network type alone \citep{li2020}.
+
+Scenarios themselves can be generated systematically. \citet{klibi2012ejor} characterize the hazards and vulnerabilities of the network, model the arrival, intensity, and duration of incidents, and then assess their consequences in terms of damage and recovery time; random sampling then produces plausible scenarios for network design. Digital twins represent the state of the network continuously \citep{ivanovdolgui2021ppc}, and \citet{ivanov2023} turns the digital twin into a stress-testing tool. The MARE framework covers the four stages of disruption management (monitor, assess, recover, and assess the recovery) and compares the restoration achieved by several recovery strategies \citep{ramzy2022}. Finally, ISOMORPH, the first public digital twin of a multi-echelon logistics network, provides reference trajectories for forecasting; closed-loop control, that is, a decision that reacts to the state of the network, appears only among the envisaged extensions \citep{zhang2026isomorph}.
+
+These simulators bring out what aggravates or mitigates a crisis. But they are designed to study a network or a case, not to produce a dataset of comparable crises. Strategies are fixed by the scenario. None of the studies reviewed systematically replays the same hazard with no reaction and then under several management policies.
+
+% ---------------------------------------------------------------------
+\subsection{Causal Bayesian networks in supply chain management}
+\label{sec:ea-rb}
+
+Bayesian networks have become a preferred tool for representing dependencies between risks, strategies, and consequences. The review by \citet{hosseiniivanov2020} highlights three strengths: inference in both directions, from cause to effect to simulate a disruption and from effect to cause to identify which levers to strengthen; the combination of expert knowledge and data; and the ability to work with little data. \citet{garvey2015} and \citet{ojha2018} model risk propagation in the network, the latter deriving risk exposure and resilience indices. \citet{hosseiniivanov2022aor} base a resilience measure on supplier vulnerability and recoverability. The decision question is addressed by \citet{qazi2018}, who couple a Bayesian network with expected utility to select mitigation strategies. The probabilities of their model are elicited from company staff through interviews and workshops. An upstream probabilistic layer has also been proposed to model the resilience of a network under severe disruptions \citep{rahiel2026codit}.
+
+The structure of these networks is most often set by experts; it can also be learned from data, through a score that rewards fit and penalizes complexity or through independence tests \citep{koller2009, hosseiniivanov2020}. The two sources can be combined \citep{heckerman1995}. For such a model to recommend a decision, the effect of that decision must still be identifiable. In the sense of \citet{pearl2009}, a decision is an intervention: its consequence cannot be read from a simple observed correlation, because the operations manager reacts all the more strongly as the crisis is more severe.
+
+Yet the necessary data are lacking. \citet{hosseiniivanov2020} note that major disruptions are rare, so that the available data are insufficient to quantify resilience. Even at a large manufacturer, data on lower-tier suppliers remain hard to obtain \citep{simchilevi2015}. Learning studies therefore rely on internal industrial data, such as the Ford time series used by \citet{do2024} to forecast delivery delays. These records are not public and contain neither the label of the decision taken nor the counterfactual, that is, what would have happened without it: each crisis occurs only once, with a single response.
+
+% ---------------------------------------------------------------------

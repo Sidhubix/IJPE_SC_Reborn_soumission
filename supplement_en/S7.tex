@@ -1,0 +1,34 @@
+\section{Reproducibility of figures and tables}
+\label{sec:S7}
+\sloppy
+
+
+This part indicates, for each figure derived from the data, how to reproduce it from the files deposited with the article and from the Isomorph-Reborn application.
+
+\subsection*{ISOMORPH network (Figure~\ref{fig:d2})}
+
+In the Isomorph-Reborn application, provided with the article, open the ``Générateur de scénarios'' (scenario generator) tab; in the ``Réseau'' (network) section, at the top of the tab, choose ``Réseau ISOMORPH'' (ISOMORPH network) to display the echelon diagram of Figure~\ref{fig:d2}. The description of the network, with its capacities and travel times, is contained in the file \texttt{reseau\_isomorph-originel.json}.
+
+\subsection*{Crisis S0366 under the four policies (Figure~2 of the main manuscript)}
+
+In the ``Générateur de scénarios'' tab of Isomorph-Reborn, load the assumptions file \texttt{hypotheses\_lot} \texttt{\_A\_isomorph\_tension75.json} (ISOMORPH network, flow representation, strain level 75, 2,000 scenarios, seed 42) and run the generation. The daily trajectories are exported to the file \texttt{ip\_timeseries.csv} (columns \texttt{scenario\_id}, \texttt{branch\_id}, \texttt{day\_rel} and \texttt{ip}); Figure~2 of the main manuscript shows the four versions of scenario S0366. The detection days come from the learning dataset exported for the same batch.
+
+\subsection*{Fit of crisis S0366 (Figure~3 of the main manuscript)}
+
+The fitted parameters of each crisis version are exported by Isomorph-Reborn (``Ajustement par lot'' (batch fitting) tab) to the file \texttt{resilience\_ip.csv} (columns \texttt{k}, \texttt{q}, \texttt{h}, \texttt{g}, \texttt{d}, \texttt{alpha}, \texttt{beta}, \texttt{r2}, followed by the six indicators). The plotted curve is Eq.~(2) of the main manuscript evaluated with the parameters of row S0366, version \texttt{none}, superimposed on the trajectory from the file \texttt{ip\_timeseries.csv}. In the application, this crisis is curve no.~1461 of 8,000: the counter numbers the crisis versions, four per scenario, and not the scenarios.
+
+\subsection*{Bayesian network learning (Figure~5 of the main manuscript)}
+
+In BayesArtist, import the dataset \texttt{bayesartist\_apprentissage\_lotA.csv} (6,400 crisis versions, 20 variables) and the constraints \texttt{bayesartist\_contraintes\_isomorph.json} (155 forbidden arcs, at most four parents), then run learning by greedy search (\textit{Greedy Hill Climbing}) with the BIC score and Laplace smoothing. The learned network is exported in \texttt{.bif} format; the figure is drawn from this file. Since BayesArtist is not publicly distributed, the same learning can be carried out with any Bayesian network software that learns from a CSV file and accepts forbidden arcs (see the data availability statement of the main manuscript).
+
+\subsection*{Prognosis for the case study (Figure~\ref{fig:d7})}
+
+In BayesArtist, in inference mode on the network of Figure~5 of the main manuscript, set the evidence nature = \texttt{fermeture\_entrepot}, target = \texttt{passage\_oblige} and duration = \texttt{fort}, then successively set the profile to \texttt{none}, \texttt{tardif}, \texttt{prudent} and \texttt{reactif} and read the distribution of the IPC node each time.
+
+\subsection*{Recommendation map (Figure~6 of the main manuscript)}
+
+In BayesArtist, on the network of Figure~5 of the main manuscript, set the nature, target and duration evidence corresponding to a context of the map, together with IPC = \texttt{faible}, then read the distribution of the profile node. The map is computed by exact inference on the network exported in \texttt{.bif} format; BayesArtist, whose inference is approximate, gives the same values to within 0.01 (for example 0.06, 0.08, 0.10, and 0.76 for the long closure of a bottleneck).
+
+\subsection*{Economic analysis (Table~8 and Figure~7 of the main manuscript)}
+
+Lost sales are computed from the file \texttt{ip\_timeseries.csv} of batch A, as the sum of $1 - \mathrm{PI}(t)$ over the 60 days following the disruption multiplied by the reference demand; the number of levers engaged and the reference demand come from the learning dataset exported for the same batch (columns \texttt{nb\_decisions} and \texttt{base\_demand}).

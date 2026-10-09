@@ -1,0 +1,49 @@
+\section{Literature review}
+\label{sec:etat}
+
+\textbf{Four research streams} relate to recommending decisions in the face of disruptions: resilience measurement, mitigation and contingency strategies, disruption simulation, and causal Bayesian networks. Their detailed review is given in Section~S2. Here we retain what positions the approach and helps the reader grasp the contributions of this work.
+
+The first stream measures resilience from the performance trajectory. Supply chain resilience is generally defined as the ability of a supply chain to prepare for disruptions, respond to them, and recover from them \citep{tukamuhabwa2015, kamalahmadi2016}. \citet{rahiel2026in4pl} and \citet{rahiel2026these} formalized this definition mathematically from the performance trajectory, which describes the drop and then the recovery of a disrupted supply chain. This framework was applied to the hospital supply chain \citep{rahiel2025esd} and complemented by a probabilistic modeling of severe disruptions \citep{rahiel2026codit}. Several measures thus start from the performance observed over time. \citet{bruneau2003} associate the resilience loss with the area between nominal performance and degraded performance, \citet{henry2012} treat resilience as a function of time, and others derive indicators useful for decision making \citep{spiegler2012, behzadi2020}. Building on all of this, the formalization of \citet{rahiel2026in4pl} describes the whole curve by a composite function of hyperbolic tangents with seven parameters, which yields six indicators. Note, however, that the approach assumes an already observed curve. None of these works explains how to obtain comparable curves in large numbers, for varied crises and different responses.
+
+Measuring resilience does not say how to improve it. This is the subject of work on mitigation and contingency strategies. Mitigation measures, taken before the disruption, are distinguished from contingency measures, taken once it occurs \citep{tang2006, tomlin2006}. Quantitative studies have clarified the role of each lever, with inventory acting mainly as prevention and reserve capacity as reaction \citep{lucker2019}. They have compared proactive policies with recovery policies \citep{ivanov2016tre} and quantified the costs of resilience \citep{aldrighetti2021}. In these studies, decisions are most often fixed in advance. Their triggering as the crisis unfolds, with the detection and decision delays of a real operations manager, is rarely modeled \citep{klibi2012ijpe}. Several management policies are seldom compared against the same hazard.
+
+Simulation has become the standard way to confront these strategies with varied disruptions. It is now the common tool for studying disruption propagation, or the domino effect, notably in supply chains \citep{schmitt2012, ivanov2017}. It also serves to build design of experiments (DoE) approaches \citep{macdonald2018}, to generate plausible scenarios \citep{klibi2012ejor}, and to compare recovery strategies \citep{ramzy2022}. ISOMORPH, to our knowledge the first public digital twin of a multi-echelon logistics network, provides reference trajectories for forecasting, without decisions that react to the state of the network \citep{zhang2026isomorph}. This simulator is designed to study one network or one case. No simulator systematically replays the same hazard with no reaction and then under several management policies.
+
+What remains is to derive decision rules from observed or simulated crises, which Bayesian networks make possible. They represent the dependencies between risks, strategies, and consequences, and allow reasoning from cause to effect as well as from effect to cause \citep{hosseiniivanov2020}. They have been used to model risk propagation \citep{garvey2015, ojha2018} and to select mitigation strategies \citep{qazi2018}. Their structure, often set by experts, can also be learned from data, and the two sources can be combined \citep{heckerman1995}. This last point is a notable advantage. For such a model to recommend a decision, the effect of that decision must be identifiable. A decision is an intervention in the sense of \citet{pearl2009}, and its consequence cannot be read from an observed correlation, since the operations manager reacts more strongly when the crisis is more severe. Company records do not allow this causal identification, because they often contain neither the label of the decision taken nor what would have happened without it \citep{do2024}.
+
+These four streams are well established, but they have developed separately (Table~\ref{tab:synthese}). No known public database links, for a large number of crises, the disruption suffered, the decision taken, and the resulting service level trajectory.
+
+\begin{table*}[htbp]
+\caption{Literature streams, limitations for decision recommendation, and response provided by this work.}
+\label{tab:synthese}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}P{1.9cm}P{3.3cm}LLL@{}}
+\toprule
+\textbf{Stream} & \textbf{Representative works} & \textbf{Contribution} & \textbf{Limitation for recommendation} & \textbf{Response of this work} \\
+\midrule
+Resilience measurement
+  & \citealp{bruneau2003}; \citealp{henry2012}; \citealp{spiegler2012}; \citealp{behzadi2020}; \citealp{rahiel2026in4pl}
+  & Performance curve, indicators, explicit function of the trajectory
+  & Assumes an already observed curve
+  & Measure: seven-parameter function fitted to each simulated trajectory \\
+\addlinespace
+Mitigation and contingency
+  & \citealp{tang2006}; \citealp{tomlin2006}; \citealp{lucker2019}; \citealp{ivanov2016tre}; \citealp{aldrighetti2021}
+  & Catalog of levers and their costs
+  & Decisions fixed in advance; reaction delays rarely modeled
+  & Simulate: operations manager who sees only the service level, three management profiles \\
+\addlinespace
+Disruption simulation
+  & \citealp{schmitt2012}; \citealp{ivanov2017}; \citealp{macdonald2018}; \citealp{klibi2012ejor}; \citealp{ramzy2022}; \citealp{zhang2026isomorph}
+  & Propagation of disruptions, scenario generation, recovery strategies
+  & Single case study; no systematic counterfactuals
+  & Simulate: each crisis replayed with no reaction and then under each profile \\
+\addlinespace
+Causal Bayesian networks
+  & \citealp{garvey2015}; \citealp{ojha2018}; \citealp{qazi2018}; \citealp{hosseiniivanov2020}; \citealp{rahiel2026codit}
+  & Inference in both directions, strategy selection
+  & Scarce data, without decision labels or counterfactuals
+  & Learn: network learned on the counterfactual dataset, with forbidden arcs \\
+\bottomrule
+\end{tabularx}
+\end{table*}

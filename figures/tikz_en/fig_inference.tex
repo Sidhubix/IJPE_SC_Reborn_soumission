@@ -1,0 +1,38 @@
+% Figure: prognosis of the cumulative loss by policy (inference in BayesArtist on the learned network)
+% Evidence: nature = fermeture_entrepot, cible = passage_oblige, duree = fort; values read in BayesArtist.
+\begin{tikzpicture}[x=1cm,y=1cm, font=\scriptsize]
+  \node[anchor=east] at (-0.15,0.00) {Reactive};
+  \fill[palmec!75] (0.000,-0.30) rectangle (10.812,0.30);
+  \node at (5.406,0.00) {$0.90$};
+  \fill[poltard!75] (10.812,-0.30) rectangle (11.904,0.30);
+  \node at (11.358,0.00) {$0.09$};
+  \fill[polprud!75] (11.904,-0.30) rectangle (11.988,0.30);
+  \node[anchor=west] at (12.05,0.00) {$0.01$};
+  \node[anchor=east] at (-0.15,-0.90) {Prudent};
+  \fill[palmec!75] (0.000,-1.20) rectangle (1.272,-0.60);
+  \node at (0.636,-0.90) {$0.11$};
+  \fill[poltard!75] (1.272,-1.20) rectangle (6.672,-0.60);
+  \node at (3.972,-0.90) {$0.45$};
+  \fill[polprud!75] (6.672,-1.20) rectangle (12.000,-0.60);
+  \node at (9.336,-0.90) {$0.44$};
+  \node[anchor=east] at (-0.15,-1.80) {Delayed};
+  \fill[palmec!75] (0.000,-2.10) rectangle (1.056,-1.50);
+  \node at (0.528,-1.80) {$0.09$};
+  \fill[poltard!75] (1.056,-2.10) rectangle (5.268,-1.50);
+  \node at (3.162,-1.80) {$0.35$};
+  \fill[polprud!75] (5.268,-2.10) rectangle (12.000,-1.50);
+  \node at (8.634,-1.80) {$0.56$};
+  \node[anchor=east] at (-0.15,-2.70) {No reaction};
+  \fill[palmec!75] (0.000,-3.00) rectangle (0.816,-2.40);
+  \node at (0.408,-2.70) {$0.07$};
+  \fill[poltard!75] (0.816,-3.00) rectangle (3.600,-2.40);
+  \node at (2.208,-2.70) {$0.23$};
+  \fill[polprud!75] (3.600,-3.00) rectangle (12.000,-2.40);
+  \node at (7.800,-2.70) {$0.70$};
+  \draw[black!50] (0,-3.15) -- (12.0,-3.15);
+  \foreach \p/\l in {0/0,0.2/0.2,0.4/0.4,0.6/0.6,0.8/0.8,1/1} { \draw[black!50] (\p*12.0,-3.15) -- ++(0,-0.08) node[below] {$\l$}; }
+  \node[font=\small] at (6.0,-3.90) {Probability of each IPC cumulative loss class};
+  \fill[palmec!75] (1.20,0.55) rectangle (1.55,0.8); \node[anchor=west] at (1.60,0.675) {Low loss};
+  \fill[poltard!75] (4.60,0.55) rectangle (4.95,0.8); \node[anchor=west] at (5.00,0.675) {Medium loss};
+  \fill[polprud!75] (8.00,0.55) rectangle (8.35,0.8); \node[anchor=west] at (8.40,0.675) {High loss};
+\end{tikzpicture}

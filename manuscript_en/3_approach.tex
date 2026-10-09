@@ -1,0 +1,169 @@
+\section{Approach: simulate, measure, learn}
+\label{sec:3}
+
+The object of study is the crisis, followed from start to finish: what caused it, what the operations managers decided, and how the service level evolved day by day. The Simulate block produces these crises, the Measure block summarizes each one by a resilience curve, and the Learn block derives a causal model from them.
+
+\subsection{Digital twin of the Isomorph-Reborn platform}
+\label{sec:3.1}
+
+This work starts from ISOMORPH \citep{zhang2026isomorph}, an open digital twin of a distribution network located in real cities of the United States. Three sources (San Francisco, St.~Louis, and Orlando) supply a hub in Nashville. The goods then pass through Atlanta and then through Chicago, Charlotte, Memphis, Columbus, Richmond, Philadelphia, and Baltimore to reach a single customer in New York. The network thus has thirteen cities connected by sixteen links. It is simulated with a daily time step and an (s, S) replenishment policy. ISOMORPH was designed for forecasting and is not suited as such to the study of resilience. Its disruptions are not labeled, no decision is made during a crisis, and no resilience indicator is computed.
+
+A first attempt, which directly grafted an operations manager and disruptions onto ISOMORPH, ran into the buffer stocks. They absorbed most of the disruptions and about half of the scenarios showed no degradation. The Isomorph-Reborn platform, developed for this work, therefore extends ISOMORPH by distinguishing two nested representations of the same network. The first, called the flow representation, is an instantaneous capacitated flow model, in which any drop in the service level is explained by a loss of capacity, an increase in demand, or an identified decision. The second, called the temporal representation, adds transport and production lead times and an (s, S) inventory policy at each storage site. This makes absorption by inventory a factor that can be set at will. Isomorph-Reborn also accepts any multi-echelon network. Table~\ref{tab:isomorph} summarizes what distinguishes it from ISOMORPH.
+
+\begin{table*}[htbp]
+\caption{Positioning of the Isomorph-Reborn platform relative to the ISOMORPH digital twin.}
+\label{tab:isomorph}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}P{2.3cm}P{3cm}L@{}}
+\toprule
+\textbf{Dimension} & \textbf{ISOMORPH} & \textbf{Isomorph-Reborn} \\
+\toprule
+Network & 13 nodes, single destination, daily time step & Any multi-echelon network; parametric network with partial redundancy and ISOMORPH network as references \\
+\midrule
+Dynamics & Inventory managed with (s, S) & Two nested representations: instantaneous capacitated flow, or transport and production lead times with (s, S) inventory and adjustable cover \\
+\midrule
+Disruptions & Random, unlabeled & Five controlled types: target, date, duration, and severity known \\
+\midrule
+Decisions & Parameters set before the simulation & Simulated operations manager reacting during the crisis \\
+\midrule
+Experimentation & Independent draws & Same crisis replayed under several management policies \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+\subsection{Simulation of crisis scenarios}
+\label{sec:3.2}
+
+\paragraph{Network and service level.} The network is a directed acyclic graph that connects typed sites (suppliers, factories, hubs, warehouses, carriers) to a single final customer. The sites form two groups, production and storage. A disruption or a lever targets a site of one of these groups. The shipping capacity of a storage site is carried by its outgoing links. The effectiveness of a lever therefore depends on where the binding constraint lies in the topology as much as on its nominal magnitude. Two networks can react very differently to the same disruption and the same decision. The generator makes it possible to isolate this effect by replaying the same crises on several networks. Two networks serve as references here: a parametric network with partial redundancy (three factories, nine warehouses) and the ISOMORPH network (thirteen cities, sixteen links), whose nominal values are given in Section~S3.1.
+
+Each day, the network can deliver a volume $F(t)$. In the flow representation, this is the maximum quantity it can route with its capacities of the day. In the temporal representation, it is what the movement of material and the inventories actually allow to be delivered. This volume serves critical items first, which account for 15 to 45\% of demand depending on the scenario. Network performance is measured by its daily service level $\mathrm{PI}(t)$, the share of customer demand actually served, in which critical items count triple:
+
+\begin{equation}
+\mathrm{PI}(t) = \frac{S_r(t) + 3\,S_c(t)}{D_r(t) + 3\,D_c(t)}, \quad S_c(t) = \min\big(F(t), D_c(t)\big), \quad S_r(t) = \min\big(F(t) - S_c(t), D_r(t)\big)
+\label{eq:1}
+\end{equation}
+
+$D_{c}(t)$ and $D_{r}(t)$ denote the demands for critical and ordinary items, and $S_{c}(t)$ and $S_{r}(t)$ the quantities served. The service level equals 1 when all demand is met, and demand not served on a given day is not carried over to the next day. In the temporal representation, the levels s and S of each site are expressed in days of cover of its nominal throughput \citep{scarf1960, little1961}. The network runs for 60 days without disruption before any observation (\voirSM{S3.2}).
+
+\paragraph{Disruptions.} Each scenario undergoes a single disruption, of one of the five types in Table~\ref{tab:d3}, which correspond to distinct failure mechanisms. Its target, start date, duration, and severity $s \in [0,1]$ are known exactly, so that the origin of each observed degradation is certain.\\
+
+\begin{table*}[htbp]
+\caption{Disruption types and mechanisms represented.}
+\label{tab:d3}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}P{2.4cm}LLP{1.7cm}@{}}
+\toprule
+\textbf{Type} & \textbf{Failure mechanism} & \textbf{Modeled effect} & \textbf{Nominal severity} \\
+\toprule
+Supplier failure & Localized loss of upstream capacity & Production of the affected site reduced by $s$ & 0.50 to 1.00 \\
+\midrule
+Link cut & Break of a supply route and disorganization of the site served & Link reduced by $s$; shipping of the site served reduced by $0.7\,s$; its backup routes by $0.3\,s$ & 0.80 to 1.00 \\
+\midrule
+Storage site closure & Loss of a distribution node & Shipping and supply of the site reduced by $s$ & 0.80 to 1.00 \\
+\midrule
+Demand surge & Saturation without physical damage & Demand multiplied by $1 + 2s$ & 0.50 to 1.00 \\
+\midrule
+Congestion & Diffuse degradation of the whole network & Transport and shipping capacities reduced by $s$ & 0.50 to 1.00 \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+The reference demand of a scenario is calibrated on the volume still deliverable during the incident, through a strain rate $u$ drawn between 0.85 and 1.15. This calibration also ensures that no degradation appears before the disruption: any observed trough comes from the crisis (\voirSM{S3.3}).
+
+\paragraph{Simulated operations manager.} The simulated operations manager does not seek the optimal decision. It reproduces the way organizations react. It sees the crisis only through the service level averaged over a few days, so as not to be alarmed by a mere fluctuation. It declares an anomaly when this smoothed level falls below a critical threshold. Beyond this (configurable) threshold, that is, when the service level falls lower, a crisis is judged likely and the resilience of the network is mobilized. Once the anomaly is declared, the operations manager takes an analysis delay before engaging a first lever. As long as the service level then remains insufficient, it engages an additional lever at regular intervals, following its order of preference. A crisis can thus worsen through late perception, decision inertia, or overly slow escalation. The nine available levers fall into four families and come from the study of contingency strategies by \citet{sheffi2005book,ivanov2019ijpr,tomlin2006,chopra2004}. These families are ``reroute flows'', ``add capacity'', ``draw on inventory'', and ``act on the demand served''. Their nominal effects and the specific operation of the inventory levers in the temporal representation are detailed in Section~S3.4.\\
+
+Three operations manager profiles reflect contrasting management cultures (Table~\ref{tab:d5}). The \textbf{reactive} profile detects early, decides quickly, and starts by rerouting flows. The \textbf{prudent} profile filters signals more, draws on inventory first, and escalates methodically. The \textbf{delayed} profile lets the service level degrade markedly before acting, then starts by restricting the demand served.
+
+\begin{table*}[htbp]
+\caption{Operations manager profiles (nominal values).}
+\label{tab:d5}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}p{5cm}LLL@{}}
+\toprule
+\textbf{Characteristic} & \textbf{Reactive} & \textbf{Prudent} & \textbf{Delayed} \\
+\toprule
+Critical threshold (smoothed service level) & 0.97 & 0.92 & 0.85 \\
+\midrule
+Smoothing period & 1 day & 4 days & 6 days \\
+\midrule
+Decision delay & 1 day & 3 days & 6 days \\
+\midrule
+Reassessment interval & 2 days & 5 days & 8 days \\
+\midrule
+First levers tried & Rerouting, spot carrier & Safety stock release, inventory pre-positioning & Critical order prioritization, demand postponement \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+\paragraph{Counterfactual replay.} Each crisis is played four times, with no reaction at all and then under each of the three profiles. Each of these four options is called a management policy. The four versions share the same network, the same disruption, the same demand fluctuations and, in the temporal representation, the same initial inventory state. A difference in trajectory can therefore only come from the policy. The no-reaction version shows what the crisis would have been without remediation (Fig.~\ref{fig:d3}). The policy is thus an intervention in the sense of \citet{pearl2009}, assigned independently of the situation, whereas the levers actually engaged depend on what the operations manager perceives.
+
+\begin{center}
+\input{figures/tikz_en/fig_crise_S0366}
+\captionof{figure}{The same crisis played under the four policies: closure of the Atlanta warehouse for 21 days.}\label{fig:d3}
+\end{center}
+
+\paragraph{Design of experiments.} For each scenario, the network characteristics, the severity and duration of the disruption, and the strain are drawn independently from a uniform distribution over their ranges. The type and target are drawn in the same way among the possible options, with one exception: a link cut targets the main link of a site with a probability of 0.85. In the absence of field data on crisis frequency, the uniform distribution gives the same weight to all plausible values. The dataset therefore describes the scenario space and not the actual frequency of crises. Each crisis is followed over 60 days, and the generation, initialized by a seed, is reproduced identically. A global strain level, from 0 to 100, sets in a single step the intensity and duration of the disruptions, the network strain, the effectiveness of the levers, and the responsiveness of the operations managers. Level 50 corresponds to the nominal values given here (\voirSM{S3.5}).
+
+\subsection{Computation of resilience curves and indicators}
+\label{sec:3.3}
+
+A daily trajectory is too long and too noisy to be compared as such from one crisis to another. We use here the parametric hyperbolic curve (seven parameters) and the six indicators of \citet{rahiel2026in4pl}, applying them to a large number of simulated crises. The modeled service level $p(x)$, where $x$ is the time elapsed since the onset of the disruption, chains a downward transition for the drop and an upward transition for the recovery:
+
+\begin{equation}
+p(x) = k + \frac{q}{2} - \frac{h}{2}\tanh\left(\frac{\alpha\,(x - g)}{2}\right) + \frac{h + q}{2}\tanh\left(\frac{\beta\,(x - g - d)}{2}\right)
+\label{eq:5}
+\end{equation}
+
+Before the crisis (e.g., fitted curve (orange) in Fig.~\ref{fig:d4}), $p(x)$ equals $k$. At the core of the crisis, it falls to the plateau $k - h$, then settles at $k + q$ after the recovery. Four parameters describe the shape of the episode: the delay $g$ of the drop, during which the network absorbs the disruption, the duration $d$ of the degraded plateau, and the steepnesses $\alpha$ and $\beta$ of the drop and the recovery. Their detailed interpretation, as well as the constraints that guarantee an interpretable shape, are given in Section~S4.1.
+
+Each trajectory is aligned on the onset of the disruption, so that the days preceding the crisis directly give the nominal level. The seven parameters are estimated by minimizing a robust criterion, which penalizes large deviations less heavily than least squares (\voirSM{S4.1}). \\
+
+In a logistics crisis, recovery is rarely smooth. The successive engagement of levers causes rebounds and jolts that a curve with a single drop cannot reproduce. The robust criterion limits their influence in order to focus on the depth and width of the trough, which carry most of the information on resilience. Because this criterion is not convex, the estimation starts from several initial points taken from the observed trajectory and keeps the best solution (Fig.~\ref{fig:d4}).
+
+\begin{center}
+\input{figures/tikz_en/fig_ajustement_S0366}
+\captionof{figure}{Observed trajectory and fitted curve for the crisis of Figure~\ref{fig:d3}, with no reaction, showing how the parameters are read.}\label{fig:d4}
+\end{center}
+
+The fitted parameters give six indicators by direct computation: the cumulative loss index (IPC), the dynamic recovery coefficient (CRD), the weighted recovery time (TRP), the adaptive robustness score (SRA), the relative resilience efficiency (ERR), and the recovery potential (PR). The most used here, IPC, measures the area between the nominal level and the curve:
+
+\begin{equation}
+\mathrm{IPC} = \frac{h}{\alpha}\ln 2 + \frac{h\,d}{2} - \frac{h + q}{\beta}\ln 2
+\label{eq:7}
+\end{equation}
+
+The definitions and formulas of the six indicators, as well as the estimation criterion, are given in Sections~S4.1 and S4.2. Only three of them enter the Bayesian network and the results of Section~\ref{sec:4.3}: IPC, TRP, and CRD. SRA is redundant with the parameters from which it is computed. ERR varies too little from one crisis to another to be informative. The favorable direction of PR depends on the depth of the drop (\voirSM{S5}).
+
+The curve describes resilience in the strict sense, that is, an actual drop followed by a recovery. A crisis absorbed without degradation falls under robustness, and small, rapid variations around the nominal level fall under stability. A drop from which the network does not recover falls under failure, which calls for a reconfiguration. When $h$ tends to zero, CRD and SRA, which are normalized by $h$, become unstable. This signals an absorbed crisis, and therefore a case of robustness (\voirSM{S4.3}).
+
+\subsection{Causal Bayesian learning}
+\label{sec:3.4}
+
+Each version of a crisis provides one observation. The variables are arranged according to the causes that a diagnosis must be able to distinguish and according to the temporal order of the crisis, which imposes tiers that no causal relation can go back up (Table~\ref{tab:d9}). The target position flags in particular the bottlenecks, that is, sites or links whose loss would cut the customer off from all its sources. Continuous variables are divided into three equal-frequency classes, whose thresholds are computed on the learning sample. The prognosis targets IPC, which closely tracks the lost service and whose direction is unambiguous.
+
+\begin{table*}[htbp]
+\caption{Variables of the learning dataset, tiers of the causal structure, and associated diagnostic question.}
+\label{tab:d9}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}P{2.4cm}LP{2.3cm}L@{}}
+\toprule
+\textbf{Tier} & \textbf{Variables} & \textbf{Causal status} & \textbf{Diagnostic question} \\
+\toprule
+1a. Context & Target position (bottleneck, redundant site, whole network), share of critical items, type, severity, duration & Exogenous & Did the disruption hit a point with no alternative? Could it be overcome? \\
+\midrule
+1b. Policy & No reaction, Reactive, Prudent, Delayed & Intervention & Was the policy appropriate? \\
+\midrule
+2. Response & Detection delay, reaction delay, number of levers, families engaged & Mediator & Was the reaction late or poorly targeted? \\
+\midrule
+3. Mechanism & Parameters $h$, $d$, $\alpha$, $\beta$ & Mediator & How did the crisis unfold? \\
+\midrule
+4. Resilience & IPC (prognosis target), TRP, CRD & Effect & What resilience level was reached? \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+Because it is assigned independently of the crisis and compared on identical crises, the policy has an effect on resilience that is identified without adjustment. The levers actually engaged, by contrast, depend on what the operations manager perceived and act as mediators. The structure is learned by greedy hill-climbing with the BIC score \citep{schwarz1978}, with the tier order imposed as forbidden arcs \citep{heckerman1995}. Inference is exact \citep{koller2009}. Learning was carried out with the BayesArtist tool \citep{bayesartist}. Any software that accepts forbidden arcs can reproduce it (\voirSM{S5}).
+
+For a given context and policy, the learned network gives the distribution of expected resilience (prognosis) and traces a degraded resilience back to its probable causes (diagnosis). To recommend, each policy is evaluated by its probability of reaching a set resilience target. Among the policies for which this probability exceeds a threshold $\theta$ chosen by the decision maker, the least interventionist one is retained, the order being that of the mean number of levers engaged (no reaction, delayed, prudent, reactive). The policy is a root variable, assigned according to a uniform distribution. Backward inference, from the target to the policy, therefore ranks the policies exactly as the prognosis does. A single query per context is enough to draw up a recommendation map.
+
+The results of the Bayesian network shown come from 2,000 scenarios split into 1,600 for learning and 400 for testing. Since each test crisis was played under all policies, one can check directly whether the recommended policy reached the target. The prognosis is assessed on the test crises with two standard measures. Accuracy is the share of crises whose most probable loss class according to the network is the observed class. The Brier score \citep{brier1950} assesses the probabilities themselves, on which the recommendation relies. It sums, over the three classes, the squared difference between the predicted probability and the observed outcome (1 for the observed class, 0 for the others), then averages it over the crises. It equals 0 for a perfect forecast and 0.667 for a forecast that assigns 1/3 to each class. The lower it is, the better the prognosis.

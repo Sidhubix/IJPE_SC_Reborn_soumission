@@ -1,0 +1,48 @@
+% Figure 1: three-block approach (simplified version).
+% The former detailed figure remains available: figures/Fig1_approach_EN.pdf
+
+% --- Adjustable block dimensions -----------------------------------------
+\def\bw{5.0cm}   % block width
+\def\bh{3.0cm}   % block height
+% -------------------------------------------------------------------------
+
+\begin{tikzpicture}[
+  font=\small,
+  bloc/.style={draw=#1, line width=1pt, rounded corners=4pt, fill=#1!6,
+               minimum width=\bw, minimum height=\bh},
+  titre/.style={font=\small\bfseries, text=#1!80!black},
+  etape/.style={draw=black!25, rounded corners=2pt, fill=white,
+                text width=3.6cm, align=center, minimum height=0.62cm,
+                inner sep=2pt, font=\scriptsize},
+  fl/.style={-{Stealth[length=2.4mm]}, line width=1.1pt, black!55},
+  pt/.style={-{Stealth[length=1.6mm]}, black!35}]
+
+  % ---- Block 1 ---------------------------------------------------------
+  \node[bloc=polreac] (B1) at (0,0) {};
+  \node[titre=polreac, rotate=90, anchor=north]
+        at ([xshift=7pt]B1.west) {1. Simulate};
+  \node[etape] (a1) at (0.40, 0.85) {Network and labeled\\disruption};
+  \node[etape] (a2) at (0.40, 0.00) {Crisis replayed: no reaction\\and 3 management profiles};
+  \node[etape] (a3) at (0.40,-0.85) {Service level $\mathrm{PI}(t)$ over time};
+  \draw[pt] (a1) -- (a2); \draw[pt] (a2) -- (a3);
+
+  % ---- Block 2 ---------------------------------------------------------
+  \node[bloc=palmec] (B2) at (5.6,0) {};
+  \node[titre=palmec, rotate=90, anchor=north]
+        at ([xshift=7pt]B2.west) {2. Measure};
+  \node[etape] (b1) at (5.95, 0.45) {Associated 7-parameter resilience curves};
+  \node[etape] (b2) at (5.95,-0.45) {6 network resilience\\indicators};
+  \draw[pt] (b1) -- (b2);
+
+  % ---- Block 3 ---------------------------------------------------------
+  \node[bloc=polprud] (B3) at (11.2,0) {};
+  \node[titre=polprud, rotate=90, anchor=north]
+        at ([xshift=7pt]B3.west) {3. Learn};
+  \node[etape] (c1) at (11.55, 0.45) {Causal Bayesian network};
+  \node[etape] (c2) at (11.55,-0.45) {Prognosis, diagnosis, and recommendation};
+  \draw[pt] (c1) -- (c2);
+
+  % ---- Sequence --------------------------------------------------------
+  \draw[fl] (B1.east) -- (B2.west);
+  \draw[fl] (B2.east) -- (B3.west);
+\end{tikzpicture}

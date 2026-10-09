@@ -1,0 +1,20 @@
+% Final declarations: data availability, use of generative AI, competing interests, funding.
+
+\section*{Data availability}
+
+The data and code needed to reproduce the results are deposited in a public repository, in line with the journal's data policy. The Mendeley Data dataset \citep{screborn2026data} contains the scenario datasets of batches A, B, and C, the assumption and configuration files, the trajectories, the fitted parameters, the learning dataset, the structural constraints, and the learned Bayesian network, as well as the Isomorph-Reborn generator, released as open source with its user manual. During review, it is accessible through a preview link reserved for reviewers: \url{https://data.mendeley.com/preview/jm2phpyw92?a=b897008c-f117-4563-85e2-fb74ac173c47}. The BayesArtist tool, used for learning and inference, is not released; network learning can nevertheless be reproduced with any Bayesian network software that learns structure and parameters from a CSV file and accepts forbidden arcs, for example Hugin, GeNIe (BayesFusion), the R package bnlearn, or the Python library pgmpy. As the available search algorithms differ from one tool to another, slight differences in structure are possible. The supplementary material, submitted with the manuscript, contains the detailed literature review, the modeling complements, the additional results, and the instructions for reproducing the figures.
+
+\section*{Declaration of generative AI and AI-assisted technologies in the writing process}
+
+During the preparation of this work, the authors used Claude (Anthropic) to structure part of the text and to produce some of the figures in TikZ. The authors reviewed and edited the content as needed. Google AI Studio was used to support the development of the two applications BayesArtist and Isomorph-Reborn. After using these tools, the authors checked the code sections and the implemented algorithms with particular care, as needed. They verified that they correspond exactly to the descriptions given in this article. The authors therefore take full responsibility for the content of the article.
+
+\section*{Declaration of competing interest}
+
+The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+
+% In double-blind review (\anonymetrue), the funding statement goes on the separate title page.
+\ifanonyme\else
+\section*{Funding}
+
+This work was carried out within the SC-Reborn project, ``Reconfigurable and resilient logistics'' (ANR-AAPG2021, grant ANR-21-CE10-0020), funded by the French National Research Agency (Agence nationale de la recherche, ANR), France.
+\fi

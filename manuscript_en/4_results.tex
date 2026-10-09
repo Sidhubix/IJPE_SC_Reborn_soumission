@@ -1,0 +1,129 @@
+\section{Results}
+\label{sec:4}
+
+% \subsection{Generated dataset}
+\label{sec:4.1}
+
+The main dataset was generated with Isomorph-Reborn using the ISOMORPH network at a strain level of 75, in the flow representation (hence without inventory effects). Severity ranges from 0.68 to 1, disruption duration from 8 to 24 days, and the strain rate from 1.08 to 1.42. The critical thresholds of the profiles were raised to 0.98, 0.95, and 0.92. With a median minimum service level close to 0.87, the nominal thresholds left the prudent and delayed profiles almost always inactive. The ranking of the profiles, the sole object of the comparison, remains the same.
+
+The dataset used contains the 2,000 scenarios, that is, 8,000 crisis versions, split roughly equally among the five disruption types. The curve fit is satisfactory, with a median coefficient of determination of 0.88. The cumulative loss IPC tracks the service actually lost very closely (correlation of 0.97). This is why it serves as the main indicator in what follows (\voirSM{S6.1}).
+
+\subsection{Effect of management policies}
+\label{sec:4.2}
+
+Table~\ref{tab:d12} compares the four policies over the 2,000 crises. The reactive profile clearly comes out ahead. It reduces the cumulative loss by a median 82\% relative to no reaction, against 17\% for the prudent profile and 0\% for the delayed profile, which does not act in half of the crises. All three differences are significant (paired Wilcoxon signed-rank test, $p < 10^{-150}$). Since levers have no cost in the model, acting early never has a drawback. This advantage stems in part from the very construction of the model.
+
+
+\begin{table*}[htbp]
+\caption{Reaction and resilience by management policy (2,000 crises).}
+\label{tab:d12}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}LP{2.3cm}P{2.3cm}P{2.3cm}P{2.3cm}@{}}
+\toprule
+\textbf{Indicator} & \textbf{No reaction} & \textbf{Reactive} & \textbf{Prudent} & \textbf{Delayed} \\
+\toprule
+Versions with at least one lever engaged & not applicable & 98\% & 88\% & 56\% \\
+\midrule
+Mean number of levers engaged & 0 & 2.8 & 2.0 & 0.7 \\
+\midrule
+Detection, days after onset (median) & not applicable & 0 & 1 & 3 \\
+\midrule
+Minimum service level (median) & 0.87 & 0.89 & 0.88 & 0.87 \\
+\midrule
+Days before return to normal (median) & 14 & 4 & 11 & 13 \\
+\midrule
+IPC, median [quartiles] & 0.67 [0.43; 1.02] & 0.11 [0.07; 0.18] & 0.51 [0.36; 0.69] & 0.58 [0.43; 0.74] \\
+\midrule
+Share of lost service avoided & reference & 73\% & 18\% & 14\% \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+Reacting shortens the crisis without reducing its depth. The minimum service level is almost the same under all policies, but the return to normal occurs on the fourth day under the reactive profile, against the fourteenth day with no reaction (Fig.~\ref{fig:d5}). Under the reactive profile, the cumulative loss no longer depends on the disruption duration (Spearman rank correlation of 0.01), whereas it clearly does with no reaction (0.48). Severity, by contrast, carries little weight (0.08); within this range, it is the persistence of the disruption that makes the crisis.
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{figures/Fig5_median_trajectory_EN.pdf}
+\captionof{figure}{Median service level trajectory by management policy (2,000 crises aligned on disruption onset).}\label{fig:d5}
+\end{center}
+
+The effectiveness of a policy varies with the disruption type. The prudent profile, for example, makes no difference to a supplier failure but reduces the loss from a congestion by 41\% (\voirSM{S6.2}). Duration also matters. If the loss is split into three levels of equal size, the prudent profile reaches the same level as the reactive profile in 18\% of the crises, a share that rises to 31\% for disruptions of 12 days or less and falls to 11\% beyond 18 days. A short crisis can therefore be handled with a light response, whereas a long crisis calls for reactivity.
+
+These proportions hold on a second network. On a control batch of 500 scenarios generated on the parametric network, the share of lost service avoided reaches 67\%, 17\%, and 13\% for the reactive, prudent, and delayed profiles. Topology nevertheless changes the effectiveness of the levers. On this network, whose backup routes are narrow, the reactive profile reduces the loss from a link cut by only 25\% and that from a closure by 53\%, against 73\% and 82\% on ISOMORPH.
+
+\subsection{Steering with the Bayesian model}
+\label{sec:4.3}
+
+The learned network recovers the mechanism described above on its own. Its structure (Fig.~\ref{fig:d6}) has 41 arcs, none of which runs against the tier order. The cumulative loss depends directly on the policy, the depth $h$, and the duration $d$ of the plateau. This duration in turn depends on the policy, the disruption duration, and the reaction delay.
+
+\begin{center}
+\resizebox{\textwidth}{!}{\input{figures/tikz_en/fig_reseau_bayesien}}
+\captionof{figure}{Bayesian network learned under constraints, with variables colored by tier of the temporal order of a crisis; each node gives the marginal probability of its states.}\label{fig:d6}
+\end{center}
+
+Using only the variables known at decision time, the prognosis correctly classifies 65\% of the test crises, against 60\% for a model that knows only the management policy applied (no reaction, reactive, prudent, or delayed) and 34\% for an uninformed model, which assigns each class its frequency and selects the most frequent one. The corresponding Brier scores are 0.466, 0.494, and 0.667. The learning curve is almost flat, which indicates that accuracy is limited by the information available at decision time rather than by the size of the dataset. The diagnosis is well calibrated for policy and duration. For the high-loss test crises, the posterior probabilities of the policies reproduce their observed frequencies to within 0.01.
+
+The recommendation that can be made depends on the objective. If the aim is a low loss, only the reactive profile succeeds consistently and the rule always recommends it. If the aim is only to avoid a high loss, a trade-off appears between safety and restraint, governed by the threshold $\theta$ (Table~\ref{tab:d15}).
+
+\begin{table*}[htbp]
+\caption{Recommendation on the test crises, with the objective of a cumulative loss that is not high.}
+\label{tab:d15}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}LLL@{}}
+\toprule
+\textbf{Rule} & \textbf{Objective met} & \textbf{Recommendations lighter than the reactive profile} \\
+\midrule
+Always the reactive profile & 99.2\% & 0\% \\
+Learned network, $\theta$ = 0.9 & 99.2\% & 0\% \\
+Learned network, $\theta$ = 0.8 & 97.5\% & 15\% \\
+Learned network, $\theta$ = 0.7 & 86.2\% & 37\% \\
+Learned network, $\theta$ = 0.6 & 69.5\% & 84\% \\
+A posteriori reference: lightest successful policy & 99.2\% & 67\% \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+With $\theta$ = 0.8, that is, selecting the least interventionist policy among those that meet the objective with a probability of at least 0.8, the network recommends a lighter policy in about one crisis out of seven. The objective is met in 97.5\% of cases, less than two points below the most interventionist policy. This restraint rests entirely on the forecast duration of the disruption. If this information is removed from the crisis description, the rule no longer recommends any lighter policy. Knowing the probable duration of a disruption therefore has decision value in itself. For the short closure of a redundant site, for example, the prudent profile meets the objective with a probability of 0.80 and becomes the recommendation, whereas for the long closure of a bottleneck, only the reactive profile does so (\voirSM{S6.3}).
+
+Figure~\ref{fig:carte} extends this analysis to the seven contexts allowed by the ISOMORPH topology, by backward inference and for the objective of a low loss. The reactive profile is the most probable everywhere, and all the more so as the disruption lasts longer, its posterior probability rising from 0.51--0.58 for a short disruption to 0.72--0.79 for a long one. For a short disruption, each of the other policies keeps a probability between 0.12 and 0.18, a sign that a low loss then remains attainable without a rapid reaction.
+
+\begin{center}
+\begin{minipage}{\textwidth}\centering
+\input{figures/tikz_en/fig_carte_preconisation}
+\captionof{figure}{Recommendation map: posterior probability of each profile given a low cumulative loss, for the seven contexts of disruption type and target position, by disruption duration.}\label{fig:carte}
+\end{minipage}
+\end{center}
+
+% \subsection{Role of inventories}
+\label{sec:4.4}
+
+\textbf{Role of inventories — }Inventories protect against some disruptions only. The main dataset neutralizes them. To study them, we switch to the temporal representation, in which material flows with its travel and production delays and each storage site manages its inventory under an (s, S) inventory policy; 60 no-reaction crises were simulated in this representation on the ISOMORPH network for each disruption type and each inventory cover. Against distribution disruptions, inventory cover acts as a progressive robustness lever. The number of visible crises increases as cover decreases, from 11 to 43 out of 60 for a link cut. A demand surge, on the other hand, is better absorbed without inventories, because the extra demand must first be drawn from inventories sized for the nominal throughput (\voirSM{S6.4}).
+
+\subsection{Economic analysis}
+\label{sec:4.5}
+
+The service loss is converted into lost sales by multiplying it by the reference daily demand, over the 60 days following the disruption. A no-reaction crisis thus costs 25,550 units on average, or about 1.4 days of demand. As the model does not put a cost on the levers, their cost $c$ per engagement is expressed in units of margin $m$. A policy is profitable as long as its preserved sales, multiplied by $m$, cover the cost of the levers it engages; the ratio $c/m$ beyond which it ceases to be profitable is its break-even ratio (Table~\ref{tab:eco}).
+
+\begin{table*}[htbp]
+\caption{Preserved sales, levers engaged, and break-even ratio by policy (means over 2,000 crises). The marginal gain divides the additional preserved sales by the additional levers relative to the previous row.}
+\label{tab:eco}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}LLLLLL@{}}
+\toprule
+\textbf{Policy} & \textbf{Lost sales per crisis (units)} & \textbf{Preserved sales (units; share)} & \textbf{Levers engaged per crisis} & \textbf{Break-even ratio ($c/m$)} & \textbf{Marginal gain per lever} \\
+\midrule
+No reaction & 25,550 & reference & 0 & not applicable & not applicable \\
+Delayed & 22,020 & 3,530; 14\% & 0.67 & 5,300 & 5,300 \\
+Prudent & 20,980 & 4,570; 18\% & 1.97 & 2,320 & 790 \\
+Reactive & 7,000 & 18,550; 73\% & 2.80 & 6,630 & 16,940 \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+The reactive policy is the most effective and also the most profitable per lever. Each of its levers preserves 6,630 units on average, about one third of a day of demand. The prudent policy engages more than two thirds of the levers of the reactive policy for a quarter of its gains. Each lever it adds to the delayed policy preserves only 790 units; it is economically dominated. What makes a policy profitable is therefore less the number of levers than the moment at which they are engaged.
+
+\begin{center}
+\input{figures/tikz_en/fig_economie}
+\captionof{figure}{Mean net benefit per crisis as a function of the cost of a lever. The dashed curve, which selects a posteriori the best policy for each crisis, bounds the value of a tailored recommendation.}\label{fig:eco}
+\end{center}
+
+Among the policies applied uniformly to all crises, reactivity is the best as long as a lever costs less than 6,630 units of margin; beyond that, it is better not to react (Fig.~\ref{fig:eco}). Choosing for each crisis the policy with the highest benefit, as if its outcome were known, would raise the mean benefit from 4,560 to 8,350 units per crisis for a lever costing 5,000 units of margin, that is, 83\% more. The reactive profile does have one drawback. Faced with minor disruptions, it engages levers that are nearly thirty times less profitable than in a severe crisis (\voirSM{S6.5}).

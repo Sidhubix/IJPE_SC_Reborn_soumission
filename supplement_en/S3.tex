@@ -1,0 +1,120 @@
+\section{Scenario generator details (Simulate)}
+\label{sec:S3}
+
+\subsection{Reference networks}
+\label{sec:S3.1}
+
+Two networks serve as references (Table~\ref{tab:reseaux}). The parametric network has three echelons: three factories, nine warehouses, and one final customer. Each warehouse is supplied by a main factory, by a backup factory through a lower-capacity link, and, for one warehouse in three, by a third factory. Redundancy is therefore partial by construction. The loss of a warehouse's main route can only be partly offset by its fallback routes, as in most real networks, where dual sourcing remains costly.
+
+The ISOMORPH network keeps the original topology (Fig.~\ref{fig:d2}): thirteen cities connected by sixteen links, with a hub and five intermediate echelons between the sources and the customer. Since the original file does not set all the required quantities, three assumptions complete its description. The capacity of each link is drawn within plus or minus 10\% of its original value. The production capacity of each source is set at 0.8 times the cumulative capacity of its outgoing links; at 1.0, production could never be a capacity bottleneck and shifting load to unaffected production sites would have no effect. Finally, the last mile is assumed to be unlimited; the last two storage sites before the customer then have neither their own capacity nor a limited outgoing link and are beyond the reach of the shipping levers.
+
+\begin{center}
+\input{figures/tikz_en/fig_reseau_isomorph}
+\captionof{figure}{Original ISOMORPH network shown by echelon, from the three sources to the customer.}\label{fig:d2}
+\end{center}
+
+\begin{table}[htbp]
+\caption{Characteristics of the two reference networks (nominal values).}
+\label{tab:reseaux}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}P{4.2cm}LL@{}}
+\toprule
+\textbf{Item} & \textbf{Parametric network} & \textbf{ISOMORPH network} \\
+\midrule
+Sites and echelons & 3 factories, 9 warehouses, 1 customer & 13 cities, 16 links, 1 hub, 5 intermediate echelons \\
+Production capacity of a source (units per day) & 200 to 320 & 0.8 times the capacity of its outgoing links \\
+Link capacity (units per day) & Main route 60 to 110; backup route 15 to 35; third route 10 to 20 & Original value $\pm$10\%; unlimited last mile \\
+Shipping capacity of a storage site (units per day) & 50 to 100 & Carried by the outgoing links \\
+Transit time, temporal representation (days) & 0 by default, adjustable & 1 to 8 (original values) \\
+Production lead time, temporal representation (days) & 0 by default, adjustable & 0 by default, adjustable \\
+Share of critical items in demand & 15\% to 45\% & 15\% to 45\% \\
+Daily demand fluctuation & $\pm$3\% to $\pm$8\% & $\pm$3\% to $\pm$8\% \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+In the flow representation, the deliverable volume $F(t)$ on a given day is the maximum quantity the network can carry from the sources to the customer given all its capacities, degraded or reinforced on that day. This formulation reveals the capacity bottlenecks. It is often the shipping capacity of storage sites, rather than production, that limits service. In the temporal representation, $F(t)$ denotes the volume that the movement of material and the inventories actually allow to be delivered on that day.
+
+\subsection{Temporal representation: lead times and inventory policy}
+\label{sec:S3.2}
+
+The flow representation assumes that material moves instantaneously and that no inventory stands between the capacities and the customer. The temporal representation removes these two assumptions. Each link has a transit time and each production site a production lead time, expressed in whole days. Orders travel upstream instantaneously, but material takes the time of these lead times to move down to the customer. Each storage site manages its inventory with an (s, S) inventory policy \citep{scarf1960}: when its inventory position, on-hand inventory plus material in transit, falls below the reorder point s, it orders the quantity that brings it back up to level S.
+
+The levels $s_{i}$ and $S_{i}$ of a storage site i are expressed in days of cover of its own nominal throughput, to which is added the inventory that is necessarily in transit to it:
+
+\begin{equation}
+s_i = c_s\,\Phi_i + \sum_{a \in A_i} (L_a + P_a)\, f_a, \qquad S_i = c_S\,\Phi_i + \sum_{a \in A_i} (L_a + P_a)\, f_a
+\label{eq:S1}
+\end{equation}
+
+$\Phi_{i}$ denotes the nominal throughput of site i, the sum of the nominal throughputs of its supply links for the reference demand (Section~3.2 of the main manuscript), $c_{s}$ and $c_{S}$ the covers in days, 3 and 10 days by default, $A_{i}$ the set of links that supply site i, $L_{a}$ the transit time of link a, $P_{a}$ the production lead time of its origin site, and $f_{a}$ its nominal throughput. The second term applies Little's law \citep{little1961} link by link. It sizes the material in transit so that, in steady state, on-hand inventory matches the chosen cover, however heterogeneous the supply lead times. Relating the cover to the throughput of each site, rather than to an equal share of demand, is essential in a serial network. Otherwise, a hub through which the entire flow passes would receive the same cover as a secondary warehouse and the network would stop delivering even without a disruption. When the network description sets the levels of a site, these levels are kept.
+
+Three rules complete the representation. Each day, a storage site first serves the day's requirements and then the replenishment of downstream sites. Allocation favors the main link over backup links. Critical and ordinary items are aggregated in inventory, and priority to critical items applies only to customer service. Finally, links to the customer are served the same day. With a lead time on these links, the customer would receive today what it ordered the day before and the indicator would drop with every day-to-day increase in demand, even without a disruption; it would then measure demand noise rather than network availability.
+
+Before any observation, the network is simulated without disruption during a 60-day burn-in, which brings inventories and material in transit to their steady state. This burn-in is common to the four versions of the same crisis.
+
+The two representations are nested. With zero lead times, the temporal representation reproduces the flow representation almost exactly, with a mean service level gap between 0.00025 and 0.002 depending on the cases tested. With lead times, however, inventories deeply alter the network's response to disruptions, to an extent that depends on the cover and on the nature of the disruption; Section~S6.4 analyzes this sensitivity.
+
+\subsection{Disruptions and calibration of the reference demand}
+\label{sec:S3.3}
+
+The link cut illustrates an often underestimated phenomenon, because the loss of a main route is not limited to the volume it carried. The storage site deprived of its usual supply must reorganize in a hurry, which degrades its own shipping capacity. Its backup routes, overloaded, also lose efficiency. The disruption thus propagates beyond its target. Cuts and closures are treated as near-total outages, hence a higher severity; the duration of any disruption ranges from 3 to 15 days. In the temporal representation, these capacity reductions apply in the same way, but their effect on the customer is cushioned by inventories and delayed by the material already in transit.
+
+The effect of a disruption depends as much on its severity as on the strain under which the network operates. A network with slack absorbs a disruption that would break a saturated network. To control this factor, the reference demand of each scenario is set according to the volume still deliverable during the incident, using a strain rate $u$ drawn between 0.85 and 1.15:
+
+\begin{equation}
+D_{max} = \min\left(\frac{u \cdot F_{inc}}{m_{inc}},\ \frac{0.995 \cdot F_{nom}}{1 + \varepsilon}\right)
+\label{eq:S2}
+\end{equation}
+
+$F_{\mathrm{inc}}$ and $F_{\mathrm{nom}}$ denote the deliverable volume during the incident and under normal operation, $m_{\mathrm{inc}}$ the demand multiplier during the incident (1 + 2s for a demand surge, 1 otherwise), and $\varepsilon$ the amplitude of the daily fluctuation. $D_{\max}$ is the highest demand that the network serves both during the incident (up to the strain $u$) and without degradation under normal operation. The volumes $F_{\mathrm{inc}}$ and $F_{\mathrm{nom}}$ are obtained by a maximum flow computation (Edmonds-Karp algorithm). The factor $0.995$ leaves a margin of $0.5\%$ below nominal capacity. This margin does not follow from any theory; it is a simulator parameter set by trial. Initially set at $0.97$, it was tightened to $0.995$ because a wider margin flattened the effect of a link cut in a redundant network. A strain below 1 only reduces the network's margin; a strain above 1 creates an outright shortage. The second term guarantees, in the flow representation, that no degradation appears before the disruption, during an initial period of 10 days, so that any observed trough can be attributed to the crisis. In this representation, the reference demand $D_{0}$ equals $D_{\max}$, rounded to an integer.
+
+In the temporal representation, $F_{\mathrm{inc}}$ and $F_{\mathrm{nom}}$ are measured by the simulation engine itself, under just-in-time flow: they are the volumes that the movement of material actually allows to be delivered, and they never exceed the maximum flow. The second term then no longer suffices to guarantee the absence of degradation, because lumpy replenishments and lead times can leave some demand unserved on a given day, even without a disruption. The reference demand is therefore checked by simulation. Each scenario is simulated without disruption, burn-in included, with its own series of fluctuations. The demand $D_{0}$ is the largest integer demand not exceeding $D_{\max}$ that is fully served every day:
+
+\begin{equation}
+D_0 = \max\left\{\, d \in \mathbb{N}^*,\ d \le D_{max} \;:\; \mathrm{PI}_d(t) = 1 \ \text{for every day } t \text{ simulated without disruption} \right\}
+\label{eq:S3}
+\end{equation}
+
+$\mathrm{PI}_{d}(t)$ denotes the service level obtained under a reference demand $d$, with the levels s and S recomputed by Eq.~\eqref{eq:S1} for each demand tried. The search proceeds by bisection over the integers and can only lower $D_{\max}$; the value retained is always checked by simulation. When even a demand of one unit is not fully served, the inventory cover is too low given the fluctuations and lead times. The scenario then admits no nominal regime without degradation. In that case, the DoE is rejected rather than continued with an arbitrary demand. This feasibility condition directly links inventory cover, supply lead times, and demand variability.
+
+\subsection{Remediation levers}
+\label{sec:S3.4}
+
+The nine levers of the simulated operations manager (Section~3.2 of the main manuscript) are detailed in Table~\ref{tab:d4}.
+
+\begin{table}[htbp]
+\caption{Remediation levers.}
+\label{tab:d4}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}P{1.0cm}P{1.5cm}LLL@{}}
+\toprule
+\textbf{Lever} & \textbf{Family} & \textbf{Action} & \textbf{Nominal effect} & \textbf{Disruptions concerned} \\
+\midrule
+D1 & Rerouting & Load shift to unaffected production sites & +20\% capacity & Supplier failure, link cut, congestion \\
+D2 & Rerouting & Shift to neighboring storage sites & +25\% shipping capacity & Link cut, storage site closure, congestion \\
+D3 & Capacity & Overtime at the affected production site & 50\% of the loss recovered & Supplier failure \\
+D4 & Capacity & Spot carrier on the affected link or site & 50\% of the loss recovered & Link cut, storage site closure \\
+D5 & Capacity & Buffer warehouse & +15\% shipping capacity across the whole network & All \\
+D6 & Inventory & Safety stock release & Flow: 30\% of demand, depleted in 10 days. Temporal: separate reserve released once, used only for unserved demand & All \\
+D7 & Inventory & Inventory pre-positioning near the customer & Flow: 20\% of any loss offset. Temporal: s and S raised by 50\%, immediate order & Supplier failure, link cut, congestion \\
+D8 & Demand & Prioritization of critical items & $-$25\% of ordinary demand served & All \\
+D9 & Demand & Postponement of non-critical demand & 30\% of ordinary demand deferred & All \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The levers do not all act in the same way. Rerouting and additional capacity restore or bypass lost capacity. Safety stock release brings temporary relief, which can produce a second trough when the stock runs out before the end of the crisis. Finally, demand levers improve the measured service level by giving up part of the ordinary demand; they reflect a service trade-off rather than a restoration of capacity, a distinction that should guide the interpretation of the recommendations.
+
+In the temporal representation, the two inventory levers change mechanism. Inventory pre-positioning (D7) temporarily raises the s and S levels of the storage sites and triggers an immediate order. Safety stock release (D6) frees a safety reserve kept apart from ordinary inventory. This reserve is invisible to the ordering policy and serves only the demand that ordinary inventory could not meet.
+
+This mechanism addresses an effect observed during development. When injected directly into ordinary inventory, the same quantity pushed some sites above their reorder point. They then skipped a replenishment and the missing requirement propagated up to the sources, which stood idle for a day during a supplier failure; the production capacity lost in this way was never recovered. In one measured case, the lever reduced the delivered volume instead of increasing it. An emergency intervention on inventories can therefore disrupt the replenishment signal it was meant to relieve. The separate reserve guarantees that safety stock release never reduces the delivered volume. Finally, the two inventory levers exclude storage sites that have no capacity of their own and unlimited outgoing links, since the levers have no hold on them.
+
+\subsection{Design of experiments, strain level, and content of the observations}
+\label{sec:S3.5}
+
+The network characteristics, the nature, target, severity, and duration of the disruption, and the network strain are drawn independently for each scenario from a uniform distribution. Continuous quantities are drawn uniformly over the ranges described above: site and link capacities, share of critical items, amplitude of demand fluctuation, severity, duration (rounded to the day), and strain rate. The nature of the disruption is drawn uniformly among the five natures and its target among the eligible sites or links; a link cut, however, targets the main link of a site with probability 0.85, because cutting an already marginal backup route would have almost no effect. The daily demand fluctuation is also drawn uniformly, each day, between $-\varepsilon$ and $+\varepsilon$. In the absence of field data on crisis frequency, the uniform distribution gives the same weight to all plausible values and covers the scenario space without favoring any regime; the proportions observed in the dataset therefore describe this space and not the actual frequency of crises. All draws come from a seeded pseudo-random number generator. By contrast, the reference network, the representation, and, in the temporal representation, the default lead times and inventory cover are fixed for a batch of scenarios. Comparing several networks or several covers requires generating several batches. Each crisis is tracked over 60 days after its onset. Generation is exactly reproducible, which makes it possible to regenerate a dataset or to extend it.
+
+All values set by assumption for lack of field data can be modified: capacities, lever effects, characteristics of the operations manager profiles, assumptions that complete the ISOMORPH network, and parameters of the temporal representation. To explore contrasting contexts, a global strain level, from 0 to 100, simultaneously shifts four groups of assumptions: the intensity and duration of disruptions, network strain, lever effectiveness, and the reactivity of operations managers. Level 50 corresponds to the nominal values presented here. Level 0 describes an overcapacity network subject to brief disruptions and managed by highly reactive decision makers; level 100 describes disruptions of 12 to 32 days on a saturated network, with ineffective levers and decision delays of up to 12 days. When the network is imposed, this level still drives the severity and duration of disruptions, the strain between demand and capacity, lever effectiveness, and the reactivity of operations managers, but it does not change the network capacities, which come from the network description. Nor does it affect lead times or inventory cover, which belong to the representation of the network and not to the intensity of the crisis.
+
+Each version of a crisis is a complete observation. It combines the network context (network identity and size, reference demand, share of critical items), the disruption experienced, the decision log (detection date, levers deployed, and commitment dates), and the daily service level trajectory. Inventory levels and material in transit are not recorded, because the dataset describes a crisis by its causes, its decisions, and the service delivered, not by the internal state of the network. Simple descriptive quantities (minimum service level, cumulative lost service, and time to return to normal) are used to check the dataset.

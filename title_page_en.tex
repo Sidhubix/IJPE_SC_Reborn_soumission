@@ -1,0 +1,62 @@
+%% Separate title page, required for double-blind review (Elsevier, IJPE).
+%% To be uploaded as a file separate from the anonymized manuscript (master file with \anonymetrue).
+%% Compilation: pdflatex title_page_en
+
+\documentclass[a4paper,11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{tikz}
+\input{commun}
+\input{manuscript_en/front}
+% The CRediT statement is printed only outside anonymous mode.
+\newif\ifanonyme
+\anonymefalse
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\begin{document}
+
+\begin{center}
+{\Large\bfseries \ArticleTitle\par}
+\vspace{10pt}
+{\large Title page\par}
+\end{center}
+
+\section*{Authors}
+
+Naïma Rahiel\textsuperscript{a},
+Sid-Ali Addouche\textsuperscript{a,*},
+El Mouloudi Dafaoui\textsuperscript{a},
+Abderrahman El Mhamedi\textsuperscript{a},
+Saïd Amari\textsuperscript{b,c},
+Agnès Letouzey\textsuperscript{d},
+Xavier Desforges\textsuperscript{d},
+Kamal Medjaher\textsuperscript{d}
+
+\textsuperscript{a} Laboratoire QUARTZ, IUT de Montreuil, Université Paris 8, Montreuil, France\\
+\textsuperscript{b} LURPA, ENS Paris-Saclay, Gif-sur-Yvette, France\\
+\textsuperscript{c} LIPN, Université Sorbonne Paris Nord, Villetaneuse, France\\
+\textsuperscript{d} LGP, Université de Toulouse, UTTOP, Tarbes, France
+
+\textsuperscript{*} Corresponding author: Sid-Ali Addouche, Laboratoire QUARTZ, IUT de Montreuil, Université Paris 8, Montreuil, France. Email: s.addouche@iut.univ-paris8.fr
+
+\section*{Acknowledgements}
+
+\acompleter{Possible acknowledgements (people or organizations who helped without being authors), to be completed or removed.}
+
+\section*{Funding}
+
+This work was carried out within the SC-Reborn project, ``Reconfigurable and resilient logistics'' (ANR-AAPG2021, grant ANR-21-CE10-0020), funded by the French National Research Agency (Agence nationale de la recherche, ANR), France.
+
+\section*{Declaration of competing interest}
+
+The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+
+\input{manuscript_en/credit}
+
+\end{document}
