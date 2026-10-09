@@ -6,7 +6,7 @@
 
 La base principale a été générée avec Isomorph-Reborn sur le réseau d'ISOMORPH au niveau de tension 75, en représentation par flux, donc sans effet des stocks. La sévérité y varie de 0,68 à 1, la durée des perturbations de 8 à 24 jours et le taux de tension de 1,08 à 1,42. Les seuils critiques des profils ont été relevés à 0,98, 0,95 et 0,92. Avec un taux de service minimal médian proche de 0,87, les seuils nominaux laissaient en effet les profils prudent et tardif presque toujours inactifs. L'ordre des profils, seul objet de la comparaison, reste le même.
 
-La base comptant les 2 000 scénarios, soit 8 000 versions de crise, répartis à parts à peu près égales entre les cinq natures. L'ajustement de la courbe est satisfaisant, avec un coefficient de détermination médian de 0,88. La perte cumulée IPC suit de très près le service effectivement perdu (corrélation de 0,97). C'est pourquoi elle sert d'indicateur principal dans la suite (\voirSM{S5.1}).
+La base utilisée compte les 2 000 scénarios, soit 8 000 versions de crise, répartis à parts à peu près égales entre les cinq natures. L'ajustement de la courbe est satisfaisant, avec un coefficient de détermination médian de 0,88. La perte cumulée IPC suit de très près le service effectivement perdu (corrélation de 0,97). C'est pourquoi elle sert d'indicateur principal dans la suite (\voirSM{S5.1}).
 
 \subsection{Effet des politiques de gestion}
 \label{sec:4.2}
@@ -42,7 +42,7 @@ Part du service perdu évitée & référence & 73 \% & 18 \% & 14 \% \\
 La réaction raccourcit la crise sans en réduire la profondeur. Le taux de service minimal est presque le même pour toutes les politiques, mais le retour à la normale intervient au quatrième jour sous le profil réactif, contre le quatorzième sans réaction (Fig.~\ref{fig:d5}). Sous le profil réactif, la perte cumulée ne dépend plus de la durée du choc (corrélation de rangs de Spearman de 0,01), alors qu'elle en dépend nettement sans réaction (0,48). La sévérité, elle, pèse peu (0,08) ; dans cette plage, c'est la persistance du choc qui fait la crise.
 
 \begin{center}
-\includegraphics[width=0.85\textwidth]{figures/Fig5_trajectoire_mediane.pdf}
+\includegraphics[width=0.5\textwidth]{figures/Fig5_trajectoire_mediane.pdf}
 \captionof{figure}{Trajectoire médiane du taux de service selon la politique de gestion (2 000 crises recalées sur le début de la perturbation).}\label{fig:d5}
 \end{center}
 
@@ -62,7 +62,7 @@ Le réseau appris retrouve de lui-même le mécanisme décrit plus haut. Sa stru
 
 À partir des seules variables connues au moment de décider, le pronostic classe correctement 65~\% des crises de test, contre 60~\% pour un modèle qui ne connaîtrait que la politique de gestion appliquée (sans réaction, réactif, prudent ou tardif) et 34~\% pour un modèle sans information, qui attribue à chaque classe sa fréquence et retient la plus fréquente. Les scores de Brier correspondants sont 0,466, 0,494 et 0,667. La courbe d'apprentissage est presque plate, ce qui indique que la précision est limitée par l'information disponible au moment de décider plutôt que par la taille de la base. Le diagnostic est bien calibré pour la politique et la durée. Pour les crises de test à forte perte, les probabilités a posteriori des politiques reproduisent leurs fréquences observées à 0,01 près.
 
-La préconisation que l'on peut emmètre dépend de l'objectif. Si l'on vise une perte faible, seul le profil réactif réussit régulièrement et la règle le préconise toujours. Si l'on se contente d'éviter une perte forte, un arbitrage apparaît entre sécurité et sobriété, réglé par le seuil $\theta$ (tableau~\ref{tab:d15}).
+La préconisation que l'on peut émettre dépend de l'objectif. Si l'on vise une perte faible, seul le profil réactif réussit régulièrement et la règle le préconise toujours. Si l'on se contente d'éviter une perte forte, un arbitrage apparaît entre sécurité et sobriété, réglé par le seuil $\theta$ (tableau~\ref{tab:d15}).
 
 \begin{table*}[htbp]
 \caption{Préconisation sur les crises de test, objectif d'une perte cumulée non forte.}
