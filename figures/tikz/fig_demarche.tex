@@ -1,32 +1,48 @@
 % Figure 1 : démarche en trois blocs (version épurée).
 % L'ancienne figure détaillée reste disponible : figures/Fig1_demarche.pdf
+
+% --- Dimensions ajustables des blocs -------------------------------------
+\def\bw{5.0cm}   % largeur des blocs
+\def\bh{3.0cm}   % hauteur des blocs
+% -------------------------------------------------------------------------
+
 \begin{tikzpicture}[
   font=\small,
-  bloc/.style={draw=#1, line width=1pt, rounded corners=4pt, fill=#1!6, minimum width=4.6cm, minimum height=3.6cm},
+  bloc/.style={draw=#1, line width=1pt, rounded corners=4pt, fill=#1!6,
+               minimum width=\bw, minimum height=\bh},
   titre/.style={font=\small\bfseries, text=#1!80!black},
-  etape/.style={draw=black!25, rounded corners=2pt, fill=white, text width=3.9cm, align=center, minimum height=0.62cm, inner sep=2pt, font=\scriptsize},
+  etape/.style={draw=black!25, rounded corners=2pt, fill=white,
+                text width=3.6cm, align=center, minimum height=0.62cm,
+                inner sep=2pt, font=\scriptsize},
   fl/.style={-{Stealth[length=2.4mm]}, line width=1.1pt, black!55},
   pt/.style={-{Stealth[length=1.6mm]}, black!35}]
-  % Bloc 1
+
+  % ---- Bloc 1 ----------------------------------------------------------
   \node[bloc=polreac] (B1) at (0,0) {};
-  \node[titre=polreac, anchor=north] at (B1.north) [yshift=-3pt] {1. Simuler};
-  \node[etape] (a1) at (0,0.75) {Réseau et perturbation étiquetée};
-  \node[etape] (a2) at (0,-0.15) {Crise rejouée sans réaction et sous 3 profils de gestion};
-  \node[etape] (a3) at (0,-1.1) {Trajectoires de service $\mathrm{IP}(t)$};
+  \node[titre=polreac, rotate=90, anchor=north]
+        at ([xshift=7pt]B1.west) {1. Simuler};
+  \node[etape] (a1) at (0.40, 0.85) {Réseau et perturbation étiquetée};
+  \node[etape] (a2) at (0.40, 0.00) {Crise rejouée sans réaction et sous 3 profils de gestion};
+  \node[etape] (a3) at (0.40,-0.85) {Évolution du taux de service $\mathrm{IP}(t)$};
   \draw[pt] (a1) -- (a2); \draw[pt] (a2) -- (a3);
-  % Bloc 2
-  \node[bloc=palmec] (B2) at (5.4,0) {};
-  \node[titre=palmec, anchor=north] at (B2.north) [yshift=-3pt] {2. Mesurer};
-  \node[etape] (b1) at (5.4,0.3) {Courbe de résilience à 7 paramètres};
-  \node[etape] (b2) at (5.4,-0.75) {6 indicateurs};
+
+  % ---- Bloc 2 ----------------------------------------------------------
+  \node[bloc=palmec] (B2) at (5.6,0) {};
+  \node[titre=palmec, rotate=90, anchor=north]
+        at ([xshift=7pt]B2.west) {2. Mesurer};
+  \node[etape] (b1) at (5.95, 0.45) {Courbes de résilience à 7 paramètres associées};
+  \node[etape] (b2) at (5.95,-0.45) {6 indicateurs de résilience du réseau};
   \draw[pt] (b1) -- (b2);
-  % Bloc 3
-  \node[bloc=polprud] (B3) at (10.8,0) {};
-  \node[titre=polprud, anchor=north] at (B3.north) [yshift=-3pt] {3. Apprendre};
-  \node[etape] (c1) at (10.8,0.3) {Réseau bayésien causal};
-  \node[etape] (c2) at (10.8,-0.75) {Pronostic, diagnostic et préconisation};
+
+  % ---- Bloc 3 ----------------------------------------------------------
+  \node[bloc=polprud] (B3) at (11.2,0) {};
+  \node[titre=polprud, rotate=90, anchor=north]
+        at ([xshift=7pt]B3.west) {3. Apprendre};
+  \node[etape] (c1) at (11.55, 0.45) {Réseau bayésien causal};
+  \node[etape] (c2) at (11.55,-0.45) {Pronostic, diagnostic et préconisation};
   \draw[pt] (c1) -- (c2);
-  % Enchaînement
+
+  % ---- Enchaînement ---------------------------------------------------
   \draw[fl] (B1.east) -- (B2.west);
   \draw[fl] (B2.east) -- (B3.west);
 \end{tikzpicture}
