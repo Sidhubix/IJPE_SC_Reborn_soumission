@@ -20,9 +20,6 @@
 % Mettre \anonymetrue pour la version soumise en double aveugle (masque auteurs, affiliations, CRediT et financement).
 \newif\ifanonyme
 \anonymefalse
-% Mettre \suivifalse pour retirer la liste de suivi des dépôts en fin de document.
-\newif\ifsuivi
-\suivitrue
 
 \input{manuscrit/front}
 
@@ -91,9 +88,5 @@ La résilience d'une chaîne logistique dépend autant de la réaction des respo
 \bibliographystyle{cas-model2-names}
 \bibliography{references}
 
-\ifsuivi
-\clearpage
-\input{manuscrit/liste_de_suivi}
-\fi
 
 \end{document}
